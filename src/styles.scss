@@ -1,10 +1,11 @@
 body {
     background-color: #ddd;
-    & {
-        margin-top: 20px;
-    }
 }
-
+.header {
+  background-size: 100%;
+  background-position: center;
+  height: 150px;
+}
 .content {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -12,22 +13,56 @@ body {
   grid-auto-rows: minmax(100px, auto);
 }
 
-.nav1 {
-  grid-column: 1 / 3;
-  grid-row: 1;
+@media (max-width: 480px) /*and (orientation: landscape)*/ {
+  .content {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
-.nav2 {
-  grid-column: 2 / 4;
-  grid-row: 2;
+@media (min-width: 481px) and (max-width: 740px) /*and (orientation: landscape)*/ {
+  .content {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.nav3 {
-  grid-column: 1 / 3;
-  grid-row: 3;
+.navItem {
+  height: 300px;
 }
-
-.nav4 {
-  grid-column: 2 / 4;
-  grid-row: 4;
+.navItem a {
+  & p {
+    color: black;
+    border-color: black;
+    transition: all 0.3s;
+  }
+  &:hover {
+    text-decoration: none;
+    & p {
+      color: white;
+      border-color: white;
+    }
+    .imgContainer {
+      background-size: 150%;
+      filter: blur(3px);
+    }
+  }
+}
+.navItem p {
+  border: solid 3px;
+  line-height: 1.5em;
+  font-size: 2em;
+  text-align: center;
+  margin: auto;
+  position: relative;
+  bottom: 70px;
+  width: 70%;
+}
+.navItem .imgContainer {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  // background-size: 100%;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s;
 }

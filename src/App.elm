@@ -40,34 +40,40 @@ styles =
 
 
 navItem caption link imageUrl className =
-    div [ class className ]
+    div [ class className, class "navItem" ]
         [ a [ href link ]
-            [ img [ src imageUrl, styles [ Css.width (Css.pct 100) ] ] []
-            , p [] [ text caption ]
+            [ div [ class "imgContainer", style [ ( "background-image", "url(" ++ imageUrl ++ ")" ) ] ]
+                [-- [ src imageUrl ] []
+                ]
+            , p
+                []
+                [ text caption ]
             ]
         ]
 
 
+header =
+    div [ class "header", style [ ( "background-image", "url(img/head.jpg)" ) ] ]
+        [ h1 [] [ text "Wellcome in da shop" ]
+        ]
+
+
 mainContent =
-    div [ styles [ Css.marginTop (Css.px 100) ] ]
-        [ h1
-            [ styles
-                [ Css.backgroundColor (Css.rgb 74 153 120)
-                , Css.height (Css.px 250)
-                ]
-            ]
-            [ text "Wellcome in da shop" ]
-        , div [ class "content" ]
+    div []
+        [ div [ class "content" ]
             [ navItem "trololo" "#" "img/1.jpg" "nav1"
             , navItem "bla" "#" "img/2.jpg" "nav2"
             , navItem "bla" "#" "img/3.jpg" "nav3"
             , navItem "bla" "#" "img/4.jpg" "nav4"
+            , navItem "bla" "#" "img/5.jpg" "nav5"
+            , navItem "bla" "#" "img/6.jpg" "nav6"
             ]
         ]
 
 
 view : Model -> Html Msg
 view model =
-    div [ class "container" ]
-        [ mainContent
+    div []
+        [ header
+        , mainContent
         ]
