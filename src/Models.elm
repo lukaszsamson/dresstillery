@@ -2,9 +2,14 @@ module Models exposing (..)
 
 
 type Route
-    = HomeRoute
-    | CreatorRoute
-    | NotFoundRoute
+    = Home
+    | Creator
+    | About
+    | BuyNow
+    | FabricsAndAccesories
+    | TermsAndConditions
+    | Contact
+    | NotFound
 
 
 type alias Model =

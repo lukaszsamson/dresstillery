@@ -1,12 +1,13 @@
-@import url('https://fonts.googleapis.com/css?family=Cabin');
-$menuWidth: 300px;
+@import url('https://fonts.googleapis.com/css?family=BioRhyme');
+$menuWidth: 200px;
+$headerHeight: 150px;
 body {
     background-color: white;
 }
 .header {
   background-size: 100%;
   background-position: center;
-  height: 150px;
+  height: $headerHeight;
   margin-left: $menuWidth;
 }
 .content {
@@ -93,18 +94,34 @@ body {
   left: 0px;
   top: 0px;
   width: $menuWidth;
-  background-color: pink;
   & ul {
     padding: 0;
     list-style: none;
-    margin-top: 150px;
     li {
       display: flex;
       justify-content: center;
     }
   }
   & a {
-    font-size: 2em;
+    font-family: 'BioRhyme', serif;
+    font-size: 1em;
     text-align: center;
+    color: black;
+    margin-bottom: 1em;
+    &:link, &:visited, &:hover, &:focus, &:active {
+      color: black;
+      outline: none;
+      // text-decoration: none;
+    }
+  }
+  .logo {
+    height: $headerHeight;
+  }
+  .social {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1em;
   }
 }

@@ -8,8 +8,13 @@ import UrlParser
 matchers : UrlParser.Parser (Route -> a) a
 matchers =
     UrlParser.oneOf
-        [ UrlParser.map HomeRoute UrlParser.top
-        , UrlParser.map CreatorRoute (UrlParser.s "creator")
+        [ UrlParser.map Home UrlParser.top
+        , UrlParser.map Creator (UrlParser.s (pathImpl Creator))
+        , UrlParser.map About (UrlParser.s (pathImpl About))
+        , UrlParser.map FabricsAndAccesories (UrlParser.s (pathImpl FabricsAndAccesories))
+        , UrlParser.map BuyNow (UrlParser.s (pathImpl BuyNow))
+        , UrlParser.map TermsAndConditions (UrlParser.s (pathImpl TermsAndConditions))
+        , UrlParser.map Contact (UrlParser.s (pathImpl Contact))
         ]
 
 
@@ -20,17 +25,37 @@ parseLocation location =
             route
 
         Nothing ->
-            NotFoundRoute
+            NotFound
+
+
+pathImpl : Route -> String
+pathImpl r =
+    case r of
+        Home ->
+            ""
+
+        About ->
+            "about"
+
+        Creator ->
+            "creator"
+
+        FabricsAndAccesories ->
+            "fabrics_and_accesories"
+
+        BuyNow ->
+            "buy_now"
+
+        TermsAndConditions ->
+            "terms_and_conditions"
+
+        Contact ->
+            "contact"
+
+        NotFound ->
+            ""
 
 
 path : Route -> String
 path r =
-    case r of
-        HomeRoute ->
-            "/"
-
-        CreatorRoute ->
-            "/creator"
-
-        NotFoundRoute ->
-            "/"
+    "/" ++ pathImpl r

@@ -1,6 +1,8 @@
 module App exposing (..)
 
+import Color exposing (Color)
 import Css
+import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onWithOptions)
@@ -61,38 +63,76 @@ header =
 
 pageNotFound : Html msg
 pageNotFound =
-    div [] [ text "404" ]
+    div [ class "content" ] [ text "404" ]
 
 
 creatorView : Html msg
 creatorView =
-    div [] [ text "creator" ]
+    div [ class "content" ] [ text "creator" ]
+
+
+aboutView : Html msg
+aboutView =
+    div [ class "content" ] [ text "about" ]
+
+
+buyNowView : Html msg
+buyNowView =
+    div [ class "content" ] [ text "buyNow" ]
+
+
+termsAndConditionsView : Html msg
+termsAndConditionsView =
+    div [ class "content" ] [ text "termsAndConditions" ]
+
+
+fabricsAndAccesoriesView : Html msg
+fabricsAndAccesoriesView =
+    div [ class "content" ] [ text "fabricsAndAccesories" ]
+
+
+contactView : Html msg
+contactView =
+    div [ class "content" ] [ text "contact" ]
 
 
 homeView : Html msg
 homeView =
-    div []
-        [ div [ class "content" ]
-            [ navItem "trololo" "#" "img/1.jpg" "nav1"
-            , navItem "bla" "#" "img/2.jpg" "nav2"
-            , navItem "bla" "#" "img/3.jpg" "nav3"
-            , navItem "bla" "#" "img/4.jpg" "nav4"
-            , navItem "bla" "#" "img/5.jpg" "nav5"
-            , navItem "bla" "#" "img/6.jpg" "nav6"
-            ]
+    div [ class "content" ]
+        [ navItem "trololo" "#" "img/1.jpg" "nav1"
+        , navItem "bla" "#" "img/2.jpg" "nav2"
+        , navItem "bla" "#" "img/3.jpg" "nav3"
+        , navItem "bla" "#" "img/4.jpg" "nav4"
+        , navItem "bla" "#" "img/5.jpg" "nav5"
+        , navItem "bla" "#" "img/6.jpg" "nav6"
         ]
 
 
 mainContent : Model -> Html msg
 mainContent model =
     case model.route of
-        HomeRoute ->
+        Home ->
             homeView
 
-        CreatorRoute ->
+        About ->
+            aboutView
+
+        BuyNow ->
+            buyNowView
+
+        TermsAndConditions ->
+            termsAndConditionsView
+
+        FabricsAndAccesories ->
+            fabricsAndAccesoriesView
+
+        Contact ->
+            contactView
+
+        Creator ->
             creatorView
 
-        NotFoundRoute ->
+        NotFound ->
             pageNotFound
 
 
@@ -120,9 +160,21 @@ menuLink path label =
 menu : Model -> Html Msg
 menu model =
     div [ class "menu" ]
-        [ menuLink (path HomeRoute) "Home"
-        , menuLink (path CreatorRoute) "Creator"
-        , text ("ch " ++ toString model.changes)
+        [ img [ class "logo", src "img/logo.png" ] []
+        , ul []
+            [ menuLink (path Home) "Home"
+            , menuLink (path About) "Kim jesteśmy"
+            , menuLink (path BuyNow) "Kup teraz"
+            , menuLink (path Creator) "Zaprojektuj własną spódnicę"
+            , menuLink (path FabricsAndAccesories) "Tkaniny i akcesoria"
+            , menuLink (path TermsAndConditions) "Warunki zakupów"
+            , text ("" ++ toString model.changes)
+            ]
+        , div [ class "social" ]
+            [ FontAwesome.instagram (Color.rgb 0 0 0) 60
+            , FontAwesome.facebook_official (Color.rgb 0 0 0) 60
+            , FontAwesome.twitter (Color.rgb 0 0 0) 60
+            ]
         ]
 
 
