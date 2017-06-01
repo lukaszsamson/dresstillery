@@ -1,32 +1,52 @@
+@import url('https://fonts.googleapis.com/css?family=Cabin');
+$menuWidth: 300px;
 body {
-    background-color: #ddd;
+    background-color: white;
 }
 .header {
   background-size: 100%;
   background-position: center;
   height: 150px;
+  margin-left: $menuWidth;
 }
 .content {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
   grid-auto-rows: minmax(100px, auto);
+  margin-left: $menuWidth;
 }
 
 @media (max-width: 480px) /*and (orientation: landscape)*/ {
   .content {
     grid-template-columns: repeat(1, 1fr);
+    margin-left: 0;
+  }
+  .menu {
+    display: none;
+  }
+  .header {
+    margin-left: 0;
   }
 }
 
 @media (min-width: 481px) and (max-width: 740px) /*and (orientation: landscape)*/ {
   .content {
     grid-template-columns: repeat(2, 1fr);
+    margin-left: 0;
+  }
+  .menu {
+    display: none;
+  }
+  .header {
+    margin-left: 0;
   }
 }
 
 .navItem {
   height: 300px;
+  font-family: 'Cabin', sans-serif;
+  background-color: #ddd;
 }
 .navItem a {
   & p {
@@ -65,4 +85,26 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   transition: background-size 0.3s;
+}
+
+.menu {
+  position: absolute;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  width: $menuWidth;
+  background-color: pink;
+  & ul {
+    padding: 0;
+    list-style: none;
+    margin-top: 150px;
+    li {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  & a {
+    font-size: 2em;
+    text-align: center;
+  }
 }
