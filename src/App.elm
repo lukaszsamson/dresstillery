@@ -1,5 +1,6 @@
 module App exposing (..)
 
+import BuyNowView
 import Color exposing (Color)
 import Css
 import FontAwesome
@@ -10,15 +11,35 @@ import Json.Decode as Decode
 import Messages exposing (..)
 import Models exposing (..)
 import Navigation
+import Process
 import Routing exposing (parseLocation, path)
+import Task
+import Time exposing (Time)
 
 
 -- UPDATE
 
 
+delay : Time -> msg -> Cmd msg
+delay time msg =
+    Process.sleep time
+        |> Task.andThen (always <| Task.succeed msg)
+        |> Task.perform identity
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        BuyNowLoaded ->
+            ( { model
+                | buyNow =
+                    { loaded = True
+                    , items = [ { label = "asd" }, { label = "xzcz" } ]
+                    }
+              }
+            , Cmd.none
+            )
+
         ChangeLocation path ->
             ( { model | changes = model.changes + 1 }, Navigation.newUrl path )
 
@@ -26,8 +47,42 @@ update msg model =
             let
                 newRoute =
                     parseLocation location
+
+                newModel =
+                    { model | route = newRoute }
             in
-            ( { model | route = newRoute }, Cmd.none )
+            newModel ! load newModel
+
+
+load : Model -> List (Cmd Msg)
+load model =
+    case model.route of
+        Home ->
+            []
+
+        About ->
+            []
+
+        BuyNow ->
+            if not model.buyNow.loaded then
+                [ delay (Time.second * 5) <| BuyNowLoaded ]
+            else
+                []
+
+        TermsAndConditions ->
+            []
+
+        FabricsAndAccesories ->
+            []
+
+        Contact ->
+            []
+
+        Creator ->
+            []
+
+        NotFound ->
+            []
 
 
 
@@ -48,7 +103,7 @@ navItem caption link imageUrl className =
                 [-- [ src imageUrl ] []
                 ]
             , p
-                []
+                [ class className ]
                 [ text caption ]
             ]
         ]
@@ -56,9 +111,8 @@ navItem caption link imageUrl className =
 
 header : Html msg
 header =
-    div [ class "header", style [ ( "background-image", "url(img/head.jpg)" ) ] ]
-        [ h1 [] [ text "Wellcome in da shop" ]
-        ]
+    div [ class "header", style [ ( "background-image", "url(img/top.jpg)" ) ] ]
+        []
 
 
 pageNotFound : Html msg
@@ -74,11 +128,6 @@ creatorView =
 aboutView : Html msg
 aboutView =
     div [ class "content" ] [ text "about" ]
-
-
-buyNowView : Html msg
-buyNowView =
-    div [ class "content" ] [ text "buyNow" ]
 
 
 termsAndConditionsView : Html msg
@@ -104,11 +153,11 @@ homeView =
         , navItem "bla" "#" "img/3.jpg" "nav3"
         , navItem "bla" "#" "img/4.jpg" "nav4"
         , navItem "bla" "#" "img/5.jpg" "nav5"
-        , navItem "bla" "#" "img/6.jpg" "nav6"
+        , navItem "bla" "#" "img/6.jpg" "negate"
         ]
 
 
-mainContent : Model -> Html msg
+mainContent : Model -> Html Msg
 mainContent model =
     case model.route of
         Home ->
@@ -118,7 +167,7 @@ mainContent model =
             aboutView
 
         BuyNow ->
-            buyNowView
+            BuyNowView.view model
 
         TermsAndConditions ->
             termsAndConditionsView
@@ -160,7 +209,7 @@ menuLink path label =
 menu : Model -> Html Msg
 menu model =
     div [ class "menu" ]
-        [ img [ class "logo", src "img/logo.png" ] []
+        [ div [ class "logo" ] [ img [ src "img/logo.png" ] [] ]
         , ul []
             [ menuLink (path Home) "Home"
             , menuLink (path About) "Kim jesteśmy"

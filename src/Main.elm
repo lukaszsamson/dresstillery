@@ -11,6 +11,10 @@ initialModel : Route -> Model
 initialModel route =
     { route = route
     , changes = 0
+    , buyNow =
+        { loaded = False
+        , items = []
+        }
     }
 
 

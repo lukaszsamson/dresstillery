@@ -12,7 +12,19 @@ type Route
     | NotFound
 
 
+type alias BuyNowItem =
+    { label : String
+    }
+
+
+type alias BuyNowModel =
+    { loaded : Bool
+    , items : List BuyNowItem
+    }
+
+
 type alias Model =
     { route : Route
+    , buyNow : BuyNowModel
     , changes : Int
     }
