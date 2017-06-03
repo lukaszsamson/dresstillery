@@ -14,6 +14,7 @@ type Route
 
 type alias BuyNowItem =
     { label : String
+    , src : String
     }
 
 

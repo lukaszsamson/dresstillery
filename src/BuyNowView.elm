@@ -6,16 +6,21 @@ import Messages exposing (..)
 import Models exposing (..)
 
 
-item : String -> Html Msg
-item label =
-    div [] [ text label ]
+item : BuyNowItem -> Html Msg
+item item =
+    div []
+        [ div [] [ img [ src item.src ] [] ]
+        , div []
+            [ text item.label
+            ]
+        ]
 
 
 view : Model -> Html Msg
 view model =
     div [ class "content" ]
         [ if model.buyNow.loaded then
-            div [] (List.map (\a -> item a.label) model.buyNow.items)
+            div [] (List.map item model.buyNow.items)
           else
             div [] [ text "Loading" ]
         ]

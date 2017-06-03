@@ -34,7 +34,15 @@ update msg model =
             ( { model
                 | buyNow =
                     { loaded = True
-                    , items = [ { label = "asd" }, { label = "xzcz" } ]
+                    , items =
+                        [ { label = "ksadf sadffsd df", src = "img/cat/1.jpg" }
+                        , { label = "sdfdf", src = "img/cat/2.jpg" }
+                        , { label = "dsd few", src = "img/cat/3.jpg" }
+                        , { label = "erffre re", src = "img/cat/4.jpg" }
+                        , { label = "sdcd dcscerf", src = "img/cat/5.jpg" }
+                        , { label = "fer erf", src = "img/cat/6.jpg" }
+                        , { label = "rfrt gtef", src = "img/cat/7.jpg" }
+                        ]
                     }
               }
             , Cmd.none
@@ -217,7 +225,6 @@ menu model =
             , menuLink (path Creator) "Zaprojektuj własną spódnicę"
             , menuLink (path FabricsAndAccesories) "Tkaniny i akcesoria"
             , menuLink (path TermsAndConditions) "Warunki zakupów"
-            , text ("" ++ toString model.changes)
             ]
         , div [ class "social" ]
             [ FontAwesome.instagram (Color.rgb 0 0 0) 60
@@ -227,10 +234,18 @@ menu model =
         ]
 
 
+footer : Html Msg
+footer =
+    div [ class "footer" ]
+        [ p [] [ text "Copyright Ⓒ ja" ]
+        ]
+
+
 view : Model -> Html Msg
 view model =
     div []
         [ header
         , menu model
         , mainContent model
+        , footer
         ]
