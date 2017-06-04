@@ -11,5 +11,6 @@ type CreatorMsg
 type Msg
     = ChangeLocation String
     | OnLocationChange Navigation.Location
+    | ToggleMenu
     | BuyNowLoaded
     | CreatorMessage CreatorMsg

@@ -32,6 +32,7 @@ type alias CreatorModel =
 
 type alias Model =
     { route : Route
+    , menuShown : Bool
     , buyNow : BuyNowModel
     , creator : CreatorModel
     }

@@ -52,6 +52,9 @@ update msg model =
         ChangeLocation path ->
             ( model, Navigation.newUrl path )
 
+        ToggleMenu ->
+            ( { model | menuShown = not model.menuShown }, Cmd.none )
+
         OnLocationChange location ->
             let
                 newRoute =
@@ -241,10 +244,26 @@ menuLink path label =
         ]
 
 
+menuContainer : Model -> Html Msg
+menuContainer model =
+    div
+        [ class
+            (if model.menuShown then
+                "menuShown"
+             else
+                ""
+            )
+        ]
+        [ menu model
+        , div [ class "menuIcon", onClick ToggleMenu ] [ FontAwesome.bars (Color.rgb 0 0 0) 60 ]
+        ]
+
+
 menu : Model -> Html Msg
 menu model =
     div [ class "menu" ]
-        [ div [ class "logo" ] [ img [ src "img/logo.png" ] [] ]
+        [ div [ class "menuClose", onClick ToggleMenu ] [ FontAwesome.close (Color.rgb 0 0 0) 10 ]
+        , div [ class "logo" ] [ img [ src "img/logo.png" ] [] ]
         , ul []
             [ menuLink (path Home) "Home"
             , menuLink (path About) "Kim jesteśmy"
@@ -272,7 +291,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ header
-        , menu model
+        , menuContainer model
         , mainContent model
         , footer
         ]
