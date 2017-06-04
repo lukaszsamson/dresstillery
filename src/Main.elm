@@ -10,7 +10,10 @@ import Routing exposing (..)
 initialModel : Route -> Model
 initialModel route =
     { route = route
-    , changes = 0
+    , creator =
+        { selectedColor = Nothing
+        , lenght = Nothing
+        }
     , buyNow =
         { loaded = False
         , items = []

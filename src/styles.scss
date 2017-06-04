@@ -167,3 +167,15 @@ body {
     height: 20vh;
   }
 }
+
+
+.colorPicker {
+  display: grid;
+  grid-template-columns: repeat(3, 120px);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(120px, auto);
+  & .colorPick {
+    border: solid 1px;
+    // box-sizing: border-box;
+  }
+}

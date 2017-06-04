@@ -2,10 +2,11 @@ module App exposing (..)
 
 import BuyNowView
 import Color exposing (Color)
+import CreatorView
 import Css
 import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (class, href, src, style)
 import Html.Events exposing (onClick, onWithOptions)
 import Json.Decode as Decode
 import Messages exposing (..)
@@ -49,7 +50,7 @@ update msg model =
             )
 
         ChangeLocation path ->
-            ( { model | changes = model.changes + 1 }, Navigation.newUrl path )
+            ( model, Navigation.newUrl path )
 
         OnLocationChange location ->
             let
@@ -60,6 +61,37 @@ update msg model =
                     { model | route = newRoute }
             in
             newModel ! load newModel
+
+        CreatorMessage msg_ ->
+            updateCreator msg_ model
+
+
+updateCreator : CreatorMsg -> Model -> ( Model, Cmd Msg )
+updateCreator msg model =
+    case msg of
+        ColorPicked val ->
+            let
+                creator =
+                    model.creator
+            in
+            ( { model
+                | creator =
+                    { creator | selectedColor = Just val }
+              }
+            , Cmd.none
+            )
+
+        LenghtChanged val ->
+            let
+                creator =
+                    model.creator
+            in
+            ( { model
+                | creator =
+                    { creator | lenght = val }
+              }
+            , Cmd.none
+            )
 
 
 load : Model -> List (Cmd Msg)
@@ -128,11 +160,6 @@ pageNotFound =
     div [ class "content" ] [ text "404" ]
 
 
-creatorView : Html msg
-creatorView =
-    div [ class "content" ] [ text "creator" ]
-
-
 aboutView : Html msg
 aboutView =
     div [ class "content" ] [ text "about" ]
@@ -187,7 +214,7 @@ mainContent model =
             contactView
 
         Creator ->
-            creatorView
+            CreatorView.view model
 
         NotFound ->
             pageNotFound

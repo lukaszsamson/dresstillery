@@ -24,8 +24,14 @@ type alias BuyNowModel =
     }
 
 
+type alias CreatorModel =
+    { selectedColor : Maybe String
+    , lenght : Maybe Int
+    }
+
+
 type alias Model =
     { route : Route
     , buyNow : BuyNowModel
-    , changes : Int
+    , creator : CreatorModel
     }
