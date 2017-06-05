@@ -1,39 +1,10 @@
 module Main exposing (main)
 
-import App exposing (update, view)
+import App exposing (init, subscriptions, update, view)
 import Messages exposing (..)
 import Models exposing (..)
 import Navigation
 import Routing exposing (..)
-
-
-initialModel : Route -> Model
-initialModel route =
-    { route = route
-    , menuShown = False
-    , creator =
-        { selectedColor = Nothing
-        , lenght = Nothing
-        }
-    , buyNow =
-        { loaded = False
-        , items = []
-        }
-    }
-
-
-init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
-    let
-        currentRoute =
-            parseLocation location
-    in
-    ( initialModel currentRoute, Cmd.none )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
 
 
 main : Program Never Model Msg

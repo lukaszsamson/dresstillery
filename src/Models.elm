@@ -1,5 +1,7 @@
 module Models exposing (..)
 
+import Creator
+
 
 type Route
     = Home
@@ -24,15 +26,9 @@ type alias BuyNowModel =
     }
 
 
-type alias CreatorModel =
-    { selectedColor : Maybe String
-    , lenght : Maybe Int
-    }
-
-
 type alias Model =
     { route : Route
     , menuShown : Bool
     , buyNow : BuyNowModel
-    , creator : CreatorModel
+    , creator : Creator.Model
     }

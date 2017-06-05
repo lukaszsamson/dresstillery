@@ -2,7 +2,7 @@ module App exposing (..)
 
 import BuyNowView
 import Color exposing (Color)
-import CreatorView
+import Creator
 import Css
 import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
@@ -12,20 +12,39 @@ import Json.Decode as Decode
 import Messages exposing (..)
 import Models exposing (..)
 import Navigation
-import Process
 import Routing exposing (parseLocation, path)
-import Task
-import Time exposing (Time)
+import Time
+import Utils exposing (delay)
+
+
+initialModel : Route -> Model
+initialModel route =
+    { route = route
+    , menuShown = False
+    , creator = Creator.init
+    , buyNow =
+        { loaded = False
+        , items = []
+        }
+    }
+
+
+init : Navigation.Location -> ( Model, Cmd Msg )
+init location =
+    let
+        currentRoute =
+            parseLocation location
+    in
+    ( initialModel currentRoute, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
+
 
 
 -- UPDATE
-
-
-delay : Time -> msg -> Cmd msg
-delay time msg =
-    Process.sleep time
-        |> Task.andThen (always <| Task.succeed msg)
-        |> Task.perform identity
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -66,35 +85,11 @@ update msg model =
             newModel ! load newModel
 
         CreatorMessage msg_ ->
-            updateCreator msg_ model
-
-
-updateCreator : CreatorMsg -> Model -> ( Model, Cmd Msg )
-updateCreator msg model =
-    case msg of
-        ColorPicked val ->
             let
-                creator =
-                    model.creator
+                ( creator, message ) =
+                    Creator.update msg_ model.creator
             in
-            ( { model
-                | creator =
-                    { creator | selectedColor = Just val }
-              }
-            , Cmd.none
-            )
-
-        LenghtChanged val ->
-            let
-                creator =
-                    model.creator
-            in
-            ( { model
-                | creator =
-                    { creator | lenght = val }
-              }
-            , Cmd.none
-            )
+            ( { model | creator = creator }, Cmd.map (\a -> CreatorMessage a) message )
 
 
 load : Model -> List (Cmd Msg)
@@ -217,7 +212,8 @@ mainContent model =
             contactView
 
         Creator ->
-            CreatorView.view model
+            Creator.view model.creator
+                |> Html.map (\a -> CreatorMessage a)
 
         NotFound ->
             pageNotFound

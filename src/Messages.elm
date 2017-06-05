@@ -1,11 +1,7 @@
 module Messages exposing (..)
 
+import Creator
 import Navigation
-
-
-type CreatorMsg
-    = ColorPicked String
-    | LenghtChanged (Maybe Int)
 
 
 type Msg
@@ -13,4 +9,4 @@ type Msg
     | OnLocationChange Navigation.Location
     | ToggleMenu
     | BuyNowLoaded
-    | CreatorMessage CreatorMsg
+    | CreatorMessage Creator.Msg
