@@ -1,5 +1,6 @@
 module Messages exposing (..)
 
+import Basket
 import BuyNow
 import Creator
 import Navigation
@@ -11,3 +12,4 @@ type Msg
     | ToggleMenu
     | BuyNowMessage BuyNow.Msg
     | CreatorMessage Creator.Msg
+    | BasketMessage Basket.Msg

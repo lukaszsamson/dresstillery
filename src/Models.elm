@@ -1,5 +1,6 @@
 module Models exposing (..)
 
+import Basket
 import BuyNow
 import Creator
 
@@ -9,6 +10,7 @@ type Route
     | Creator
     | About
     | BuyNow
+    | Basket
     | FabricsAndAccesories
     | TermsAndConditions
     | Contact
@@ -20,5 +22,5 @@ type alias Model =
     , menuShown : Bool
     , buyNow : BuyNow.Model
     , creator : Creator.Model
-    , basket : Bool
+    , basket : Basket.Model
     }

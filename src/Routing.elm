@@ -13,6 +13,7 @@ matchers =
         , UrlParser.map About (UrlParser.s (pathImpl About))
         , UrlParser.map FabricsAndAccesories (UrlParser.s (pathImpl FabricsAndAccesories))
         , UrlParser.map BuyNow (UrlParser.s (pathImpl BuyNow))
+        , UrlParser.map Basket (UrlParser.s (pathImpl Basket))
         , UrlParser.map TermsAndConditions (UrlParser.s (pathImpl TermsAndConditions))
         , UrlParser.map Contact (UrlParser.s (pathImpl Contact))
         ]
@@ -45,6 +46,9 @@ pathImpl r =
 
         BuyNow ->
             "buy_now"
+
+        Basket ->
+            "basket"
 
         TermsAndConditions ->
             "terms_and_conditions"

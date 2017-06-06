@@ -1,6 +1,7 @@
 module Creator exposing (..)
 
 import Accordion
+import BasketItem exposing (BasketItem)
 import CreatorCanvas
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -10,7 +11,7 @@ import Input.Number
 
 type Msg
     = ColorPicked String
-    | ToBasket
+    | ToBasket BasketItem
     | LenghtChanged (Maybe Int)
     | ToggleColorPicker Accordion.Msg
     | ToggleLenghtPicker Accordion.Msg
@@ -60,7 +61,7 @@ update msg creator =
             , Cmd.none
             )
 
-        ToBasket ->
+        ToBasket _ ->
             creator ! []
 
 
@@ -122,6 +123,11 @@ lenghtPicker model =
         model.lenghtPickerShown
 
 
+toBasket : Model -> Msg
+toBasket model =
+    ToBasket (BasketItem.CustomItem { lenght = Maybe.withDefault 0 model.lenght, color = Maybe.withDefault "" model.selectedColor })
+
+
 view : Model -> Html Msg
 view model =
     div [ class "content" ]
@@ -138,6 +144,12 @@ view model =
                 []
             )
         , div []
-            [ button [ onClick ToBasket ] [ text "go" ]
+            [ button
+                (if render model then
+                    [ onClick (toBasket model) ]
+                 else
+                    []
+                )
+                [ text "go" ]
             ]
         ]

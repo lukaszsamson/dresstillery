@@ -1,5 +1,7 @@
 module App exposing (..)
 
+import Basket
+import BasketItem exposing (BasketItem)
 import BuyNow
 import Color exposing (Color)
 import Creator
@@ -13,8 +15,6 @@ import Messages exposing (..)
 import Models exposing (..)
 import Navigation
 import Routing exposing (parseLocation, path)
-import Time
-import Utils exposing (delay)
 
 
 initialModel : Route -> Model
@@ -22,7 +22,7 @@ initialModel route =
     { route = route
     , menuShown = False
     , creator = Creator.init
-    , basket = False
+    , basket = Basket.init
     , buyNow = BuyNow.init
     }
 
@@ -69,27 +69,57 @@ update msg model =
                 ( creator, message ) =
                     Creator.update msg_ model.creator
 
-                model_ =
+                creatorMessage =
+                    Cmd.map (\a -> CreatorMessage a) message
+
+                ( model_, message_ ) =
                     case msg_ of
-                        Creator.ToBasket ->
-                            { model | basket = not model.basket }
+                        Creator.ToBasket item ->
+                            addToBasket item model
 
                         _ ->
-                            model
+                            ( model, Cmd.none )
             in
-            ( { model_ | creator = creator }, Cmd.map (\a -> CreatorMessage a) message )
+            ( { model_ | creator = creator }, Cmd.batch [ creatorMessage, message_ ] )
 
         BuyNowMessage msg_ ->
             let
                 ( buyNow, message ) =
                     BuyNow.update msg_ model.buyNow
 
+                buyNowMessage =
+                    Cmd.map (\a -> BuyNowMessage a) message
+
+                ( model_, message_ ) =
+                    case msg_ of
+                        BuyNow.ToBasket item ->
+                            addToBasket item model
+
+                        _ ->
+                            ( model, Cmd.none )
+            in
+            ( { model_ | buyNow = buyNow }, Cmd.batch [ buyNowMessage, message_ ] )
+
+        BasketMessage msg_ ->
+            let
+                ( basket, message ) =
+                    Basket.update msg_ model.basket
+
                 model_ =
                     case msg_ of
                         _ ->
                             model
             in
-            ( { model_ | buyNow = buyNow }, Cmd.map (\a -> BuyNowMessage a) message )
+            ( { model_ | basket = basket }, Cmd.map (\a -> BasketMessage a) message )
+
+
+addToBasket : BasketItem -> Model -> ( Model, Cmd Msg )
+addToBasket item model =
+    let
+        ( basket, basketMessage ) =
+            Basket.update (Basket.AddLine item) model.basket
+    in
+    ( { model | basket = basket }, Cmd.map (\a -> BasketMessage a) basketMessage )
 
 
 load : Model -> ( Model, Cmd Msg )
@@ -182,6 +212,10 @@ mainContent model =
             BuyNow.view model.buyNow
                 |> Html.map (\a -> BuyNowMessage a)
 
+        Basket ->
+            Basket.view model.basket
+                |> Html.map (\a -> BasketMessage a)
+
         TermsAndConditions ->
             termsAndConditionsView
 
@@ -247,8 +281,8 @@ menu model =
             , menuLink (path Creator) "Zaprojektuj własną spódnicę"
             , menuLink (path FabricsAndAccesories) "Tkaniny i akcesoria"
             , menuLink (path TermsAndConditions) "Warunki zakupów"
+            , menuLink (path Basket) "Koszyk"
             ]
-        , p [] [ text (toString model.basket) ]
         , div [ class "social" ]
             [ FontAwesome.instagram (Color.rgb 0 0 0) 60
             , FontAwesome.facebook_official (Color.rgb 0 0 0) 60
