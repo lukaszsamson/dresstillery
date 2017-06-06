@@ -1,4 +1,4 @@
-module Creator exposing (Model, Msg, init, update, view)
+module Creator exposing (..)
 
 import Accordion
 import CreatorCanvas
@@ -10,6 +10,7 @@ import Input.Number
 
 type Msg
     = ColorPicked String
+    | ToBasket
     | LenghtChanged (Maybe Int)
     | ToggleColorPicker Accordion.Msg
     | ToggleLenghtPicker Accordion.Msg
@@ -58,6 +59,9 @@ update msg creator =
             ( { creator | lenght = val }
             , Cmd.none
             )
+
+        ToBasket ->
+            creator ! []
 
 
 colorPick : String -> Bool -> Html Msg
@@ -133,4 +137,7 @@ view model =
              else
                 []
             )
+        , div []
+            [ button [ onClick ToBasket ] [ text "go" ]
+            ]
         ]

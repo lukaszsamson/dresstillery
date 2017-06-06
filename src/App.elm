@@ -1,6 +1,6 @@
 module App exposing (..)
 
-import BuyNowView
+import BuyNow
 import Color exposing (Color)
 import Creator
 import Css
@@ -22,10 +22,8 @@ initialModel route =
     { route = route
     , menuShown = False
     , creator = Creator.init
-    , buyNow =
-        { loaded = False
-        , items = []
-        }
+    , basket = False
+    , buyNow = BuyNow.init
     }
 
 
@@ -50,24 +48,6 @@ subscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        BuyNowLoaded ->
-            ( { model
-                | buyNow =
-                    { loaded = True
-                    , items =
-                        [ { label = "ksadf sadffsd df", src = "img/cat/1.jpg" }
-                        , { label = "sdfdf", src = "img/cat/2.jpg" }
-                        , { label = "dsd few", src = "img/cat/3.jpg" }
-                        , { label = "erffre re", src = "img/cat/4.jpg" }
-                        , { label = "sdcd dcscerf", src = "img/cat/5.jpg" }
-                        , { label = "fer erf", src = "img/cat/6.jpg" }
-                        , { label = "rfrt gtef", src = "img/cat/7.jpg" }
-                        ]
-                    }
-              }
-            , Cmd.none
-            )
-
         ChangeLocation path ->
             ( model, Navigation.newUrl path )
 
@@ -82,45 +62,44 @@ update msg model =
                 newModel =
                     { model | route = newRoute }
             in
-            newModel ! load newModel
+            load newModel
 
         CreatorMessage msg_ ->
             let
                 ( creator, message ) =
                     Creator.update msg_ model.creator
+
+                model_ =
+                    case msg_ of
+                        Creator.ToBasket ->
+                            { model | basket = not model.basket }
+
+                        _ ->
+                            model
             in
-            ( { model | creator = creator }, Cmd.map (\a -> CreatorMessage a) message )
+            ( { model_ | creator = creator }, Cmd.map (\a -> CreatorMessage a) message )
+
+        BuyNowMessage msg_ ->
+            let
+                ( buyNow, message ) =
+                    BuyNow.update msg_ model.buyNow
+
+                model_ =
+                    case msg_ of
+                        _ ->
+                            model
+            in
+            ( { model_ | buyNow = buyNow }, Cmd.map (\a -> BuyNowMessage a) message )
 
 
-load : Model -> List (Cmd Msg)
+load : Model -> ( Model, Cmd Msg )
 load model =
     case model.route of
-        Home ->
-            []
-
-        About ->
-            []
-
         BuyNow ->
-            if not model.buyNow.loaded then
-                [ delay (Time.second * 5) <| BuyNowLoaded ]
-            else
-                []
+            update (BuyNowMessage BuyNow.Load) model
 
-        TermsAndConditions ->
-            []
-
-        FabricsAndAccesories ->
-            []
-
-        Contact ->
-            []
-
-        Creator ->
-            []
-
-        NotFound ->
-            []
+        _ ->
+            model ! []
 
 
 
@@ -200,7 +179,8 @@ mainContent model =
             aboutView
 
         BuyNow ->
-            BuyNowView.view model
+            BuyNow.view model.buyNow
+                |> Html.map (\a -> BuyNowMessage a)
 
         TermsAndConditions ->
             termsAndConditionsView
@@ -268,6 +248,7 @@ menu model =
             , menuLink (path FabricsAndAccesories) "Tkaniny i akcesoria"
             , menuLink (path TermsAndConditions) "Warunki zakupów"
             ]
+        , p [] [ text (toString model.basket) ]
         , div [ class "social" ]
             [ FontAwesome.instagram (Color.rgb 0 0 0) 60
             , FontAwesome.facebook_official (Color.rgb 0 0 0) 60

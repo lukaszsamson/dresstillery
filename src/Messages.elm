@@ -1,5 +1,6 @@
 module Messages exposing (..)
 
+import BuyNow
 import Creator
 import Navigation
 
@@ -8,5 +9,5 @@ type Msg
     = ChangeLocation String
     | OnLocationChange Navigation.Location
     | ToggleMenu
-    | BuyNowLoaded
+    | BuyNowMessage BuyNow.Msg
     | CreatorMessage Creator.Msg

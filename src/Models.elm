@@ -1,5 +1,6 @@
 module Models exposing (..)
 
+import BuyNow
 import Creator
 
 
@@ -14,21 +15,10 @@ type Route
     | NotFound
 
 
-type alias BuyNowItem =
-    { label : String
-    , src : String
-    }
-
-
-type alias BuyNowModel =
-    { loaded : Bool
-    , items : List BuyNowItem
-    }
-
-
 type alias Model =
     { route : Route
     , menuShown : Bool
-    , buyNow : BuyNowModel
+    , buyNow : BuyNow.Model
     , creator : Creator.Model
+    , basket : Bool
     }
