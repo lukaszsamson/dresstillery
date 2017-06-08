@@ -6,24 +6,26 @@ import BuyNow
 import Color exposing (Color)
 import Creator
 import Css
+import Dict
 import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
 import Html.Attributes exposing (class, href, src, style)
 import Html.Events exposing (onClick, onWithOptions)
-import Json.Decode as Decode
 import Messages exposing (..)
 import Models exposing (..)
 import Navigation
-import Routing exposing (parseLocation, path)
+import Product
+import Routing
 
 
-initialModel : Route -> Model
+initialModel : Routing.Route -> Model
 initialModel route =
     { route = route
     , menuShown = False
     , creator = Creator.init
     , basket = Basket.init
     , buyNow = BuyNow.init
+    , products = Dict.empty
     }
 
 
@@ -31,7 +33,7 @@ init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
     let
         currentRoute =
-            parseLocation location
+            Routing.parseLocation location
     in
     ( initialModel currentRoute, Cmd.none )
 
@@ -47,9 +49,14 @@ subscriptions model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    updateImpl (unwrapLocationChange msg) model
+
+
+updateImpl : Msg -> Model -> ( Model, Cmd Msg )
+updateImpl msg model =
     case msg of
-        ChangeLocation path ->
-            ( model, Navigation.newUrl path )
+        ChangeLocation route ->
+            ( model, Navigation.newUrl (Routing.toPath route) )
 
         ToggleMenu ->
             ( { model | menuShown = not model.menuShown }, Cmd.none )
@@ -57,7 +64,7 @@ update msg model =
         OnLocationChange location ->
             let
                 newRoute =
-                    parseLocation location
+                    Routing.parseLocation location
 
                 newModel =
                     { model | route = newRoute }
@@ -92,13 +99,42 @@ update msg model =
 
                 ( model_, message_ ) =
                     case msg_ of
-                        BuyNow.ToBasket item ->
-                            addToBasket item model
+                        BuyNow.Loaded list ->
+                            let
+                                products =
+                                    list
+                                        |> List.map (\a -> ( a.id, a ))
+                                        |> Dict.fromList
+                            in
+                            ( { model | products = products }, Cmd.none )
 
                         _ ->
                             ( model, Cmd.none )
             in
             ( { model_ | buyNow = buyNow }, Cmd.batch [ buyNowMessage, message_ ] )
+
+        ProductMessage msg_ i ->
+            let
+                ( updatedProducts, wrappedProductMessage ) =
+                    case model.products |> Dict.get i of
+                        Nothing ->
+                            ( model.products, Cmd.none )
+
+                        Just productModel ->
+                            let
+                                ( productModel_, productMessage ) =
+                                    Product.update msg_ productModel
+                            in
+                            ( Dict.insert i productModel_ model.products
+                            , Cmd.map (\a -> ProductMessage a i) productMessage
+                            )
+
+                ( model_, message_ ) =
+                    case msg_ of
+                        Product.ToBasket item ->
+                            addToBasket item model
+            in
+            ( { model_ | products = updatedProducts }, Cmd.batch [ wrappedProductMessage, message_ ] )
 
         BasketMessage msg_ ->
             let
@@ -113,6 +149,16 @@ update msg model =
             ( { model_ | basket = basket }, Cmd.map (\a -> BasketMessage a) message )
 
 
+unwrapLocationChange : Msg -> Msg
+unwrapLocationChange msg =
+    case msg of
+        BuyNowMessage (BuyNow.ChangeLocation route) ->
+            ChangeLocation route
+
+        _ ->
+            msg
+
+
 addToBasket : BasketItem -> Model -> ( Model, Cmd Msg )
 addToBasket item model =
     let
@@ -125,7 +171,7 @@ addToBasket item model =
 load : Model -> ( Model, Cmd Msg )
 load model =
     case model.route of
-        BuyNow ->
+        Routing.BuyNow ->
             update (BuyNowMessage BuyNow.Load) model
 
         _ ->
@@ -202,55 +248,54 @@ homeView =
 mainContent : Model -> Html Msg
 mainContent model =
     case model.route of
-        Home ->
+        Routing.Home ->
             homeView
 
-        About ->
+        Routing.About ->
             aboutView
 
-        BuyNow ->
+        Routing.BuyNow ->
             BuyNow.view model.buyNow
                 |> Html.map (\a -> BuyNowMessage a)
 
-        Basket ->
+        Routing.Product i ->
+            let
+                prod =
+                    Dict.get i model.products
+            in
+            case prod of
+                Nothing ->
+                    pageNotFound
+
+                Just p ->
+                    Product.view p
+                        |> Html.map (\a -> ProductMessage a i)
+
+        Routing.Basket ->
             Basket.view model.basket
                 |> Html.map (\a -> BasketMessage a)
 
-        TermsAndConditions ->
+        Routing.TermsAndConditions ->
             termsAndConditionsView
 
-        FabricsAndAccesories ->
+        Routing.FabricsAndAccesories ->
             fabricsAndAccesoriesView
 
-        Contact ->
+        Routing.Contact ->
             contactView
 
-        Creator ->
+        Routing.Creator ->
             Creator.view model.creator
                 |> Html.map (\a -> CreatorMessage a)
 
-        NotFound ->
+        Routing.NotFound ->
             pageNotFound
 
 
-{-| When clicking a link we want to prevent the default browser behaviour which is to load a new page.
-So we use `onWithOptions` instead of `onClick`.
--}
-onLinkClick : msg -> Attribute msg
-onLinkClick message =
-    let
-        options =
-            { stopPropagation = False
-            , preventDefault = True
-            }
-    in
-    onWithOptions "click" options (Decode.succeed message)
-
-
-menuLink : String -> String -> Html Msg
-menuLink path label =
+menuLink : Routing.Route -> String -> Html Msg
+menuLink route label =
     li []
-        [ a [ href path, onLinkClick (ChangeLocation path) ] [ text label ]
+        [ a [ Routing.linkHref route, Routing.onLinkClick (ChangeLocation route) ] [ text label ]
         ]
 
 
@@ -275,13 +320,13 @@ menu model =
         [ div [ class "menuClose", onClick ToggleMenu ] [ FontAwesome.close (Color.rgb 0 0 0) 10 ]
         , div [ class "logo" ] [ img [ src "img/logo.png" ] [] ]
         , ul []
-            [ menuLink (path Home) "Home"
-            , menuLink (path About) "Kim jesteśmy"
-            , menuLink (path BuyNow) "Kup teraz"
-            , menuLink (path Creator) "Zaprojektuj własną spódnicę"
-            , menuLink (path FabricsAndAccesories) "Tkaniny i akcesoria"
-            , menuLink (path TermsAndConditions) "Warunki zakupów"
-            , menuLink (path Basket) "Koszyk"
+            [ menuLink Routing.Home "Home"
+            , menuLink Routing.About "Kim jesteśmy"
+            , menuLink Routing.BuyNow "Kup teraz"
+            , menuLink Routing.Creator "Zaprojektuj własną spódnicę"
+            , menuLink Routing.FabricsAndAccesories "Tkaniny i akcesoria"
+            , menuLink Routing.TermsAndConditions "Warunki zakupów"
+            , menuLink Routing.Basket "Koszyk"
             ]
         , div [ class "social" ]
             [ FontAwesome.instagram (Color.rgb 0 0 0) 60

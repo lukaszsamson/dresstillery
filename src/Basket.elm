@@ -106,4 +106,8 @@ item i item =
 view : Model -> Html Msg
 view model =
     div [ class "content" ]
-        (model.items |> Array.indexedMap item |> Array.toList)
+        (if Array.isEmpty model.items then
+            [ text "Empty" ]
+         else
+            model.items |> Array.indexedMap item |> Array.toList
+        )

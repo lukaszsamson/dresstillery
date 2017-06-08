@@ -1,27 +1,44 @@
 module Routing exposing (..)
 
-import Models exposing (Route(..))
-import Navigation
-import UrlParser
+import Html exposing (Attribute)
+import Html.Attributes exposing (href)
+import Html.Events exposing (onWithOptions)
+import Json.Decode as Decode
+import Navigation exposing (Location)
+import UrlParser exposing (..)
 
 
-matchers : UrlParser.Parser (Route -> a) a
+type Route
+    = Home
+    | Creator
+    | About
+    | BuyNow
+    | Product Int
+    | Basket
+    | FabricsAndAccesories
+    | TermsAndConditions
+    | Contact
+    | NotFound
+
+
+matchers : Parser (Route -> a) a
 matchers =
-    UrlParser.oneOf
-        [ UrlParser.map Home UrlParser.top
-        , UrlParser.map Creator (UrlParser.s (pathImpl Creator))
-        , UrlParser.map About (UrlParser.s (pathImpl About))
-        , UrlParser.map FabricsAndAccesories (UrlParser.s (pathImpl FabricsAndAccesories))
-        , UrlParser.map BuyNow (UrlParser.s (pathImpl BuyNow))
-        , UrlParser.map Basket (UrlParser.s (pathImpl Basket))
-        , UrlParser.map TermsAndConditions (UrlParser.s (pathImpl TermsAndConditions))
-        , UrlParser.map Contact (UrlParser.s (pathImpl Contact))
+    oneOf
+        [ map Home top
+        , map Creator (s (pathImpl Creator))
+        , map About (s (pathImpl About))
+        , map FabricsAndAccesories (s (pathImpl FabricsAndAccesories))
+        , map BuyNow (s (pathImpl BuyNow))
+        , map Product (s "products" </> int)
+        , map Basket (s (pathImpl Basket))
+        , map TermsAndConditions (s (pathImpl TermsAndConditions))
+        , map Contact (s (pathImpl Contact))
         ]
 
 
-parseLocation : Navigation.Location -> Route
+parseLocation : Location -> Route
 parseLocation location =
-    case UrlParser.parsePath matchers location of
+    case parsePath matchers location of
         Just route ->
             route
 
@@ -56,10 +73,32 @@ pathImpl r =
         Contact ->
             "contact"
 
+        Product i ->
+            "products/" ++ toString i
+
         NotFound ->
             ""
 
 
-path : Route -> String
-path r =
+toPath : Route -> String
+toPath r =
     "/" ++ pathImpl r
+
+
+{-| When clicking a link we want to prevent the default browser behaviour which is to load a new page.
+So we use `onWithOptions` instead of `onClick`.
+-}
+onLinkClick : a -> Attribute a
+onLinkClick msg =
+    let
+        options =
+            { stopPropagation = False
+            , preventDefault = True
+            }
+    in
+    onWithOptions "click" options (Decode.succeed msg)
+
+
+linkHref : Route -> Attribute a
+linkHref route =
+    href (toPath route)

@@ -3,18 +3,9 @@ module Models exposing (..)
 import Basket
 import BuyNow
 import Creator
-
-
-type Route
-    = Home
-    | Creator
-    | About
-    | BuyNow
-    | Basket
-    | FabricsAndAccesories
-    | TermsAndConditions
-    | Contact
-    | NotFound
+import Dict exposing (Dict)
+import Product
+import Routing exposing (Route)
 
 
 type alias Model =
@@ -23,4 +14,5 @@ type alias Model =
     , buyNow : BuyNow.Model
     , creator : Creator.Model
     , basket : Basket.Model
+    , products : Dict Int Product.Model
     }
