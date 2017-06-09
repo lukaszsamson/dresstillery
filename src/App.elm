@@ -157,6 +157,9 @@ unwrapLocationChange msg =
         BuyNowMessage (BuyNow.ChangeLocation route) ->
             ChangeLocation route
 
+        BasketMessage (Basket.ChangeLocation route) ->
+            ChangeLocation route
+
         _ ->
             msg
 

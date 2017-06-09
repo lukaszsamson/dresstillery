@@ -5,10 +5,12 @@ import BasketItem exposing (BasketItem)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Routing exposing (Route, linkHref, onLinkClick)
 
 
 type Msg
     = AddLine BasketItem
+    | ChangeLocation Route
     | LineMessage Int BasketLineMsg
 
 
@@ -70,6 +72,9 @@ updateLines v items change =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ChangeLocation _ ->
+            model ! []
+
         AddLine item ->
             let
                 updatedItems =
@@ -85,6 +90,21 @@ update msg model =
             { model | items = updatedItems } ! []
 
 
+itemLink : BasketItem -> Html Msg
+itemLink item =
+    case item of
+        BasketItem.CatalogItem item_ ->
+            let
+                route =
+                    Routing.Product item_.id
+            in
+            a [ linkHref route, onLinkClick (ChangeLocation route) ] [ text "see" ]
+
+        BasketItem.CustomItem item_ ->
+            -- TODO load model in creator
+            a [ linkHref Routing.Creator, onLinkClick (ChangeLocation Routing.Creator) ] [ text "see" ]
+
+
 item : Int -> BasketLine -> Html Msg
 item i item =
     div []
@@ -95,6 +115,7 @@ item i item =
             ]
          else
             [ div [] [ text (toString item.item) ]
+            , itemLink item.item
             , button [ onClick (LineMessage i (ChangeQuantity 1)) ] [ text "+" ]
             , div [] [ text (item.quantity |> toString) ]
             , button [ onClick (LineMessage i (ChangeQuantity -1)) ] [ text "-" ]
