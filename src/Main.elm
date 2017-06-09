@@ -4,7 +4,6 @@ import App exposing (init, subscriptions, update, view)
 import Messages exposing (..)
 import Models exposing (..)
 import Navigation
-import Routing exposing (..)
 
 
 main : Program Never Model Msg

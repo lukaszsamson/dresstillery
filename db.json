@@ -1,0 +1,31 @@
+{
+  "products": [{
+    "id": 1,
+    "label": "ksadf sadffsd df",
+    "src": "/img/cat/1.jpg"
+  }, {
+    "id": 2,
+    "label": "sdfdf",
+    "src": "/img/cat/2.jpg"
+  }, {
+    "id": 3,
+    "label": "dsd few",
+    "src": "/img/cat/3.jpg"
+  }, {
+    "id": 4,
+    "label": "erffre re",
+    "src": "/img/cat/4.jpg"
+  }, {
+    "id": 5,
+    "label": "sdcd dcscerf",
+    "src": "/img/cat/5.jpg"
+  }, {
+    "id": 6,
+    "label": "fer erf",
+    "src": "/img/cat/6.jpg"
+  }, {
+    "id": 7,
+    "label": "rfrt gtef",
+    "src": "/img/cat/7.jpg"
+  }]
+}

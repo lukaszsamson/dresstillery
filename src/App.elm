@@ -98,41 +98,43 @@ updateImpl msg model =
                     Cmd.map (\a -> BuyNowMessage a) message
 
                 ( model_, message_ ) =
-                    case msg_ of
-                        BuyNow.Loaded list ->
-                            let
-                                products =
-                                    list
-                                        |> List.map (\a -> ( a.id, a ))
-                                        |> Dict.fromList
-                            in
-                            ( { model | products = products }, Cmd.none )
-
-                        _ ->
-                            ( model, Cmd.none )
+                    -- case msg_ of
+                    --     BuyNow.Loaded list ->
+                    --         let
+                    --             products =
+                    --                 list
+                    --                     |> List.map (\a -> ( a.id, a ))
+                    --                     |> Dict.fromList
+                    --         in
+                    --         ( { model | products = products }, Cmd.none )
+                    --
+                    --     _ ->
+                    ( model, Cmd.none )
             in
             ( { model_ | buyNow = buyNow }, Cmd.batch [ buyNowMessage, message_ ] )
 
         ProductMessage msg_ i ->
             let
-                ( updatedProducts, wrappedProductMessage ) =
-                    case model.products |> Dict.get i of
-                        Nothing ->
-                            ( model.products, Cmd.none )
+                productModel =
+                    model.products
+                        |> Dict.get i
+                        |> Maybe.withDefault (Product.init i)
 
-                        Just productModel ->
-                            let
-                                ( productModel_, productMessage ) =
-                                    Product.update msg_ productModel
-                            in
-                            ( Dict.insert i productModel_ model.products
-                            , Cmd.map (\a -> ProductMessage a i) productMessage
-                            )
+                ( productModel_, productMessage ) =
+                    Product.update msg_ productModel
+
+                ( updatedProducts, wrappedProductMessage ) =
+                    ( Dict.insert i productModel_ model.products
+                    , Cmd.map (\a -> ProductMessage a i) productMessage
+                    )
 
                 ( model_, message_ ) =
                     case msg_ of
                         Product.ToBasket item ->
                             addToBasket item model
+
+                        _ ->
+                            ( model, Cmd.none )
             in
             ( { model_ | products = updatedProducts }, Cmd.batch [ wrappedProductMessage, message_ ] )
 
@@ -173,6 +175,9 @@ load model =
     case model.route of
         Routing.BuyNow ->
             update (BuyNowMessage BuyNow.Load) model
+
+        Routing.Product i ->
+            update (ProductMessage Product.Load i) model
 
         _ ->
             model ! []
