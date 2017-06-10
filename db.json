@@ -27,5 +27,37 @@
     "id": 7,
     "label": "rfrt gtef",
     "src": "/img/cat/7.jpg"
+  }],
+  "fabrics": [{
+    "id": 1,
+    "label": "asdc",
+    "color": "#F0AD00"
+  }, {
+    "id": 2,
+    "label": "asdc",
+    "color": "#F00D00"
+  }, {
+    "id": 3,
+    "label": "asdc",
+    "color": "#F0ADA0"
+  }, {
+    "id": 4,
+    "label": "asdc",
+    "color": "#40AD00"
+  }, {
+    "id": 5,
+    "label": "asdc",
+    "color": "#10AD40"
+  }, {
+    "id": 6,
+    "label": "asdc",
+    "color": "#306D21"
+  }],
+  "lenghts": [{
+    "label": "mini",
+    "value": 40
+  }, {
+    "label": "midi",
+    "value": 60
   }]
 }

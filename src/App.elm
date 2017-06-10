@@ -176,6 +176,9 @@ addToBasket item model =
 load : Model -> ( Model, Cmd Msg )
 load model =
     case model.route of
+        Routing.Creator ->
+            update (CreatorMessage Creator.Load) model
+
         Routing.BuyNow ->
             update (BuyNowMessage BuyNow.Load) model
 
