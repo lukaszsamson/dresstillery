@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Tillana');
+@import url('https://fonts.googleapis.com/css?family=PT+Sans|Tillana');
 $menuWidth: 200px;
 $headerHeight: 50vh;
 $gray: #f7f7f7;
-
+* {
+  font-family: 'PT Sans', sans-serif;
+}
 body {
     background-color: white;
 }
@@ -14,13 +16,17 @@ body {
 }
 .content {
   min-height: 80vh;
+  & h1 {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
 }
 
 .grid3 {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 10px;
-  grid-auto-rows: minmax(100px, auto);
+  // grid-auto-rows: minmax(100px, auto);
 }
 
 .footer {
@@ -44,6 +50,9 @@ body {
   .grid3 {
     grid-template-columns: repeat(2, 1fr);
   }
+  .centeredColumn {
+    grid-column: 1/3;
+  }
   .header {
     height: 30vh;
   }
@@ -55,6 +64,9 @@ body {
   .grid3 {
     grid-template-columns: repeat(3, 1fr);
   }
+  .centeredColumn {
+    grid-column: 2;
+  }
   .header {
     height: 40vh;
   }
@@ -62,9 +74,6 @@ body {
 @media (min-width: 992px) {
   .content {
     min-height: 50vh;
-  }
-  .grid3 {
-    grid-template-columns: repeat(3, 1fr);
   }
   .header {
     height: 50vh;
@@ -243,11 +252,34 @@ body {
   transition: all 0.3s ease-in;
 }
 
+.buyNowSearch {
+  padding: 1.25rem;
+  & input {
+    width: 100%;
+  }
+}
 
+$buyNowItemHeight: 40vh;
 .buyNowItem {
+  & a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: $buyNowItemHeight;
+    padding: 1.25rem;
+    box-sizing: content-box;
+  }
   & img {
+    max-height: $buyNowItemHeight;
     max-width: 100%;
   }
+  transition: all 0.3s ease-out;
+  &:hover {
+    background: rgba(0,0,0,.075)
+  }
+}
+.buyNowItemLabel {
+  text-align: center;
 }
 
 $lightBorder: 1px solid rgba(0,0,0,.125);
