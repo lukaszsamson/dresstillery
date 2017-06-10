@@ -13,12 +13,16 @@ body {
   transform: scaleX(-1);
 }
 .content {
+  min-height: 80vh;
+}
+
+.grid3 {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 10px;
   grid-auto-rows: minmax(100px, auto);
-  min-height: 80vh;
 }
+
 .footer {
   height: 20vh;
   display: flex;
@@ -35,8 +39,10 @@ body {
 
 @media (min-width: 576px) {
   .content {
-    grid-template-columns: repeat(2, 1fr);
     min-height: 70vh;
+  }
+  .grid3 {
+    grid-template-columns: repeat(2, 1fr);
   }
   .header {
     height: 30vh;
@@ -44,8 +50,10 @@ body {
 }
 @media (min-width: 768px) {
   .content {
-    grid-template-columns: repeat(3, 1fr);
     min-height: 60vh;
+  }
+  .grid3 {
+    grid-template-columns: repeat(3, 1fr);
   }
   .header {
     height: 40vh;
@@ -53,8 +61,10 @@ body {
 }
 @media (min-width: 992px) {
   .content {
-    grid-template-columns: repeat(3, 1fr);
     min-height: 50vh;
+  }
+  .grid3 {
+    grid-template-columns: repeat(3, 1fr);
   }
   .header {
     height: 50vh;
@@ -237,5 +247,27 @@ body {
 .buyNowItem {
   & img {
     max-width: 100%;
+  }
+}
+
+$lightBorder: 1px solid rgba(0,0,0,.125);
+.basketListItem {
+  border: $lightBorder;
+  margin-bottom: -1px;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  grid-gap: 0.5rem;
+  padding: 1.25rem;
+  transition: all 0.3s ease-out;
+  &:hover {
+    background: rgba(0,0,0,.075)
+  }
+}
+.basketLineQuantity {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 120px;
+  & .numberBox {
+    text-align: center;
   }
 }

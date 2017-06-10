@@ -243,7 +243,7 @@ contactView =
 
 homeView : Html msg
 homeView =
-    div [ class "content" ]
+    div [ class "content", class "grid3" ]
         [ navItem "trololo" "#" "img/1.jpg" "nav1"
         , navItem "bla" "#" "img/2.jpg" "nav2"
         , navItem "bla" "#" "img/3.jpg" "nav3"

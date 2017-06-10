@@ -107,7 +107,7 @@ itemLink item =
 
 item : Int -> BasketLine -> Html Msg
 item i item =
-    div []
+    div [ class "basketListItem" ]
         (if item.removalPending then
             [ div [] [ text "R U Sure" ]
             , button [ onClick (LineMessage i ConfirmRemove) ] [ text "Yes" ]
@@ -116,9 +116,11 @@ item i item =
          else
             [ div [] [ text (toString item.item) ]
             , itemLink item.item
-            , button [ onClick (LineMessage i (ChangeQuantity 1)) ] [ text "+" ]
-            , div [] [ text (item.quantity |> toString) ]
-            , button [ onClick (LineMessage i (ChangeQuantity -1)) ] [ text "-" ]
+            , div [ class "basketLineQuantity" ]
+                [ button [ onClick (LineMessage i (ChangeQuantity 1)) ] [ text "+" ]
+                , div [ class "numberBox" ] [ text (item.quantity |> toString) ]
+                , button [ onClick (LineMessage i (ChangeQuantity -1)) ] [ text "-" ]
+                ]
             , button [ onClick (LineMessage i Remove) ] [ text "x" ]
             ]
         )

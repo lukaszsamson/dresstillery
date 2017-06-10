@@ -77,5 +77,5 @@ maybeList response =
 
 view : Model -> Html Msg
 view model =
-    div [ class "content" ]
+    div [ class "content", class "grid3" ]
         [ maybeList model.items ]
