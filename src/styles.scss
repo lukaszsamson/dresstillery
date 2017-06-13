@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans|Tillana');
-$menuWidth: 200px;
+$menuWidth: 300px;
 $headerHeight: 50vh;
 $gray: #f7f7f7;
 $buttonColor: $gray;
@@ -41,7 +41,9 @@ body {
   background-color: $gray;
 }
 .menu {
-  display: none;
+  transform: translateX(-100%);
+  transition: all 0.3s ease-out;
+  width: 100vw;
 }
 
 @media (min-width: 576px) {
@@ -53,6 +55,9 @@ body {
     & .centeredColumn {
       grid-column: 1/3;
     }
+  }
+  .menu {
+    width: 50vw;
   }
 
   .header {
@@ -73,6 +78,10 @@ body {
     }
   }
 
+  .menu {
+    width: calc(100vw / 3);
+  }
+
   .header {
     height: 40vh;
   }
@@ -87,7 +96,11 @@ body {
 }
 @media (min-width: 1200px) {
   .menu {
-    display: block;
+    width: $menuWidth;
+    transform: translateX(0);
+  }
+  .menuIcon.icon {
+    display: none;
   }
   .content {
     margin-left: $menuWidth;
@@ -153,32 +166,37 @@ body {
 }
 .menuIcon {
   position: fixed;
-  top: 30px;
-  left: 30px;
+  z-index: 2;
+  top: 1.25rem;
+  left: 1.25rem;
 }
 .menuShown {
   & .menuIcon {
-    display: none;
+    // display: none;
   }
   & .menu {
-    display: block;
+    // display: block;
+    transform: translateX(0);
   }
 }
-.menuClose {
-  float: right;
-  height: 10px;
-  margin-top: 10px;
-  margin-right: 10px;
-}
+
 .menu {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
   position: fixed;
   height: 100%;
   left: 0px;
   top: 0px;
-  width: $menuWidth;
   z-index: 1;
   background-color: white;
+  box-shadow: 0px 0px 10px 7px rgba(204, 204, 204, 0.25);
+  padding-top: 2.5rem;
+  // padding-bottom: 1.25rem;
+  &::after {
+    flex: 0 0 1.25rem;
+    content: '';
+  }
   & ul {
     padding: 0;
     list-style: none;
@@ -200,8 +218,7 @@ body {
     }
   }
   .logo {
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-bottom: 1.25rem;
     height: 120px;
     text-align: center;
     & img {
@@ -209,13 +226,12 @@ body {
     }
   }
   .social {
-    position: absolute;
-    bottom: 0;
+    flex-grow: 2;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     width: 100%;
-    height: 20vh;
+    min-height: 68px;
   }
 }
 
@@ -232,6 +248,15 @@ body {
     // box-sizing: border-box;
   }
 }
+.icon {
+  padding: 0.25rem;
+  display: flex;
+  background-color: rgba($buttonColor, 0.5);
+  &:hover {
+    transition: all 0.3s ease-out;
+    background-color: rgba(darken($buttonColor, 10%), 0.5);
+  }
+}
 
 button {
   border: none;
@@ -241,6 +266,9 @@ button {
   &:hover {
     background-color: darken($buttonColor, 10%);
   }
+}
+button:focus {
+  outline: none;
 }
 
 .lenghtPicker {
@@ -304,13 +332,16 @@ button {
 
 $buyNowItemHeight: 40vh;
 .buyNowItem {
+  display: flex;
+  flex-direction: column;
   & a {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: $buyNowItemHeight;
+    max-height: $buyNowItemHeight;
     padding: 1.25rem;
     box-sizing: content-box;
+    flex-grow: 2;
   }
   & img {
     max-height: $buyNowItemHeight;
@@ -337,12 +368,17 @@ $lightBorder: 1px solid rgba(0,0,0,.125);
   &:hover {
     background: rgba(0,0,0,.075)
   }
+  &>* {
+    align-self: center;
+  }
 }
 .basketLineQuantity {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 120px;
   & .numberBox {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

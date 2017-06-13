@@ -56,7 +56,7 @@ updateImpl : Msg -> Model -> ( Model, Cmd Msg )
 updateImpl msg model =
     case msg of
         ChangeLocation route ->
-            ( model, Navigation.newUrl (Routing.toPath route) )
+            ( { model | menuShown = False }, Navigation.newUrl (Routing.toPath route) )
 
         ToggleMenu ->
             ( { model | menuShown = not model.menuShown }, Cmd.none )
@@ -321,15 +321,14 @@ menuContainer model =
             )
         ]
         [ menu model
-        , div [ class "menuIcon", onClick ToggleMenu ] [ FontAwesome.bars (Color.rgb 0 0 0) 60 ]
+        , div [ class "menuIcon", class "icon", onClick ToggleMenu ] [ FontAwesome.bars (Color.rgb 0 0 0) 45 ]
         ]
 
 
 menu : Model -> Html Msg
 menu model =
     div [ class "menu" ]
-        [ div [ class "menuClose", onClick ToggleMenu ] [ FontAwesome.close (Color.rgb 0 0 0) 10 ]
-        , div [ class "logo" ] [ img [ src "img/logo.png" ] [] ]
+        [ div [ class "logo" ] [ img [ src "img/logo.png" ] [] ]
         , ul []
             [ menuLink Routing.Home "Home"
             , menuLink Routing.About "Kim jesteśmy"
@@ -340,10 +339,17 @@ menu model =
             , menuLink Routing.Basket "Koszyk"
             ]
         , div [ class "social" ]
-            [ FontAwesome.instagram (Color.rgb 0 0 0) 60
-            , FontAwesome.facebook_official (Color.rgb 0 0 0) 60
-            , FontAwesome.twitter (Color.rgb 0 0 0) 60
+            [ icon FontAwesome.instagram
+            , icon FontAwesome.facebook_official
+            , icon FontAwesome.twitter
             ]
+        ]
+
+
+icon : (Color -> number -> Html msg) -> Html msg
+icon ico =
+    div [ class "icon" ]
+        [ ico (Color.rgb 0 0 0) 60
         ]
 
 
