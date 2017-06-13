@@ -51,12 +51,14 @@ maybeProduct response =
             text "Loading..."
 
         RemoteData.Success model ->
-            div []
-                [ div [] [ img [ src model.src ] [] ]
-                , div []
-                    [ text model.label
+            div [ class "grid3" ]
+                [ div [ class "wideColumn" ] [ img [ src model.src ] [] ]
+                , div [ class "productDetails" ]
+                    [ h2 [] [ text model.label ]
+                    , div [] [ text (toString model.price) ]
+                    , div [] (model.lenghts |> List.map (\a -> text <| toString a))
+                    , button [ onClick (ToBasket (BasketItem.CatalogItem { id = model.id })) ] [ text "Do koszyka" ]
                     ]
-                , button [ onClick (ToBasket (BasketItem.CatalogItem { id = model.id })) ] [ text "Go" ]
                 ]
 
         RemoteData.Failure error ->

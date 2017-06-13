@@ -74,7 +74,7 @@ body {
       grid-column: 2;
     }
     & .wideColumn {
-      grid-column: 2/4;
+      grid-column: span 2;
     }
   }
 
@@ -381,4 +381,7 @@ $lightBorder: 1px solid rgba(0,0,0,.125);
     justify-content: center;
     align-items: center;
   }
+}
+
+.productDetails {
 }

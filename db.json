@@ -2,31 +2,45 @@
   "products": [{
     "id": 1,
     "label": "ksadf sadffsd df",
-    "src": "/img/cat/1.jpg"
+    "src": "/img/cat/1.jpg",
+    "price": 25.54,
+    "lenghts": ["mini"]
   }, {
     "id": 2,
     "label": "sdfdf",
-    "src": "/img/cat/2.jpg"
+    "src": "/img/cat/2.jpg",
+    "price": 245.99,
+    "lenghts": ["midi"]
   }, {
     "id": 3,
     "label": "dsd few",
-    "src": "/img/cat/3.jpg"
+    "src": "/img/cat/3.jpg",
+    "price": 5.54,
+    "lenghts": ["mini"]
   }, {
     "id": 4,
     "label": "erffre re",
-    "src": "/img/cat/4.jpg"
+    "src": "/img/cat/4.jpg",
+    "price": 25.54,
+    "lenghts": ["mini", "midi"]
   }, {
     "id": 5,
     "label": "sdcd dcscerf",
-    "src": "/img/cat/5.jpg"
+    "src": "/img/cat/5.jpg",
+    "price": 425.54,
+    "lenghts": ["midi"]
   }, {
     "id": 6,
     "label": "fer erf",
-    "src": "/img/cat/6.jpg"
+    "src": "/img/cat/6.jpg",
+    "price": 25.54,
+    "lenghts": ["mini", "midi"]
   }, {
     "id": 7,
     "label": "rfrt gtef",
-    "src": "/img/cat/7.jpg"
+    "src": "/img/cat/7.jpg",
+    "price": 235.54,
+    "lenghts": ["mini"]
   }],
   "fabrics": [{
     "id": 1,
