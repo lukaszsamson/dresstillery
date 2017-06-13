@@ -16,6 +16,7 @@ import Models exposing (..)
 import Navigation
 import Product
 import Routing
+import Utils exposing (..)
 
 
 initialModel : Routing.Route -> Model
@@ -72,46 +73,19 @@ updateImpl msg model =
             load newModel
 
         CreatorMessage msg_ ->
-            let
-                ( creator, message ) =
-                    Creator.update msg_ model.creator
+            updateComponent Creator.update CreatorMessage msg_ model.creator (\a -> { model | creator = a })
+                |> updateParent
+                    (\a ->
+                        case msg_ of
+                            Creator.ToBasket item ->
+                                addToBasket item a
 
-                creatorMessage =
-                    Cmd.map (\a -> CreatorMessage a) message
-
-                ( model_, message_ ) =
-                    case msg_ of
-                        Creator.ToBasket item ->
-                            addToBasket item model
-
-                        _ ->
-                            ( model, Cmd.none )
-            in
-            ( { model_ | creator = creator }, Cmd.batch [ creatorMessage, message_ ] )
+                            _ ->
+                                ( a, Cmd.none )
+                    )
 
         BuyNowMessage msg_ ->
-            let
-                ( buyNow, message ) =
-                    BuyNow.update msg_ model.buyNow
-
-                buyNowMessage =
-                    Cmd.map (\a -> BuyNowMessage a) message
-
-                ( model_, message_ ) =
-                    -- case msg_ of
-                    --     BuyNow.Loaded list ->
-                    --         let
-                    --             products =
-                    --                 list
-                    --                     |> List.map (\a -> ( a.id, a ))
-                    --                     |> Dict.fromList
-                    --         in
-                    --         ( { model | products = products }, Cmd.none )
-                    --
-                    --     _ ->
-                    ( model, Cmd.none )
-            in
-            ( { model_ | buyNow = buyNow }, Cmd.batch [ buyNowMessage, message_ ] )
+            updateComponent BuyNow.update BuyNowMessage msg_ model.buyNow (\a -> { model | buyNow = a })
 
         ProductMessage msg_ i ->
             let
@@ -119,36 +93,20 @@ updateImpl msg model =
                     model.products
                         |> Dict.get i
                         |> Maybe.withDefault (Product.init i)
+            in
+            updateComponent Product.update (\a -> ProductMessage a i) msg_ productModel (\a -> { model | products = Dict.insert i a model.products })
+                |> updateParent
+                    (\a ->
+                        case msg_ of
+                            Product.ToBasket item ->
+                                addToBasket item a
 
-                ( productModel_, productMessage ) =
-                    Product.update msg_ productModel
-
-                ( updatedProducts, wrappedProductMessage ) =
-                    ( Dict.insert i productModel_ model.products
-                    , Cmd.map (\a -> ProductMessage a i) productMessage
+                            _ ->
+                                ( a, Cmd.none )
                     )
 
-                ( model_, message_ ) =
-                    case msg_ of
-                        Product.ToBasket item ->
-                            addToBasket item model
-
-                        _ ->
-                            ( model, Cmd.none )
-            in
-            ( { model_ | products = updatedProducts }, Cmd.batch [ wrappedProductMessage, message_ ] )
-
         BasketMessage msg_ ->
-            let
-                ( basket, message ) =
-                    Basket.update msg_ model.basket
-
-                model_ =
-                    case msg_ of
-                        _ ->
-                            model
-            in
-            ( { model_ | basket = basket }, Cmd.map (\a -> BasketMessage a) message )
+            updateComponent Basket.update BasketMessage msg_ model.basket (\a -> { model | basket = a })
 
 
 unwrapLocationChange : Msg -> Msg
@@ -166,11 +124,7 @@ unwrapLocationChange msg =
 
 addToBasket : BasketItem -> Model -> ( Model, Cmd Msg )
 addToBasket item model =
-    let
-        ( basket, basketMessage ) =
-            Basket.update (Basket.AddLine item) model.basket
-    in
-    ( { model | basket = basket }, Cmd.map (\a -> BasketMessage a) basketMessage )
+    updateImpl (BasketMessage (Basket.AddLine item)) model
 
 
 load : Model -> ( Model, Cmd Msg )
