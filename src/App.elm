@@ -19,9 +19,9 @@ import Routing
 import Utils exposing (..)
 
 
-initialModel : Routing.Route -> Model
-initialModel route =
-    { route = route
+initialModel : Model
+initialModel =
+    { route = Routing.Home
     , menuShown = False
     , creator = Creator.init
     , basket = Basket.init
@@ -32,11 +32,7 @@ initialModel route =
 
 init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
-    let
-        currentRoute =
-            Routing.parseLocation location
-    in
-    ( initialModel currentRoute, Cmd.none )
+    updateImpl (OnLocationChange location) initialModel
 
 
 subscriptions : Model -> Sub Msg
@@ -169,7 +165,7 @@ navItem caption link imageUrl className =
 
 header : Html msg
 header =
-    div [ class "header", style [ ( "background-image", "url(img/top.jpg)" ) ] ]
+    div [ class "header", style [ ( "background-image", "url(/img/top.jpg)" ) ] ]
         []
 
 
@@ -201,12 +197,12 @@ contactView =
 homeView : Html msg
 homeView =
     div [ class "content", class "grid3" ]
-        [ navItem "trololo" "#" "img/1.jpg" "nav1"
-        , navItem "bla" "#" "img/2.jpg" "nav2"
-        , navItem "bla" "#" "img/3.jpg" "nav3"
-        , navItem "bla" "#" "img/4.jpg" "nav4"
-        , navItem "bla" "#" "img/5.jpg" "nav5"
-        , navItem "bla" "#" "img/6.jpg" "negate"
+        [ navItem "trololo" "#" "/img/1.jpg" "nav1"
+        , navItem "bla" "#" "/img/2.jpg" "nav2"
+        , navItem "bla" "#" "/img/3.jpg" "nav3"
+        , navItem "bla" "#" "/img/4.jpg" "nav4"
+        , navItem "bla" "#" "/img/5.jpg" "nav5"
+        , navItem "bla" "#" "/img/6.jpg" "negate"
         ]
 
 
@@ -282,7 +278,7 @@ menuContainer model =
 menu : Model -> Html Msg
 menu model =
     div [ class "menu" ]
-        [ div [ class "logo" ] [ img [ src "img/logo.png" ] [] ]
+        [ div [ class "logo" ] [ img [ src "/img/logo.png" ] [] ]
         , ul []
             [ menuLink Routing.Home "Home"
             , menuLink Routing.About "Kim jesteśmy"

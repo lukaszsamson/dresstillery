@@ -79,6 +79,7 @@ module.exports = {
         //       "/": "http://localhost:9779"
         //   },
         inline: true,
-        stats: 'errors-only'
+        stats: 'errors-only',
+        historyApiFallback: true
     }
 };
