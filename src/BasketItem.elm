@@ -1,6 +1,8 @@
 module BasketItem exposing (..)
 
+import ProductModels exposing (..)
+
 
 type BasketItem
-    = CatalogItem { id : Int }
+    = CatalogItem { item : BuyNowItem, lenght : Lenght }
     | CustomItem { color : String, lenght : Int }

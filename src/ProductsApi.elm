@@ -3,8 +3,16 @@ module ProductsApi exposing (..)
 import Api exposing (..)
 import Json.Decode exposing (Decoder, andThen, fail, float, int, list, string, succeed)
 import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
+import Models exposing (..)
 import ProductModels exposing (..)
 import RemoteData exposing (WebData)
+
+
+ingridientDecoder : Json.Decode.Decoder Ingridient
+ingridientDecoder =
+    decode Ingridient
+        |> required "name" string
+        |> required "percentage" int
 
 
 productDecoder : Json.Decode.Decoder BuyNowItem
@@ -20,6 +28,8 @@ productDecoder =
                     |> andThen lenghtDecoder
                 )
             )
+        |> required "ingridients"
+            (list ingridientDecoder)
 
 
 lenghtDecoder : String -> Decoder Lenght
@@ -35,11 +45,11 @@ lenghtDecoder val =
             fail ("Unknown value: " ++ val)
 
 
-fetchProducts : (WebData (List BuyNowItem) -> msg) -> Cmd msg
-fetchProducts msg =
-    get (backend ++ "/products") (list productDecoder) msg
+fetchProducts : Flags -> (WebData (List BuyNowItem) -> msg) -> Cmd msg
+fetchProducts flags msg =
+    get (flags.backendUrl ++ "/products") (list productDecoder) msg
 
 
-fetchProduct : Int -> (WebData BuyNowItem -> msg) -> Cmd msg
-fetchProduct i msg =
-    get (backend ++ "/products/" ++ toString i) productDecoder msg
+fetchProduct : Flags -> Int -> (WebData BuyNowItem -> msg) -> Cmd msg
+fetchProduct flags i msg =
+    get (flags.backendUrl ++ "/products/" ++ toString i) productDecoder msg

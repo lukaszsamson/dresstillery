@@ -3,6 +3,8 @@ module BuyNow exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, placeholder, src, type_)
 import Html.Events exposing (onInput)
+import Html.Keyed
+import Models exposing (..)
 import ProductModels exposing (..)
 import ProductsApi
 import RemoteData exposing (WebData)
@@ -19,13 +21,15 @@ type Msg
 type alias Model =
     { items : WebData (List BuyNowItem)
     , filterText : String
+    , flags : Flags
     }
 
 
-init : Model
-init =
+init : Flags -> Model
+init flags =
     { items = RemoteData.NotAsked
     , filterText = ""
+    , flags = flags
     }
 
 
@@ -40,7 +44,7 @@ update msg model =
         --         Cmd.none
         --     )
         Load ->
-            ( { model | items = RemoteData.Loading, filterText = "" }, ProductsApi.fetchProducts Loaded )
+            ( { model | items = RemoteData.Loading, filterText = "" }, ProductsApi.fetchProducts model.flags Loaded )
 
         FilterChange filterText ->
             ( { model | filterText = filterText }, Cmd.none )
@@ -58,7 +62,7 @@ item item =
         route =
             Routing.Product item.id
     in
-    div [ class "buyNowItem" ]
+    li [ class "buyNowItem" ]
         [ a [ linkHref route, onLinkClick (ChangeLocation route) ] [ img [ src item.src ] [] ]
         , div [ class "buyNowItemLabel" ]
             [ text item.label
@@ -68,7 +72,11 @@ item item =
 
 itemFilter : String -> BuyNowItem -> Bool
 itemFilter filterText item =
-    item.label |> String.contains filterText
+    let
+        normalize =
+            String.trim << String.toLower
+    in
+    normalize item.label |> String.contains (normalize filterText)
 
 
 searchResults : List BuyNowItem -> String -> Html Msg
@@ -77,19 +85,27 @@ searchResults items filterText =
         filtered =
             items
                 |> List.filter (itemFilter <| filterText)
-    in
-    if List.isEmpty filtered then
-        div []
-            [ text "No results for "
-            , Html.i
+
+        message =
+            if List.isEmpty filtered then
+                [ div []
+                    [ text "No results for "
+                    , Html.i
+                        []
+                        [ text filterText ]
+                    ]
+                ]
+            else
                 []
-                [ text filterText ]
-            ]
-    else
-        div [ class "grid3" ]
-            (filtered
-                |> List.map item
-            )
+    in
+    div []
+        (message
+            ++ [ Html.Keyed.ul [ class "grid3", class "searchResults" ]
+                    (filtered
+                        |> List.map (\a -> ( toString a.id, item a ))
+                    )
+               ]
+        )
 
 
 maybeList : Model -> Html Msg

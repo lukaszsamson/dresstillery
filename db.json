@@ -4,43 +4,78 @@
     "label": "ksadf sadffsd df",
     "src": "/img/cat/1.jpg",
     "price": 25.54,
-    "lenghts": ["mini"]
+    "lenghts": ["mini"],
+    "ingridients": [
+      {"name": "poliester", "percentage": 23},
+      {"name": "drewno", "percentage": 33},
+      {"name": "cement", "percentage": 4}
+    ]
   }, {
     "id": 2,
     "label": "sdfdf",
     "src": "/img/cat/2.jpg",
     "price": 245.99,
-    "lenghts": ["midi"]
+    "lenghts": ["midi"],
+    "ingridients": [
+      {"name": "poliester", "percentage": 23},
+      {"name": "drewno", "percentage": 33},
+      {"name": "cement", "percentage": 4}
+    ]
   }, {
     "id": 3,
     "label": "dsd few",
     "src": "/img/cat/3.jpg",
     "price": 5.54,
-    "lenghts": ["mini"]
+    "lenghts": ["mini"],
+    "ingridients": [
+      {"name": "poliester", "percentage": 23},
+      {"name": "drewno", "percentage": 33},
+      {"name": "cement", "percentage": 4}
+    ]
   }, {
     "id": 4,
     "label": "erffre re",
     "src": "/img/cat/4.jpg",
     "price": 25.54,
-    "lenghts": ["mini", "midi"]
+    "lenghts": ["mini", "midi"],
+    "ingridients": [
+      {"name": "poliester", "percentage": 23},
+      {"name": "drewno", "percentage": 33},
+      {"name": "cement", "percentage": 4}
+    ]
   }, {
     "id": 5,
     "label": "sdcd dcscerf",
     "src": "/img/cat/5.jpg",
     "price": 425.54,
-    "lenghts": ["midi"]
+    "lenghts": ["midi"],
+    "ingridients": [
+      {"name": "poliester", "percentage": 23},
+      {"name": "drewno", "percentage": 33},
+      {"name": "cement", "percentage": 4}
+    ]
   }, {
     "id": 6,
     "label": "fer erf",
     "src": "/img/cat/6.jpg",
     "price": 25.54,
-    "lenghts": ["mini", "midi"]
+    "lenghts": ["mini", "midi"],
+    "ingridients": [
+      {"name": "poliester", "percentage": 23},
+      {"name": "drewno", "percentage": 33},
+      {"name": "cement", "percentage": 4}
+    ]
   }, {
     "id": 7,
     "label": "rfrt gtef",
     "src": "/img/cat/7.jpg",
     "price": 235.54,
-    "lenghts": ["mini"]
+    "lenghts": ["mini"],
+    "ingridients": [
+      {"name": "poliester", "percentage": 23},
+      {"name": "drewno", "percentage": 33},
+      {"name": "cement", "percentage": 4}
+    ]
   }],
   "fabrics": [{
     "id": 1,

@@ -96,13 +96,23 @@ itemLink item =
         BasketItem.CatalogItem item_ ->
             let
                 route =
-                    Routing.Product item_.id
+                    Routing.Product item_.item.id
             in
             a [ linkHref route, onLinkClick (ChangeLocation route) ] [ text "see" ]
 
         BasketItem.CustomItem item_ ->
             -- TODO load model in creator
             a [ linkHref Routing.Creator, onLinkClick (ChangeLocation Routing.Creator) ] [ text "see" ]
+
+
+itemLabel : BasketItem -> Html Msg
+itemLabel item =
+    case item of
+        BasketItem.CatalogItem item_ ->
+            text (item_.item.label ++ ", " ++ toString item_.lenght)
+
+        BasketItem.CustomItem item_ ->
+            text "custom item"
 
 
 item : Int -> BasketLine -> Html Msg
@@ -114,7 +124,7 @@ item i item =
             , button [ onClick (LineMessage i CancelRemove) ] [ text "No" ]
             ]
          else
-            [ div [] [ text (toString item.item) ]
+            [ div [] [ itemLabel item.item ]
             , itemLink item.item
             , div [ class "basketLineQuantity" ]
                 [ button [ onClick (LineMessage i (ChangeQuantity 1)) ] [ text "+" ]

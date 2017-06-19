@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "description": "Dress shop in elm",
   "scripts": {
-    "api": "node api.js",
+    "api": "json-server -w -p $API_PORT db.json",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --hot --inline --port 3443",
+    "dev": "echo $PORT && webpack-dev-server --hot --inline --port $PORT --host $HOST",
     "build": "webpack",
     "postinstall": "elm-package install -y",
     "start": "nf start"

@@ -11,7 +11,6 @@ import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
 import Html.Attributes exposing (class, href, src, style)
 import Html.Events exposing (onClick, onWithOptions)
-import Messages exposing (..)
 import Models exposing (..)
 import Navigation
 import Product
@@ -19,20 +18,42 @@ import Routing
 import Utils exposing (..)
 
 
-initialModel : Model
-initialModel =
+type Msg
+    = ChangeLocation Routing.Route
+    | OnLocationChange Navigation.Location
+    | ToggleMenu
+    | BuyNowMessage BuyNow.Msg
+    | ProductMessage Product.Msg Int
+    | CreatorMessage Creator.Msg
+    | BasketMessage Basket.Msg
+
+
+type alias Model =
+    { route : Routing.Route
+    , flags : Flags
+    , menuShown : Bool
+    , buyNow : BuyNow.Model
+    , creator : Creator.Model
+    , basket : Basket.Model
+    , products : Dict.Dict Int Product.Model
+    }
+
+
+initialModel : Flags -> Model
+initialModel flags =
     { route = Routing.Home
+    , flags = flags
     , menuShown = False
-    , creator = Creator.init
+    , creator = Creator.init flags
     , basket = Basket.init
-    , buyNow = BuyNow.init
+    , buyNow = BuyNow.init flags
     , products = Dict.empty
     }
 
 
-init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
-    updateImpl (OnLocationChange location) initialModel
+init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
+init flags location =
+    updateImpl (OnLocationChange location) (initialModel flags)
 
 
 subscriptions : Model -> Sub Msg
@@ -60,13 +81,10 @@ updateImpl msg model =
 
         OnLocationChange location ->
             let
-                newRoute =
+                route =
                     Routing.parseLocation location
-
-                newModel =
-                    { model | route = newRoute }
             in
-            load newModel
+            load { model | route = route }
 
         CreatorMessage msg_ ->
             updateComponent Creator.update CreatorMessage msg_ model.creator (\a -> { model | creator = a })
@@ -88,7 +106,7 @@ updateImpl msg model =
                 productModel =
                     model.products
                         |> Dict.get i
-                        |> Maybe.withDefault (Product.init i)
+                        |> Maybe.withDefault (Product.init model.flags i)
             in
             updateComponent Product.update (\a -> ProductMessage a i) msg_ productModel (\a -> { model | products = Dict.insert i a model.products })
                 |> updateParent

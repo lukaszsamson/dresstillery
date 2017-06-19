@@ -8,6 +8,7 @@ import CreatorModels exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Models exposing (..)
 import RemoteData exposing (WebData)
 
 
@@ -29,17 +30,19 @@ type alias Model =
     , lenghtPickerShown : Accordion.Model
     , fabrics : WebData (List Fabric)
     , lenghts : WebData (List Length)
+    , flags : Flags
     }
 
 
-init : Model
-init =
+init : Flags -> Model
+init flags =
     { selectedColor = Nothing
     , lenght = Nothing
     , lenghtPickerShown = Accordion.init True
     , colorPickerShown = Accordion.init False
     , fabrics = RemoteData.NotAsked
     , lenghts = RemoteData.NotAsked
+    , flags = flags
     }
 
 
@@ -47,7 +50,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Load ->
-            { model | fabrics = RemoteData.Loading } ! [ CreatorApi.fetchFabrics FabricsLoaded, CreatorApi.fetchLenghts LenghtsLoaded ]
+            { model | fabrics = RemoteData.Loading } ! [ CreatorApi.fetchFabrics model.flags FabricsLoaded, CreatorApi.fetchLenghts model.flags LenghtsLoaded ]
 
         FabricsLoaded response ->
             ( { model | fabrics = response }, Cmd.none )

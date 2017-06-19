@@ -4,6 +4,7 @@ import Api exposing (..)
 import CreatorModels exposing (..)
 import Json.Decode exposing (Decoder, float, int, string)
 import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
+import Models exposing (..)
 import RemoteData exposing (WebData)
 
 
@@ -15,9 +16,9 @@ fabricDecoder =
         |> required "id" int
 
 
-fetchFabrics : (WebData (List Fabric) -> msg) -> Cmd msg
-fetchFabrics msg =
-    get (backend ++ "/fabrics") (Json.Decode.list fabricDecoder) msg
+fetchFabrics : Flags -> (WebData (List Fabric) -> msg) -> Cmd msg
+fetchFabrics flags msg =
+    get (flags.backendUrl ++ "/fabrics") (Json.Decode.list fabricDecoder) msg
 
 
 lenghtDecoder : Json.Decode.Decoder Length
@@ -27,6 +28,6 @@ lenghtDecoder =
         |> required "value" int
 
 
-fetchLenghts : (WebData (List Length) -> msg) -> Cmd msg
-fetchLenghts msg =
-    get (backend ++ "/lenghts") (Json.Decode.list lenghtDecoder) msg
+fetchLenghts : Flags -> (WebData (List Length) -> msg) -> Cmd msg
+fetchLenghts flags msg =
+    get (flags.backendUrl ++ "/lenghts") (Json.Decode.list lenghtDecoder) msg
