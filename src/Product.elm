@@ -1,9 +1,9 @@
 module Product exposing (..)
 
 import BasketItem exposing (BasketItem)
+import CommonElements
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
 import Markdown
 import Models exposing (..)
 import ProductModels exposing (..)
@@ -14,6 +14,7 @@ import Utils exposing (productText)
 
 type Msg
     = ToBasket BasketItem
+    | AfterToBasket
     | Load
     | Loaded (WebData BuyNowItem)
     | LenghtChanged Lenght
@@ -24,6 +25,7 @@ type alias Model =
     , id : Int
     , flags : Flags
     , selectedLenght : Maybe Lenght
+    , justAddedToBasket : Bool
     }
 
 
@@ -33,6 +35,7 @@ init flags i =
     , product = RemoteData.NotAsked
     , flags = flags
     , selectedLenght = Nothing
+    , justAddedToBasket = False
     }
 
 
@@ -43,7 +46,10 @@ update msg model =
             { model | selectedLenght = Just l } ! []
 
         ToBasket i ->
-            model ! []
+            { model | justAddedToBasket = True } ! [ CommonElements.toBasketButtonAfter AfterToBasket ]
+
+        AfterToBasket ->
+            { model | justAddedToBasket = False } ! []
 
         Load ->
             ( { model | product = RemoteData.Loading }, ProductsApi.fetchProduct model.flags model.id Loaded )
@@ -59,27 +65,6 @@ update msg model =
                             Nothing
             in
             ( { model | product = response, selectedLenght = selectedLenght }, Cmd.none )
-
-
-lenghtPicker : List Lenght -> Maybe Lenght -> Html Msg
-lenghtPicker lenghts selectedLenght =
-    div [ class "lenghtPicker" ]
-        (lenghts
-            |> List.map
-                (\a ->
-                    Html.label
-                        [ class
-                            (if selectedLenght == Just a then
-                                "radioChecked"
-                             else
-                                ""
-                            )
-                        ]
-                        [ input [ type_ "radio", name "lenghtPicker", onClick (LenghtChanged a) ] []
-                        , text (toString a)
-                        ]
-                )
-        )
 
 
 maybeProduct : Model -> Html Msg
@@ -110,9 +95,9 @@ maybeProduct model =
                                 )
                         )
                     , h3 [] [ text "Dostępne warianty" ]
-                    , lenghtPicker product.lenghts model.selectedLenght
+                    , CommonElements.lenghtPicker product.lenghts model.selectedLenght LenghtChanged
                     , div [ class "productBasket" ]
-                        [ button [ onClick (ToBasket (BasketItem.CatalogItem { item = product, lenght = Maybe.withDefault Mini model.selectedLenght })) ] [ text "Do koszyka" ]
+                        [ CommonElements.toBasketButton model.justAddedToBasket (ToBasket (BasketItem.CatalogItem { item = product, lenght = Maybe.withDefault Mini model.selectedLenght }))
                         ]
                     ]
                 ]

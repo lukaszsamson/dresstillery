@@ -2,6 +2,7 @@ module Creator exposing (..)
 
 import Accordion
 import BasketItem exposing (BasketItem)
+import CommonElements
 import CreatorApi
 import CreatorCanvas
 import CreatorModels exposing (..)
@@ -9,13 +10,15 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Models exposing (..)
+import ProductModels
 import RemoteData exposing (WebData)
 
 
 type Msg
     = ColorPicked String
     | ToBasket BasketItem
-    | LenghtChanged Int
+    | AfterToBasket
+    | LenghtChanged ProductModels.Lenght
     | ToggleColorPicker Accordion.Msg
     | ToggleLenghtPicker Accordion.Msg
     | Load
@@ -25,12 +28,13 @@ type Msg
 
 type alias Model =
     { selectedColor : Maybe String
-    , lenght : Maybe Int
+    , lenght : Maybe ProductModels.Lenght
     , colorPickerShown : Accordion.Model
     , lenghtPickerShown : Accordion.Model
     , fabrics : WebData (List Fabric)
     , lenghts : WebData (List Length)
     , flags : Flags
+    , justAddedToBasket : Bool
     }
 
 
@@ -43,6 +47,7 @@ init flags =
     , fabrics = RemoteData.NotAsked
     , lenghts = RemoteData.NotAsked
     , flags = flags
+    , justAddedToBasket = False
     }
 
 
@@ -83,7 +88,10 @@ update msg model =
             )
 
         ToBasket _ ->
-            model ! []
+            { model | justAddedToBasket = True } ! [ CommonElements.toBasketButtonAfter AfterToBasket ]
+
+        AfterToBasket ->
+            { model | justAddedToBasket = False } ! []
 
 
 colorPick : String -> Bool -> Html Msg
@@ -145,31 +153,24 @@ colorPicker model =
         model.colorPickerShown
 
 
+lenghtInCentimeters l =
+    case l of
+        ProductModels.Mini ->
+            40
+
+        ProductModels.Midi ->
+            60
+
+
+allLenghts =
+    [ ProductModels.Mini, ProductModels.Midi ]
+
+
 lenghtPicker : Model -> Html Msg
 lenghtPicker model =
     let
         picker =
-            model.lenghts
-                |> maybeRemoteData
-                    (\a ->
-                        div [ class "lenghtPicker" ]
-                            (a
-                                |> List.map
-                                    (\a ->
-                                        Html.label
-                                            [ class
-                                                (if model.lenght == Just a.value then
-                                                    "radioChecked"
-                                                 else
-                                                    ""
-                                                )
-                                            ]
-                                            [ input [ type_ "radio", name "lenghtPicker", onClick (LenghtChanged a.value) ] []
-                                            , text a.label
-                                            ]
-                                    )
-                            )
-                    )
+            CommonElements.lenghtPicker allLenghts model.lenght LenghtChanged
     in
     Accordion.view (text "Lenght")
         picker
@@ -179,7 +180,7 @@ lenghtPicker model =
 
 toBasket : Model -> Msg
 toBasket model =
-    ToBasket (BasketItem.CustomItem { lenght = Maybe.withDefault 0 model.lenght, color = Maybe.withDefault "" model.selectedColor })
+    ToBasket (BasketItem.CustomItem { lenght = Maybe.withDefault ProductModels.Mini model.lenght, color = Maybe.withDefault "" model.selectedColor })
 
 
 view : Model -> Html Msg
@@ -191,19 +192,20 @@ view model =
             ]
         , div [ class "canvas", class "wideColumn" ]
             (if render model then
-                [ CreatorCanvas.creatorCanvas (Maybe.withDefault 100 model.lenght)
+                [ CreatorCanvas.creatorCanvas
+                    (lenghtInCentimeters <|
+                        Maybe.withDefault ProductModels.Mini model.lenght
+                    )
                     (Maybe.withDefault "" model.selectedColor)
                 ]
              else
                 []
             )
         , div []
-            [ button
-                (if render model then
-                    [ onClick (toBasket model) ]
-                 else
-                    []
-                )
-                [ text "go" ]
-            ]
+            (if render model then
+                [ CommonElements.toBasketButton model.justAddedToBasket (toBasket model)
+                ]
+             else
+                []
+            )
         ]

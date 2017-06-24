@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-// require('dotenv').config();
 const path = require('path');
 
 const elmSource = __dirname + '/src';

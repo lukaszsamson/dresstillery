@@ -1,0 +1,51 @@
+.navItem {
+  height: 300px;
+  font-family: 'Cabin', sans-serif;
+  background-color: #ddd;
+}
+.navItem a {
+  & p {
+    color: black;
+    border-color: black;
+    transition: all 0.3s;
+  }
+  & p.negate {
+    color: white;
+    border-color: white;
+  }
+  &:hover {
+    text-decoration: none;
+    & p {
+      color: white;
+      border-color: white;
+    }
+    & p.negate {
+      color: black;
+      border-color: black;
+    }
+    .imgContainer {
+      background-size: 150%;
+      filter: blur(3px);
+    }
+  }
+}
+.navItem p {
+  border: solid 3px;
+  line-height: 1.5em;
+  font-size: 2em;
+  text-align: center;
+  margin: auto;
+  position: relative;
+  bottom: 70px;
+  width: 70%;
+}
+.navItem .imgContainer {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  // background-size: 100%;
+  background-size: 160%;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s;
+}

@@ -88,11 +88,12 @@ searchResults items filterText =
 
         message =
             if List.isEmpty filtered then
-                [ div []
-                    [ text "No results for "
+                [ div [ class "simpleMessage" ]
+                    [ text "Brak wyników dla "
                     , Html.i
                         []
                         [ text filterText ]
+                    , text "."
                     ]
                 ]
             else

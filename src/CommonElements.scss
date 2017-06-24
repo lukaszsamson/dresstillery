@@ -1,0 +1,45 @@
+.icon {
+  padding: 0.25rem;
+  display: flex;
+  background-color: rgba($buttonColor, 0.5);
+  &:hover {
+    transition: all 0.3s ease-out;
+    background-color: rgba(darken($buttonColor, 10%), 0.5);
+  }
+}
+
+.lenghtPicker {
+  & label {
+    padding: 0.5rem;
+    background-color: $buttonColor;
+    margin: 0.25rem;
+    transition: all 0.3s ease-out;
+    &:hover {
+      background-color: darken($buttonColor, 10%);
+    }
+  }
+  & .radioChecked {
+    background-color: darken($buttonColor, 10%);
+  }
+  & input {
+    opacity: 0;
+    position: absolute;
+  }
+}
+
+.simpleMessage {
+  text-align: center;
+}
+
+button, .button {
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.3s ease-out;
+  background-color: $buttonColor;
+  &:hover {
+    background-color: darken($buttonColor, 10%);
+  }
+}
+button:focus {
+  outline: none;
+}

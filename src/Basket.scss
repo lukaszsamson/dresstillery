@@ -1,0 +1,30 @@
+.basketItems {
+  padding-left: 0;
+}
+
+$lightBorder: 1px solid rgba(0,0,0,.125);
+.basketListItem {
+  border: $lightBorder;
+  margin-bottom: -1px;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  grid-gap: 0.5rem;
+  padding: 1.25rem;
+  transition: all 0.3s ease-out;
+  &:hover {
+    background: rgba(0,0,0,.075)
+  }
+  &>* {
+    align-self: center;
+  }
+}
+.basketLineQuantity {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 120px;
+  & .numberBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

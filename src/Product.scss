@@ -1,0 +1,34 @@
+.productMainImage {
+  object-fit: contain;
+  width: 100%;
+}
+
+.productDetails {
+  padding: 1.25rem;
+  dl {
+    display: grid;
+    grid-template-columns: 6rem 3rem;
+
+  }
+  dt:after {
+    content: ":"
+  }
+  dd {
+    text-align: right;
+  }
+}
+.productPrice {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: rgb(206, 37, 33);
+}
+
+.productBasket {
+  display: flex;
+  justify-content: center;
+  line-height: 2.5rem;
+  margin-top: 2rem;
+  button {
+    width: 50%;
+  }
+}

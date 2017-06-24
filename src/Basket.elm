@@ -5,6 +5,7 @@ import BasketItem exposing (BasketItem)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.Keyed
 import Routing exposing (Route, linkHref, onLinkClick)
 
 
@@ -98,11 +99,11 @@ itemLink item =
                 route =
                     Routing.Product item_.item.id
             in
-            a [ linkHref route, onLinkClick (ChangeLocation route) ] [ text "see" ]
+            a [ linkHref route, onLinkClick (ChangeLocation route) ] [ text "Otwórz" ]
 
         BasketItem.CustomItem item_ ->
             -- TODO load model in creator
-            a [ linkHref Routing.Creator, onLinkClick (ChangeLocation Routing.Creator) ] [ text "see" ]
+            a [ linkHref Routing.Creator, onLinkClick (ChangeLocation Routing.Creator) ] [ text "Otwórz" ]
 
 
 itemLabel : BasketItem -> Html Msg
@@ -117,11 +118,11 @@ itemLabel item =
 
 item : Int -> BasketLine -> Html Msg
 item i item =
-    div [ class "basketListItem" ]
+    li [ class "basketListItem" ]
         (if item.removalPending then
-            [ div [] [ text "R U Sure" ]
-            , button [ onClick (LineMessage i ConfirmRemove) ] [ text "Yes" ]
-            , button [ onClick (LineMessage i CancelRemove) ] [ text "No" ]
+            [ div [] [ text "Czy na pewno chcesz usunąć tą pozycję?" ]
+            , button [ onClick (LineMessage i ConfirmRemove) ] [ text "Tak" ]
+            , button [ onClick (LineMessage i CancelRemove) ] [ text "Nie" ]
             ]
          else
             [ div [] [ itemLabel item.item ]
@@ -138,9 +139,16 @@ item i item =
 
 view : Model -> Html Msg
 view model =
+    let
+        items =
+            model.items |> Array.indexedMap (\i a -> ( toString i, item i a )) |> Array.toList
+    in
     div [ class "content" ]
-        (if Array.isEmpty model.items then
-            [ text "Empty" ]
-         else
-            model.items |> Array.indexedMap item |> Array.toList
+        ([ h1 [] [ text "Koszyk" ] ]
+            ++ (if Array.isEmpty model.items then
+                    [ div [ class "simpleMessage" ] [ text "Twój koszyk jest pusty." ] ]
+                else
+                    []
+               )
+            ++ [ Html.Keyed.ul [ class "basketItems" ] items ]
         )

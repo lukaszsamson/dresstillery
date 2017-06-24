@@ -2,9 +2,9 @@
 
 require('./index.html');
 require('bootstrap-loader');
-require("./styles.scss");
+require("./App.scss");
 
-var Elm = require('./Main');
-var app = Elm.Main.fullscreen({
+const Elm = require('./Main');
+const app = Elm.Main.fullscreen({
   backendUrl: process.env.BACKEND_URL
 });

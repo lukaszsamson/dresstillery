@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans|Tillana');
+$menuWidth: 300px;
+$headerHeight: 50vh;
+$gray: #f7f7f7;
+$buttonColor: $gray;
+*, button, input, optgroup, select, textarea {
+  font-family: 'PT Sans', sans-serif;
+}
+body {
+    background-color: white;
+}
+.header {
+  background-size: 100%;
+  background-position: top;
+  height: 20vh;
+  transform: scaleX(-1);
+}
+.content {
+  min-height: 80vh;
+  & h1 {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 10px;
+  // grid-auto-rows: minmax(100px, auto);
+}
+
+.grid5 {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 10px;
+  // grid-auto-rows: minmax(100px, auto);
+}
+
+.footer {
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  padding: 2em;
+  & p {
+    margin-top: 1rem;
+  }
+  background-color: $gray;
+}
+.menu {
+  transform: translateX(-100%);
+  transition: all 0.3s ease-out;
+  width: 100vw;
+}
+
+@media (min-width: 576px) {
+  .content {
+    min-height: 70vh;
+  }
+  .grid3 {
+    grid-template-columns: repeat(2, 1fr);
+    & .centeredColumn {
+      grid-column: 1/3;
+    }
+  }
+  .grid5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .menu {
+    width: 50vw;
+  }
+
+  .header {
+    height: 30vh;
+  }
+}
+@media (min-width: 768px) {
+  .content {
+    min-height: 60vh;
+  }
+  .grid3 {
+    grid-template-columns: repeat(3, 1fr);
+    & .centeredColumn {
+      grid-column: 2;
+    }
+    & .wideColumn {
+      grid-column: span 2;
+    }
+  }
+  .grid5 {
+    grid-template-columns: repeat(7, 1fr);
+    & .wideColumn {
+      grid-column: span 4;
+    }
+    & .thinColumn {
+      grid-column: span 3;
+    }
+  }
+
+  .menu {
+    width: calc(100vw / 3);
+  }
+
+  .header {
+    height: 40vh;
+  }
+}
+@media (min-width: 992px) {
+  .content {
+    min-height: 50vh;
+  }
+  .header {
+    height: 50vh;
+  }
+  .grid5 {
+    grid-template-columns: repeat(5, 1fr);
+    & .wideColumn {
+      grid-column: span 3;
+    }
+    & .thinColumn {
+      grid-column: span 2;
+    }
+  }
+}
+@media (min-width: 1200px) {
+  .menu {
+    width: $menuWidth;
+    transform: translateX(0);
+  }
+  .menuIcon.icon {
+    display: none;
+  }
+  .content {
+    margin-left: $menuWidth;
+  }
+  .header {
+    margin-left: $menuWidth;
+  }
+  .footer {
+    margin-left: $menuWidth;
+  }
+}
+
+@import "Accordion.scss";
+@import "CommonElements.scss";
+@import "Basket.scss";
+@import "BuyNow.scss";
+@import "Creator.scss";
+@import "Product.scss";
+@import "Home.scss";
+@import "Menu.scss";
