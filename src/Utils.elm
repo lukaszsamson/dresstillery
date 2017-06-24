@@ -1,5 +1,6 @@
 module Utils exposing (..)
 
+import Html
 import Process
 import Task
 import Time exposing (Time)
@@ -22,6 +23,12 @@ updateComponent componentUpdate wrapper componentMessage componentModel updateMo
             Cmd.map (\a -> wrapper a) componentCommand
     in
     ( updateModel componentModel_, wrappedCommand )
+
+
+subView : (a -> Html.Html b) -> a -> (b -> c) -> Html.Html c
+subView view model msg =
+    view model
+        |> Html.map (\a -> msg a)
 
 
 updateParent : (parentModel -> ( parentModel, Cmd parentMsg )) -> ( parentModel, Cmd parentMsg ) -> ( parentModel, Cmd parentMsg )

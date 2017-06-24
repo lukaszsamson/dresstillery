@@ -21,7 +21,7 @@ type Msg
     | OnLocationChange Navigation.Location
     | ToggleMenu
     | BuyNowMessage BuyNow.Msg
-    | ProductMessage Product.Msg Int
+    | ProductMessage Int Product.Msg
     | CreatorMessage Creator.Msg
     | BasketMessage Basket.Msg
 
@@ -99,14 +99,14 @@ updateImpl msg model =
         BuyNowMessage msg_ ->
             updateComponent BuyNow.update BuyNowMessage msg_ model.buyNow (\a -> { model | buyNow = a })
 
-        ProductMessage msg_ i ->
+        ProductMessage i msg_ ->
             let
                 productModel =
                     model.products
                         |> Dict.get i
                         |> Maybe.withDefault (Product.init model.flags i)
             in
-            updateComponent Product.update (\a -> ProductMessage a i) msg_ productModel (\a -> { model | products = Dict.insert i a model.products })
+            updateComponent Product.update (\a -> ProductMessage i a) msg_ productModel (\a -> { model | products = Dict.insert i a model.products })
                 |> updateParent
                     (\a ->
                         case msg_ of
@@ -149,7 +149,7 @@ load model =
             update (BuyNowMessage BuyNow.Load) model
 
         Routing.Product i ->
-            update (ProductMessage Product.Load i) model
+            update (ProductMessage i Product.Load) model
 
         _ ->
             model ! []
@@ -170,25 +170,18 @@ mainContent model =
             aboutView
 
         Routing.BuyNow ->
-            BuyNow.view model.buyNow
-                |> Html.map (\a -> BuyNowMessage a)
+            subView BuyNow.view model.buyNow BuyNowMessage
 
         Routing.Product i ->
-            let
-                prod =
-                    Dict.get i model.products
-            in
-            case prod of
+            case Dict.get i model.products of
                 Nothing ->
                     pageNotFound
 
                 Just p ->
-                    Product.view p
-                        |> Html.map (\a -> ProductMessage a i)
+                    subView Product.view p <| ProductMessage i
 
         Routing.Basket ->
-            Basket.view model.basket
-                |> Html.map (\a -> BasketMessage a)
+            subView Basket.view model.basket BasketMessage
 
         Routing.TermsAndConditions ->
             termsAndConditionsView
@@ -200,8 +193,7 @@ mainContent model =
             contactView
 
         Routing.Creator ->
-            Creator.view model.creator
-                |> Html.map (\a -> CreatorMessage a)
+            subView Creator.view model.creator CreatorMessage
 
         Routing.NotFound ->
             pageNotFound
