@@ -1,8 +1,8 @@
 module App exposing (..)
 
 import Basket
-import BasketItem exposing (BasketItem)
 import BuyNow
+import CommonMessages
 import Creator
 import Dict
 import Home
@@ -17,13 +17,13 @@ import Utils exposing (..)
 
 
 type Msg
-    = ChangeLocation Routing.Route
-    | OnLocationChange Navigation.Location
+    = OnLocationChange Navigation.Location
     | ToggleMenu
-    | BuyNowMessage BuyNow.Msg
-    | ProductMessage Int Product.Msg
-    | CreatorMessage Creator.Msg
-    | BasketMessage Basket.Msg
+    | BuyNowMessage BuyNow.Msg (Maybe CommonMessages.Msg)
+    | ProductMessage Int Product.Msg (Maybe CommonMessages.Msg)
+    | CreatorMessage Creator.Msg (Maybe CommonMessages.Msg)
+    | BasketMessage Basket.Msg (Maybe CommonMessages.Msg)
+    | CommonMessage CommonMessages.Msg
 
 
 type alias Model =
@@ -51,7 +51,7 @@ initialModel flags =
 
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
-    updateImpl (OnLocationChange location) (initialModel flags)
+    update (OnLocationChange location) (initialModel flags)
 
 
 subscriptions : Model -> Sub Msg
@@ -59,19 +59,13 @@ subscriptions model =
     Sub.none
 
 
-
--- UPDATE
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    updateImpl (unwrapLocationChange msg) model
-
-
-updateImpl : Msg -> Model -> ( Model, Cmd Msg )
-updateImpl msg model =
     case msg of
-        ChangeLocation route ->
+        CommonMessage (CommonMessages.ToBasket item) ->
+            updateComponent_ basket (Basket.AddLine item) Nothing model
+
+        CommonMessage (CommonMessages.ChangeLocation route) ->
             ( { model | menuShown = False }, Navigation.newUrl (Routing.toPath route) )
 
         ToggleMenu ->
@@ -82,82 +76,50 @@ updateImpl msg model =
                 route =
                     Routing.parseLocation location
             in
-            load { model | route = route }
+            load route { model | route = route }
 
-        CreatorMessage msg_ ->
-            updateComponent Creator.update CreatorMessage msg_ model.creator (\a -> { model | creator = a })
-                |> updateParent
-                    (\a ->
-                        case msg_ of
-                            Creator.ToBasket item ->
-                                addToBasket item a
+        CreatorMessage cMsg pMsg ->
+            updateComponent_ creator cMsg pMsg model
 
-                            _ ->
-                                ( a, Cmd.none )
-                    )
+        BuyNowMessage cMsg pMsg ->
+            updateComponent_ buyNow cMsg pMsg model
 
-        BuyNowMessage msg_ ->
-            updateComponent BuyNow.update BuyNowMessage msg_ model.buyNow (\a -> { model | buyNow = a })
+        ProductMessage i cMsg pMsg ->
+            updateComponent_ (product i) cMsg pMsg model
 
-        ProductMessage i msg_ ->
-            let
-                productModel =
-                    model.products
-                        |> Dict.get i
-                        |> Maybe.withDefault (Product.init model.flags i)
-            in
-            updateComponent Product.update (\a -> ProductMessage i a) msg_ productModel (\a -> { model | products = Dict.insert i a model.products })
-                |> updateParent
-                    (\a ->
-                        case msg_ of
-                            Product.ToBasket item ->
-                                addToBasket item a
-
-                            _ ->
-                                ( a, Cmd.none )
-                    )
-
-        BasketMessage msg_ ->
-            updateComponent Basket.update BasketMessage msg_ model.basket (\a -> { model | basket = a })
+        BasketMessage cMsg pMsg ->
+            updateComponent_ basket cMsg pMsg model
 
 
-unwrapLocationChange : Msg -> Msg
-unwrapLocationChange msg =
-    case msg of
-        BuyNowMessage (BuyNow.ChangeLocation route) ->
-            ChangeLocation route
-
-        BasketMessage (Basket.ChangeLocation route) ->
-            ChangeLocation route
-
-        _ ->
-            msg
-
-
-addToBasket : BasketItem -> Model -> ( Model, Cmd Msg )
-addToBasket item model =
-    updateImpl (BasketMessage (Basket.AddLine item)) model
-
-
-load : Model -> ( Model, Cmd Msg )
-load model =
-    case model.route of
+load : Routing.Route -> Model -> ( Model, Cmd Msg )
+load route =
+    case route of
         Routing.Creator ->
-            update (CreatorMessage Creator.Load) model
+            updateComponent_ creator Creator.Load Nothing
 
         Routing.BuyNow ->
-            update (BuyNowMessage BuyNow.Load) model
+            updateComponent_ buyNow BuyNow.Load Nothing
 
         Routing.Product i ->
-            update (ProductMessage i Product.Load) model
+            updateComponent_ (product i) Product.Load Nothing
 
         _ ->
-            model ! []
+            \m -> m ! []
 
 
+updateComponent_ :
+    Component Model Msg modelC msgC
+    -> msgC
+    -> Maybe CommonMessages.Msg
+    -> Model
+    -> ( Model, Cmd Msg )
+updateComponent_ c msg pmsg m =
+    updateComponent c m msg pmsg (\v -> update (CommonMessage v))
 
--- VIEW
--- view : Model -> Html Msg
+
+changeLocation : Routing.Route -> Msg
+changeLocation =
+    \r -> CommonMessage <| CommonMessages.ChangeLocation r
 
 
 mainContent : Model -> Html Msg
@@ -170,18 +132,13 @@ mainContent model =
             aboutView
 
         Routing.BuyNow ->
-            subView BuyNow.view model.buyNow BuyNowMessage
+            subView buyNow model
 
         Routing.Product i ->
-            case Dict.get i model.products of
-                Nothing ->
-                    pageNotFound
-
-                Just p ->
-                    subView Product.view p <| ProductMessage i
+            subView (product i) model
 
         Routing.Basket ->
-            subView Basket.view model.basket BasketMessage
+            subView basket model
 
         Routing.TermsAndConditions ->
             termsAndConditionsView
@@ -193,7 +150,7 @@ mainContent model =
             contactView
 
         Routing.Creator ->
-            subView Creator.view model.creator CreatorMessage
+            subView creator model
 
         Routing.NotFound ->
             pageNotFound
@@ -203,7 +160,51 @@ view : Model -> Html Msg
 view model =
     div []
         [ header
-        , Menu.menuContainer model.menuShown ToggleMenu ChangeLocation
+        , Menu.menuContainer model.menuShown ToggleMenu changeLocation
         , mainContent model
         , footer
         ]
+
+
+basket : Component Model Msg Basket.Model Basket.Msg
+basket =
+    { getter = \m -> m.basket
+    , setter = \m b -> { m | basket = b }
+    , update = Basket.update
+    , view = Basket.view
+    , wrap = wrap BasketMessage Basket.toParent
+    }
+
+
+creator : Component Model Msg Creator.Model Creator.Msg
+creator =
+    { getter = \m -> m.creator
+    , setter = \m b -> { m | creator = b }
+    , update = Creator.update
+    , view = Creator.view
+    , wrap = wrap CreatorMessage Creator.toParent
+    }
+
+
+buyNow : Component Model Msg BuyNow.Model BuyNow.Msg
+buyNow =
+    { getter = \m -> m.buyNow
+    , setter = \m b -> { m | buyNow = b }
+    , update = BuyNow.update
+    , view = BuyNow.view
+    , wrap = wrap BuyNowMessage BuyNow.toParent
+    }
+
+
+product : Int -> Component Model Msg Product.Model Product.Msg
+product i =
+    { getter =
+        \m ->
+            m.products
+                |> Dict.get i
+                |> Maybe.withDefault (Product.init m.flags i)
+    , setter = \m a -> { m | products = Dict.insert i a m.products }
+    , update = Product.update
+    , view = Product.view
+    , wrap = wrap (ProductMessage i) Product.toParent
+    }

@@ -3,6 +3,7 @@ module Creator exposing (..)
 import Accordion
 import BasketItem exposing (BasketItem)
 import CommonElements
+import CommonMessages
 import CreatorApi
 import CreatorCanvas
 import CreatorModels exposing (..)
@@ -16,7 +17,7 @@ import RemoteData exposing (WebData)
 
 type Msg
     = ColorPicked String
-    | ToBasket BasketItem
+    | Parent CommonMessages.Msg
     | AfterToBasket
     | LenghtChanged ProductModels.Lenght
     | ToggleColorPicker Accordion.Msg
@@ -24,6 +25,16 @@ type Msg
     | Load
     | FabricsLoaded (WebData (List Fabric))
     | LenghtsLoaded (WebData (List Length))
+
+
+toParent : Msg -> Maybe CommonMessages.Msg
+toParent msg =
+    case msg of
+        Parent m ->
+            Just m
+
+        _ ->
+            Nothing
 
 
 type alias Model =
@@ -87,8 +98,11 @@ update msg model =
             , Cmd.none
             )
 
-        ToBasket _ ->
+        Parent (CommonMessages.ToBasket m) ->
             { model | justAddedToBasket = True } ! [ CommonElements.toBasketButtonAfter AfterToBasket ]
+
+        Parent _ ->
+            model ! []
 
         AfterToBasket ->
             { model | justAddedToBasket = False } ! []
@@ -153,6 +167,7 @@ colorPicker model =
         model.colorPickerShown
 
 
+lenghtInCentimeters : ProductModels.Lenght -> number
 lenghtInCentimeters l =
     case l of
         ProductModels.Mini ->
@@ -162,6 +177,7 @@ lenghtInCentimeters l =
             60
 
 
+allLenghts : List ProductModels.Lenght
 allLenghts =
     [ ProductModels.Mini, ProductModels.Midi ]
 
@@ -180,7 +196,7 @@ lenghtPicker model =
 
 toBasket : Model -> Msg
 toBasket model =
-    ToBasket (BasketItem.CustomItem { lenght = Maybe.withDefault ProductModels.Mini model.lenght, color = Maybe.withDefault "" model.selectedColor })
+    Parent <| CommonMessages.ToBasket (BasketItem.CustomItem { lenght = Maybe.withDefault ProductModels.Mini model.lenght, color = Maybe.withDefault "" model.selectedColor })
 
 
 view : Model -> Html Msg

@@ -2,6 +2,7 @@ module Basket exposing (..)
 
 import Array exposing (Array)
 import BasketItem exposing (BasketItem)
+import CommonMessages
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -11,8 +12,18 @@ import Routing exposing (Route, linkHref, onLinkClick)
 
 type Msg
     = AddLine BasketItem
-    | ChangeLocation Route
     | LineMessage Int BasketLineMsg
+    | Parent CommonMessages.Msg
+
+
+toParent : Msg -> Maybe CommonMessages.Msg
+toParent msg =
+    case msg of
+        Parent m ->
+            Just m
+
+        _ ->
+            Nothing
 
 
 type BasketLineMsg
@@ -73,7 +84,7 @@ updateLines v items change =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ChangeLocation _ ->
+        Parent _ ->
             model ! []
 
         AddLine item ->
@@ -99,11 +110,16 @@ itemLink item =
                 route =
                     Routing.Product item_.item.id
             in
-            a [ linkHref route, onLinkClick (ChangeLocation route) ] [ text "Otwórz" ]
+            a [ linkHref route, onLinkClick (changeLocation route) ] [ text "Otwórz" ]
 
         BasketItem.CustomItem item_ ->
             -- TODO load model in creator
-            a [ linkHref Routing.Creator, onLinkClick (ChangeLocation Routing.Creator) ] [ text "Otwórz" ]
+            a [ linkHref Routing.Creator, onLinkClick (changeLocation Routing.Creator) ] [ text "Otwórz" ]
+
+
+changeLocation : Route -> Msg
+changeLocation r =
+    Parent <| CommonMessages.ChangeLocation r
 
 
 itemLabel : BasketItem -> Html Msg

@@ -1,5 +1,6 @@
 module BuyNow exposing (..)
 
+import CommonMessages
 import Html exposing (..)
 import Html.Attributes exposing (class, placeholder, src, type_)
 import Html.Events exposing (onInput)
@@ -13,9 +14,19 @@ import Routing exposing (Route, linkHref, onLinkClick)
 
 type Msg
     = Load
-    | ChangeLocation Route
+    | Parent CommonMessages.Msg
     | FilterChange String
     | Loaded (WebData (List BuyNowItem))
+
+
+toParent : Msg -> Maybe CommonMessages.Msg
+toParent msg =
+    case msg of
+        Parent m ->
+            Just m
+
+        _ ->
+            Nothing
 
 
 type alias Model =
@@ -36,13 +47,6 @@ init flags =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        -- Load ->
-        --     ( model
-        --     , if not model.loaded then
-        --         delay (Time.second * 1) <| Loaded <| []
-        --       else
-        --         Cmd.none
-        --     )
         Load ->
             ( { model | items = RemoteData.Loading, filterText = "" }, ProductsApi.fetchProducts model.flags Loaded )
 
@@ -52,7 +56,7 @@ update msg model =
         Loaded response ->
             ( { model | items = response }, Cmd.none )
 
-        ChangeLocation _ ->
+        Parent _ ->
             model ! []
 
 
@@ -63,7 +67,7 @@ item item =
             Routing.Product item.id
     in
     li [ class "buyNowItem" ]
-        [ a [ linkHref route, onLinkClick (ChangeLocation route) ] [ img [ src item.src ] [] ]
+        [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src item.src ] [] ]
         , div [ class "buyNowItemLabel" ]
             [ text item.label
             ]

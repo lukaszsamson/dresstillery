@@ -1,6 +1,6 @@
 module Utils exposing (..)
 
-import Html
+import Html exposing (Html)
 import Process
 import Task
 import Time exposing (Time)
@@ -13,31 +13,60 @@ delay time msg =
         |> Task.perform identity
 
 
-updateComponent : (msg -> model -> ( model, Cmd msg )) -> (msg -> parentMsg) -> msg -> model -> (model -> parentModel) -> ( parentModel, Cmd parentMsg )
-updateComponent componentUpdate wrapper componentMessage componentModel updateModel =
+type alias Component modelP msgP modelC msgC =
+    { getter : modelP -> modelC
+    , setter : modelP -> modelC -> modelP
+    , update : msgC -> modelC -> ( modelC, Cmd msgC )
+    , view : modelC -> Html msgC
+    , wrap : msgC -> msgP
+    }
+
+
+updateComponent :
+    Component a msgP modelC b
+    -> a
+    -> b
+    -> Maybe c
+    -> (c -> a -> ( a, Cmd msgP ))
+    -> ( a, Cmd msgP )
+updateComponent c m msg pmsg uv =
+    let
+        ( m_, cmd ) =
+            updateComponent_ c msg m
+    in
+    case pmsg of
+        Nothing ->
+            ( m_, cmd )
+
+        Just v ->
+            let
+                ( m__, cmd_ ) =
+                    uv v m_
+            in
+            ( m__, Cmd.batch [ cmd, cmd_ ] )
+
+
+updateComponent_ : Component modelP msgP modelC msgC -> msgC -> modelP -> ( modelP, Cmd msgP )
+updateComponent_ c componentMessage model =
     let
         ( componentModel_, componentCommand ) =
-            componentUpdate componentMessage componentModel
+            c.update componentMessage (c.getter model)
 
         wrappedCommand =
-            Cmd.map (\a -> wrapper a) componentCommand
+            Cmd.map (\a -> c.wrap a) componentCommand
     in
-    ( updateModel componentModel_, wrappedCommand )
+    ( c.setter model componentModel_, wrappedCommand )
 
 
-subView : (a -> Html.Html b) -> a -> (b -> c) -> Html.Html c
-subView view model msg =
-    view model
-        |> Html.map (\a -> msg a)
+subView : Component a b aa bb -> a -> Html b
+subView c m =
+    c.view (c.getter m)
+        |> Html.map (\a -> c.wrap a)
 
 
-updateParent : (parentModel -> ( parentModel, Cmd parentMsg )) -> ( parentModel, Cmd parentMsg ) -> ( parentModel, Cmd parentMsg )
-updateParent parentUpdate ( model, command ) =
-    let
-        ( model_, command_ ) =
-            parentUpdate model
-    in
-    ( model_, Cmd.batch [ command, command_ ] )
+wrap : (a -> b -> c) -> (a -> b) -> a -> c
+wrap msg toParent =
+    \m -> msg m (toParent m)
 
 
 loremIpsum : String

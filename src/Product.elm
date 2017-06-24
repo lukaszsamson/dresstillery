@@ -2,8 +2,11 @@ module Product exposing (..)
 
 import BasketItem exposing (BasketItem)
 import CommonElements
+import CommonMessages
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Http
+import Layout
 import Markdown
 import Models exposing (..)
 import ProductModels exposing (..)
@@ -13,11 +16,21 @@ import Utils exposing (productText)
 
 
 type Msg
-    = ToBasket BasketItem
-    | AfterToBasket
+    = AfterToBasket
     | Load
     | Loaded (WebData BuyNowItem)
     | LenghtChanged Lenght
+    | Parent CommonMessages.Msg
+
+
+toParent : Msg -> Maybe CommonMessages.Msg
+toParent msg =
+    case msg of
+        Parent m ->
+            Just m
+
+        _ ->
+            Nothing
 
 
 type alias Model =
@@ -42,11 +55,14 @@ init flags i =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Parent (CommonMessages.ToBasket m) ->
+            { model | justAddedToBasket = True } ! [ CommonElements.toBasketButtonAfter AfterToBasket ]
+
+        Parent _ ->
+            model ! []
+
         LenghtChanged l ->
             { model | selectedLenght = Just l } ! []
-
-        ToBasket i ->
-            { model | justAddedToBasket = True } ! [ CommonElements.toBasketButtonAfter AfterToBasket ]
 
         AfterToBasket ->
             { model | justAddedToBasket = False } ! []
@@ -97,13 +113,21 @@ maybeProduct model =
                     , h3 [] [ text "Dostępne warianty" ]
                     , CommonElements.lenghtPicker product.lenghts model.selectedLenght LenghtChanged
                     , div [ class "productBasket" ]
-                        [ CommonElements.toBasketButton model.justAddedToBasket (ToBasket (BasketItem.CatalogItem { item = product, lenght = Maybe.withDefault Mini model.selectedLenght }))
+                        [ CommonElements.toBasketButton model.justAddedToBasket (Parent <| CommonMessages.ToBasket (BasketItem.CatalogItem { item = product, lenght = Maybe.withDefault Mini model.selectedLenght }))
                         ]
                     ]
                 ]
 
         RemoteData.Failure error ->
-            text (toString error)
+            case error of
+                Http.BadStatus s ->
+                    if s.status.code == 404 then
+                        Layout.pageNotFound
+                    else
+                        text (toString error)
+
+                _ ->
+                    text (toString error)
 
 
 view : Model -> Html Msg
