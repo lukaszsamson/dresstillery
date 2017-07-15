@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Lato|Tillana');
+@import url('../node_modules/normalize.css/normalize.css');
 $menuWidth: 300px;
 $headerHeight: 50vh;
 $gray: #f7f7f7;
 $buttonColor: $gray;
 *, button, input, optgroup, select, textarea {
   font-family: 'Lato', sans-serif;
+  box-sizing: border-box;
 }
 body {
     background-color: white;

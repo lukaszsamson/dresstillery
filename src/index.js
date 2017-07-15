@@ -1,10 +1,10 @@
 'use strict';
 
-require('./index.html');
-require('bootstrap-loader');
-require("./App.scss");
+import './index.html';
+import "./App.scss";
 
-const Elm = require('./Main');
+import Elm from './Main';
+
 const app = Elm.Main.fullscreen({
   backendUrl: process.env.BACKEND_URL
 });

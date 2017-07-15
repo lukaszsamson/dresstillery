@@ -5,11 +5,7 @@
   left: 1.25rem;
 }
 .menuShown {
-  & .menuIcon {
-    // display: none;
-  }
   & .menu {
-    // display: block;
     transform: translateX(0);
   }
 }
@@ -26,10 +22,9 @@
   background-color: white;
   box-shadow: 0px 0px 10px 7px rgba(204, 204, 204, 0.25);
   padding-top: 2.5rem;
-  // padding-bottom: 1.25rem;
   &::after {
     flex: 0 0 1.25rem;
-    content: '';
+    content: ' ';
   }
   & ul {
     padding: 0;
@@ -45,10 +40,10 @@
     text-align: center;
     color: black;
     margin-bottom: 1em;
+    text-decoration: none;
     &:link, &:visited, &:hover, &:focus, &:active {
       color: black;
       outline: none;
-      // text-decoration: none;
     }
   }
   .logo {

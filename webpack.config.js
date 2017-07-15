@@ -16,9 +16,10 @@ module.exports = {
       path.join(__dirname, "src"),
       "node_modules"
     ],
-    extensions: ['.js', '.elm', '.scss']
+    extensions: ['.js', '.elm', '.scss', '.css']
   },
   plugins: [
+    new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.EnvironmentPlugin(["BACKEND_URL"])
   ],
@@ -50,7 +51,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: [/elm-stuff/, /node_modules/],
+        exclude: [/elm-stuff/],
         loaders: ["style-loader", "css-loader"]
       },
       {
