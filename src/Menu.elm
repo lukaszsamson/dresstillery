@@ -33,7 +33,7 @@ menu changeRoute =
             \r l -> menuLink r l changeRoute
     in
     div [ class "menu" ]
-        [ div [ class "logo" ] [ img [ src "/img/logo.png" ] [] ]
+        [ div [ class "logo" ] [ img [ src "/img/logo/Falda_logo_vertical_black.svg" ] [] ]
         , ul []
             [ l Routing.Home "Home"
             , l Routing.About "Kim jesteśmy"
