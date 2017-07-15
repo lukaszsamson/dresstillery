@@ -40,7 +40,7 @@
     }
   }
   & a {
-    font-family: 'Tillana', cursive;
+    // font-family: 'Tillana', cursive;
     font-size: 1em;
     text-align: center;
     color: black;
@@ -52,12 +52,13 @@
     }
   }
   .logo {
-    margin-bottom: 1.25rem;
     height: 120px;
     text-align: center;
     & img {
       height: 100%;
     }
+    margin-top: 2rem;
+    margin-bottom: 2.5rem
   }
   .social {
     flex-grow: 2;
