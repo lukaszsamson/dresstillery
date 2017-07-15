@@ -129,7 +129,7 @@ mainContent model =
             Home.view
 
         Routing.About ->
-            aboutView
+            aboutView model.flags.o_mnie
 
         Routing.BuyNow ->
             subView buyNow model

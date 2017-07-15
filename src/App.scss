@@ -143,6 +143,10 @@ body {
   }
 }
 
+.logo-woman img {
+  max-height: 100vh;
+}
+
 @import "Accordion.scss";
 @import "CommonElements.scss";
 @import "Basket.scss";

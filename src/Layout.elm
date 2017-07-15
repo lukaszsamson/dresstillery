@@ -2,6 +2,7 @@ module Layout exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Markdown
 
 
 header : Html msg
@@ -22,9 +23,12 @@ pageNotFound =
     div [ class "content" ] [ text "404" ]
 
 
-aboutView : Html msg
-aboutView =
-    div [ class "content" ] [ text "about" ]
+aboutView : String -> Html msg
+aboutView o_mnie =
+    div [ class "content", class "grid3" ]
+        [ div [ class "wideColumn" ] [ Markdown.toHtml [] o_mnie ]
+        , div [ class "logo-woman" ] [ img [src "/img/logo/FALDA grafika_fin.svg"] [] ]
+        ]
 
 
 termsAndConditionsView : Html msg

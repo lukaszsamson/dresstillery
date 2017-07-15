@@ -6,4 +6,5 @@ import Routing
 
 type alias Flags =
     { backendUrl : String
+    , o_mnie : String
     }

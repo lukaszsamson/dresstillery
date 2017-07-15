@@ -14,9 +14,10 @@ module.exports = {
   resolve: {
     modules: [
       path.join(__dirname, "src"),
+      path.join(__dirname, "txt"),
       "node_modules"
     ],
-    extensions: ['.js', '.elm', '.scss', '.css']
+    extensions: ['.js', '.elm', '.scss', '.css', '.md']
   },
   plugins: [
     new webpack.NamedModulesPlugin(),
@@ -28,6 +29,14 @@ module.exports = {
         test: /\.html$/,
         exclude: /node_modules/,
         loader: 'file-loader?name=[name].[ext]'
+      },
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: "raw-loader"
+          }
+        ]
       },
       {
         test: /\.elm$/,
