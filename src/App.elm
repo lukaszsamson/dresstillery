@@ -62,11 +62,8 @@ subscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        CommonMessage (CommonMessages.ToBasket item) ->
-            updateComponent_ basket (Basket.AddLine item) Nothing model
-
-        CommonMessage (CommonMessages.ChangeLocation route) ->
-            ( { model | menuShown = False }, Navigation.newUrl (Routing.toPath route) )
+        CommonMessage cmsg ->
+            updateCommon cmsg model
 
         ToggleMenu ->
             ( { model | menuShown = not model.menuShown }, Cmd.none )
@@ -89,6 +86,16 @@ update msg model =
 
         BasketMessage cMsg pMsg ->
             updateComponent_ basket cMsg pMsg model
+
+
+updateCommon : CommonMessages.Msg -> Model -> ( Model, Cmd Msg )
+updateCommon msg model =
+    case msg of
+        CommonMessages.ToBasket item ->
+            updateComponent_ basket (Basket.AddLine item) Nothing model
+
+        CommonMessages.ChangeLocation route ->
+            ( { model | menuShown = False }, Navigation.newUrl (Routing.toPath route) )
 
 
 load : Routing.Route -> Model -> ( Model, Cmd Msg )
@@ -114,12 +121,12 @@ updateComponent_ :
     -> Model
     -> ( Model, Cmd Msg )
 updateComponent_ c msg pmsg m =
-    updateComponent c m msg pmsg (\v -> update (CommonMessage v))
+    updateComponent c m msg pmsg (update << CommonMessage)
 
 
 changeLocation : Routing.Route -> Msg
 changeLocation =
-    \r -> CommonMessage <| CommonMessages.ChangeLocation r
+    CommonMessage << CommonMessages.ChangeLocation
 
 
 mainContent : Model -> Html Msg

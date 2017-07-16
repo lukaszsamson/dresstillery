@@ -53,7 +53,7 @@ updateComponent_ c componentMessage model =
             c.update componentMessage (c.getter model)
 
         wrappedCommand =
-            Cmd.map (\a -> c.wrap a) componentCommand
+            Cmd.map c.wrap componentCommand
     in
     ( c.setter model componentModel_, wrappedCommand )
 
@@ -61,7 +61,7 @@ updateComponent_ c componentMessage model =
 subView : Component a b aa bb -> a -> Html b
 subView c m =
     c.view (c.getter m)
-        |> Html.map (\a -> c.wrap a)
+        |> Html.map c.wrap
 
 
 wrap : (a -> b -> c) -> (a -> b) -> a -> c
