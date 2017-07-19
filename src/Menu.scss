@@ -1,12 +1,17 @@
 .menuIcon {
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   top: 1.25rem;
   left: 1.25rem;
 }
 .menuShown {
-  & .menu {
+  .menu {
     transform: translateX(0);
+    z-index: 2;
+  }
+  .menuOverlay {
+    opacity: 0.7;
+    pointer-events: all;
   }
 }
 
@@ -24,7 +29,7 @@
   padding-top: 2.5rem;
   &::after {
     flex: 0 0 1.25rem;
-    content: ' ';
+    content: '';
   }
   & ul {
     padding: 0;
@@ -63,4 +68,17 @@
     width: 100%;
     min-height: 68px;
   }
+}
+
+.menuOverlay {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  pointer-events: none;
 }

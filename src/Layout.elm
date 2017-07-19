@@ -1,5 +1,7 @@
 module Layout exposing (..)
 
+import Color
+import FontAwesome
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Markdown
@@ -7,8 +9,17 @@ import Markdown
 
 header : Html msg
 header =
-    div [ class "header", style [ ( "background-image", "url(/img/top.jpg)" ) ] ]
-        []
+    div [ class "header" ]
+        [ img [ src "/img/logo/Falda_logo_horizontal_black.svg", class "headerLogo" ]
+            []
+        , div
+            [ class "headerIcons" ]
+            [ -- FontAwesome.bars (Color.rgb 0 0 0) 45
+              --, FontAwesome.bars (Color.rgb 0 0 0) 45
+              a [ href "#" ] [ text "Koszyk" ]
+            , a [ href "#" ] [ text "Zaloguj" ]
+            ]
+        ]
 
 
 footer : Html msg
@@ -26,8 +37,8 @@ pageNotFound =
 aboutView : String -> Html msg
 aboutView o_mnie =
     div [ class "content", class "grid3" ]
-        [ div [ class "wideColumn" ] [ Markdown.toHtml [] o_mnie ]
-        , div [ class "logo-woman" ] [ img [src "/img/logo/FALDA grafika_fin.svg"] [] ]
+        [ Markdown.toHtml [ class "wideColumn", class "textContainer" ] o_mnie
+        , div [ class "logo-woman" ] [ img [ src "/img/logo/FALDA grafika_fin.svg" ] [] ]
         ]
 
 

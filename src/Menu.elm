@@ -23,6 +23,7 @@ menuContainer menuShown toggle changeRoute =
         ]
         [ menu changeRoute
         , div [ class "menuIcon", class "icon", onClick toggle ] [ FontAwesome.bars (Color.rgb 0 0 0) 45 ]
+        , div [ class "menuOverlay", onClick toggle ] []
         ]
 
 

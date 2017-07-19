@@ -7,6 +7,7 @@ import Creator
 import Dict
 import Home
 import Html exposing (Html, div)
+import Html.Attributes exposing (class)
 import Layout exposing (..)
 import Menu
 import Models exposing (..)
@@ -165,7 +166,7 @@ mainContent model =
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "wrap" ]
         [ header
         , Menu.menuContainer model.menuShown ToggleMenu changeLocation
         , mainContent model
