@@ -1,6 +1,5 @@
 'use strict';
 
-import './index.html';
 import "./App.scss";
 
 import Elm from './Main';

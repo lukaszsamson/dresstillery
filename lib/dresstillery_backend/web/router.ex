@@ -13,7 +13,7 @@ defmodule DresstilleryBackend.Web.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", DresstilleryBackend.Web do
+  scope "/admin", DresstilleryBackend.Web do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index

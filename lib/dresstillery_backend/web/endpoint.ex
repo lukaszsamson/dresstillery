@@ -1,6 +1,8 @@
 defmodule DresstilleryBackend.Web.Endpoint do
   use Phoenix.Endpoint, otp_app: :dresstillery_backend
 
+  @static_options [at: "/", from: :dresstillery_backend, gzip: false]
+
   socket "/socket", DresstilleryBackend.Web.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
@@ -8,8 +10,8 @@ defmodule DresstilleryBackend.Web.Endpoint do
   # You should set gzip to true if you are running phoenix.digest
   # when deploying your static files in production.
   plug Plug.Static,
-    at: "/", from: :dresstillery_backend, gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    (@static_options ++
+    [only: ~w(css fonts img js favicon.ico robots.txt manifest.json browserconfig.xml favicons)])
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -18,6 +20,8 @@ defmodule DresstilleryBackend.Web.Endpoint do
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
   end
+
+  plug DresstilleryBackend.Web.HistoryApiFallback, @static_options
 
   plug Plug.RequestId
   plug Plug.Logger
