@@ -1,21 +1,26 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require('path');
 
 const elmSource = __dirname + '/src';
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    app: './src/app.js',
+    backend: './backend/js/backend.js',
+  },
 
   output: {
     path: path.join(__dirname, "../priv/static/js"),
-    filename: 'app.js',
+    filename: '[name].js',
   },
 
   resolve: {
     modules: [
       path.join(__dirname, "src"),
       path.join(__dirname, "txt"),
+      path.join(__dirname, "backend"),
       "node_modules"
     ],
     extensions: ['.js', '.elm', '.scss', '.css', '.md']
@@ -25,6 +30,11 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.EnvironmentPlugin(["BACKEND_URL"]),
     new CopyWebpackPlugin([{ from: './static/', to: '..' }]),
+    new ExtractTextPlugin({
+      // filename: '[name]-[hash].css',
+      filename: '../css/[name].css',
+      allChunks: true
+    }),
   ],
   module: {
     rules: [{
@@ -81,19 +91,5 @@ module.exports = {
         use: 'file-loader'
       },
     ]
-  },
-
-  devServer: {
-    proxy: {
-      [process.env.BACKEND_URL]: {
-        target: `http://localhost:${process.env.API_PORT}`,
-        pathRewrite: {[`^${process.env.BACKEND_URL}`] : ''}
-      }
-    },
-    inline: true,
-    stats: 'errors-only',
-    historyApiFallback: true,
-    // needed to serve external requests without external host set
-    disableHostCheck: true
   }
 };
