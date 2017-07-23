@@ -1,0 +1,38 @@
+[Unit]
+Description=dresstillery server
+After=network.target
+Requires=network.target
+
+[Service]
+
+# Env
+Environment=PORT=4000
+Environment=MIX_ENV=prod
+Environment=LANG=pl_PL.UTF-8
+WorkingDirectory=/opt/dresstillery
+
+# User
+PermissionsStartOnly=true
+User=dresstillery
+Group=dresstillery
+
+Type=simple
+ExecStart=/usr/local/bin/mix do compile, phx.server
+GuessMainPID=yes
+
+# Restart
+Restart=on-failure
+RestartSec=5
+TimeoutSec=100
+
+# Hardening
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
