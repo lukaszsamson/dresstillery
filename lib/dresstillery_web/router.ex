@@ -1,5 +1,5 @@
-defmodule DresstilleryBackendWeb.Router do
-  use DresstilleryBackend.Web, :router
+defmodule DresstilleryWeb.Router do
+  use DresstilleryWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -20,7 +20,7 @@ defmodule DresstilleryBackendWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DresstilleryBackend.Web do
+  # scope "/api", DresstilleryWeb do
   #   pipe_through :api
   # end
 end

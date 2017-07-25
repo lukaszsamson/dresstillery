@@ -1,9 +1,9 @@
-defmodule DresstilleryBackendWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :dresstillery_backend
+defmodule DresstilleryWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :dresstillery
 
   @static_options [at: "/", from: :dresstillery_backend, gzip: false]
 
-  socket "/socket", DresstilleryBackendWeb.UserSocket
+  socket "/socket", DresstilleryWeb.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -21,7 +21,7 @@ defmodule DresstilleryBackendWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
-  plug DresstilleryBackendWeb.HistoryApiFallback, @static_options
+  plug DresstilleryWeb.HistoryApiFallback, @static_options
 
   plug Plug.RequestId
   plug Plug.Logger
@@ -39,13 +39,14 @@ defmodule DresstilleryBackendWeb.Endpoint do
   # Set :encryption_salt if you would also like to encrypt it.
   plug Plug.Session,
     store: :cookie,
-    key: "_dresstillery_backend_key",
-    signing_salt: "TVf1rzdz"
+    key: "_dresstillery_key",
+    signing_salt: "8mjattpP"
 
-  plug DresstilleryBackendWeb.Router
+  plug DresstilleryWeb.Router
 
   @doc """
   Callback invoked for dynamically configuring the endpoint.
+
   It receives the endpoint configuration and checks if
   configuration should be loaded from the system environment.
   """
@@ -57,5 +58,4 @@ defmodule DresstilleryBackendWeb.Endpoint do
       {:ok, config}
     end
   end
-
 end

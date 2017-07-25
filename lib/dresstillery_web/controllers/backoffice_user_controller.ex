@@ -1,8 +1,8 @@
-defmodule DresstilleryBackendWeb.BackofficeUserController do
-  use DresstilleryBackendWeb, :controller
+defmodule DresstilleryWeb.BackofficeUserController do
+  use DresstilleryWeb, :controller
 
-  alias DresstilleryBackend.Administration
-  alias DresstilleryBackend.Administration.BackofficeUser
+  alias Dresstillery.Administration
+  alias Dresstillery.Administration.BackofficeUser
 
   def index(conn, _params) do
     backoffice_users = Administration.list_backoffice_users()
