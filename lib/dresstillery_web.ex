@@ -1,44 +1,45 @@
-defmodule DresstilleryBackendWeb do
+defmodule DresstilleryWeb do
   @moduledoc """
-  A module that keeps using definitions for controllers,
-  views and so on.
+  The entrypoint for defining your web interface, such
+  as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use DresstilleryBackend.Web, :controller
-      use DresstilleryBackend.Web, :view
+      use DresstilleryWeb, :controller
+      use DresstilleryWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
   on imports, uses and aliases.
 
   Do NOT define functions inside the quoted expressions
-  below.
+  below. Instead, define any helper function in modules
+  and import those modules here.
   """
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: DresstilleryBackend.Web
+      use Phoenix.Controller, namespace: DresstilleryWeb
       import Plug.Conn
-      import DresstilleryBackend.Web.Router.Helpers
-      import DresstilleryBackend.Web.Gettext
+      import DresstilleryWeb.Router.Helpers
+      import DresstilleryWeb.Gettext
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/dresstillery_backend/web/templates",
-                        namespace: DresstilleryBackend.Web
+      use Phoenix.View, root: "lib/dresstillery_web/templates",
+                        namespace: DresstilleryWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
+      import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import DresstilleryBackend.Web.Router.Helpers
-      import DresstilleryBackend.Web.ErrorHelpers
-      import DresstilleryBackend.Web.Gettext
+      import DresstilleryWeb.Router.Helpers
+      import DresstilleryWeb.ErrorHelpers
+      import DresstilleryWeb.Gettext
     end
   end
 
@@ -53,7 +54,7 @@ defmodule DresstilleryBackendWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import DresstilleryBackend.Web.Gettext
+      import DresstilleryWeb.Gettext
     end
   end
 

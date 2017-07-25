@@ -1,4 +1,4 @@
-# DresstilleryBackend
+# Dresstillery
 
 To start your Phoenix server:
 

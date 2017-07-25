@@ -6,15 +6,15 @@
 use Mix.Config
 
 # General application configuration
-config :dresstillery_backend,
-  ecto_repos: [DresstilleryBackend.Repo]
+config :dresstillery,
+  ecto_repos: [Dresstillery.Repo]
 
 # Configures the endpoint
-config :dresstillery_backend, DresstilleryBackend.Web.Endpoint,
+config :dresstillery, DresstilleryWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "GtiPQZAfM7E490/x6XNp840/lqjpOOpGlN0mKLJGEyZhttLTjk3L+NMx/FF7Vfux",
-  render_errors: [view: DresstilleryBackend.Web.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: DresstilleryBackend.PubSub,
+  secret_key_base: "yIfNfRpk9Yjwmbaq55pss2QS+Zg3WUNirGCd5hALjCY7i+fLTmKW0A600jCGKIK2",
+  render_errors: [view: DresstilleryWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Dresstillery.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
