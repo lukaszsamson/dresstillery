@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.DataCase do
+defmodule Dresstillery.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -16,20 +16,20 @@ defmodule DresstilleryBackend.DataCase do
 
   using do
     quote do
-      alias DresstilleryBackend.Repo
+      alias Dresstillery.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import DresstilleryBackend.DataCase
+      import Dresstillery.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(DresstilleryBackend.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Dresstillery.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(DresstilleryBackend.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Dresstillery.Repo, {:shared, self()})
     end
 
     :ok

@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web.ChannelCase do
+defmodule DresstilleryWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,15 +21,15 @@ defmodule DresstilleryBackend.Web.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint DresstilleryBackend.Web.Endpoint
+      @endpoint DresstilleryWeb.Endpoint
     end
   end
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(DresstilleryBackend.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Dresstillery.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(DresstilleryBackend.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Dresstillery.Repo, {:shared, self()})
     end
     :ok
   end

@@ -1,5 +1,5 @@
-defmodule DresstilleryBackend.Web.PageControllerTest do
-  use DresstilleryBackend.Web.ConnCase
+defmodule DresstilleryWeb.PageControllerTest do
+  use DresstilleryWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

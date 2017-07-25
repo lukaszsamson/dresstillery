@@ -1,4 +1,4 @@
 ExUnit.start()
 
-Ecto.Adapters.SQL.Sandbox.mode(DresstilleryBackend.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(Dresstillery.Repo, :manual)
 

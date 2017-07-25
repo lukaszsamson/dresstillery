@@ -1,10 +1,10 @@
-defmodule DresstilleryBackend.AdministrationTest do
-  use DresstilleryBackend.DataCase
+defmodule Dresstillery.AdministrationTest do
+  use Dresstillery.DataCase
 
-  alias DresstilleryBackend.Administration
+  alias Dresstillery.Administration
 
   describe "backoffice_users" do
-    alias DresstilleryBackend.Administration.BackofficeUser
+    alias Dresstillery.Administration.BackofficeUser
 
     @valid_attrs %{login: "some login", password: "some password", tfa_code: "some tfa_code"}
     @update_attrs %{login: "some updated login", password: "some updated password", tfa_code: "some updated tfa_code"}

@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web.ConnCase do
+defmodule DresstilleryWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -19,18 +19,18 @@ defmodule DresstilleryBackend.Web.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import DresstilleryBackend.Web.Router.Helpers
+      import DresstilleryWeb.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint DresstilleryBackend.Web.Endpoint
+      @endpoint DresstilleryWeb.Endpoint
     end
   end
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(DresstilleryBackend.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Dresstillery.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(DresstilleryBackend.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Dresstillery.Repo, {:shared, self()})
     end
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
