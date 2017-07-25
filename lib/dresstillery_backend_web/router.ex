@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web.Router do
+defmodule DresstilleryBackendWeb.Router do
   use DresstilleryBackend.Web, :router
 
   pipeline :browser do

@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web do
+defmodule DresstilleryBackendWeb do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.

@@ -1,9 +1,9 @@
-defmodule DresstilleryBackend.Web.Endpoint do
+defmodule DresstilleryBackendWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :dresstillery_backend
 
   @static_options [at: "/", from: :dresstillery_backend, gzip: false]
 
-  socket "/socket", DresstilleryBackend.Web.UserSocket
+  socket "/socket", DresstilleryBackendWeb.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -21,7 +21,7 @@ defmodule DresstilleryBackend.Web.Endpoint do
     plug Phoenix.CodeReloader
   end
 
-  plug DresstilleryBackend.Web.HistoryApiFallback, @static_options
+  plug DresstilleryBackendWeb.HistoryApiFallback, @static_options
 
   plug Plug.RequestId
   plug Plug.Logger
@@ -42,7 +42,7 @@ defmodule DresstilleryBackend.Web.Endpoint do
     key: "_dresstillery_backend_key",
     signing_salt: "TVf1rzdz"
 
-  plug DresstilleryBackend.Web.Router
+  plug DresstilleryBackendWeb.Router
 
   @doc """
   Callback invoked for dynamically configuring the endpoint.
@@ -57,5 +57,5 @@ defmodule DresstilleryBackend.Web.Endpoint do
       {:ok, config}
     end
   end
-  
+
 end

@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web.UserSocket do
+defmodule DresstilleryBackendWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels

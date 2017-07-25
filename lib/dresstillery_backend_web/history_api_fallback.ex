@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web.HistoryApiFallback do
+defmodule DresstilleryBackendWeb.HistoryApiFallback do
   import Phoenix.Controller
 
   def init(opts) do

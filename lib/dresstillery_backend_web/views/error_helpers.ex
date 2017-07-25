@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web.ErrorHelpers do
+defmodule DresstilleryBackendWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -32,9 +32,9 @@ defmodule DresstilleryBackend.Web.ErrorHelpers do
     #     dgettext "errors", "is invalid"
     #
     if count = opts[:count] do
-      Gettext.dngettext(DresstilleryBackend.Web.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(DresstilleryBackendWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(DresstilleryBackend.Web.Gettext, "errors", msg, opts)
+      Gettext.dgettext(DresstilleryBackendWeb.Gettext, "errors", msg, opts)
     end
   end
 end

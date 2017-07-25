@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Web.Gettext do
+defmodule DresstilleryBackendWeb.Gettext do
   @moduledoc """
   A module providing Internationalization with a gettext-based API.
 

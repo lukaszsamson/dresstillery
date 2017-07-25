@@ -1,0 +1,30 @@
+<h2>Listing Backoffice users</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Login</th>
+      <th>Password</th>
+      <th>Tfa code</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for backoffice_user <- @backoffice_users do %>
+    <tr>
+      <td><%= backoffice_user.login %></td>
+      <td><%= backoffice_user.password %></td>
+      <td><%= backoffice_user.tfa_code %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: backoffice_user_path(@conn, :show, backoffice_user), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: backoffice_user_path(@conn, :edit, backoffice_user), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: backoffice_user_path(@conn, :delete, backoffice_user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Backoffice user", to: backoffice_user_path(@conn, :new) %></span>

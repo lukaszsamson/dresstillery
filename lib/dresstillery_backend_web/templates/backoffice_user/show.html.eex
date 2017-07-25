@@ -1,0 +1,23 @@
+<h2>Show Backoffice user</h2>
+
+<ul>
+
+  <li>
+    <strong>Login:</strong>
+    <%= @backoffice_user.login %>
+  </li>
+
+  <li>
+    <strong>Password:</strong>
+    <%= @backoffice_user.password %>
+  </li>
+
+  <li>
+    <strong>Tfa code:</strong>
+    <%= @backoffice_user.tfa_code %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: backoffice_user_path(@conn, :edit, @backoffice_user) %></span>
+<span><%= link "Back", to: backoffice_user_path(@conn, :index) %></span>
