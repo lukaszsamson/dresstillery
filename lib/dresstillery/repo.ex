@@ -1,5 +1,5 @@
-defmodule DresstilleryBackend.Repo do
-  use Ecto.Repo, otp_app: :dresstillery_backend
+defmodule Dresstillery.Repo do
+  use Ecto.Repo, otp_app: :dresstillery
 
   @doc """
   Dynamically loads the repository url from the

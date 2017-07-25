@@ -1,12 +1,12 @@
-defmodule DresstilleryBackend.Administration do
+defmodule Dresstillery.Administration do
   @moduledoc """
   The Administration context.
   """
 
   import Ecto.Query, warn: false
-  alias DresstilleryBackend.Repo
+  alias Dresstillery.Repo
 
-  alias DresstilleryBackend.Administration.BackofficeUser
+  alias Dresstillery.Administration.BackofficeUser
 
   @doc """
   Returns the list of backoffice_users.

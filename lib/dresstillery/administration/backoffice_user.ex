@@ -1,7 +1,7 @@
-defmodule DresstilleryBackend.Administration.BackofficeUser do
+defmodule Dresstillery.Administration.BackofficeUser do
   use Ecto.Schema
   import Ecto.Changeset
-  alias DresstilleryBackend.Administration.BackofficeUser
+  alias Dresstillery.Administration.BackofficeUser
 
 
   schema "backoffice_users" do
