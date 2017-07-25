@@ -1,5 +1,5 @@
-defmodule DresstilleryBackendWeb.ErrorView do
-  use DresstilleryBackendWeb, :view
+defmodule DresstilleryWeb.ErrorView do
+  use DresstilleryWeb, :view
 
   def render("404.html", _assigns) do
     "Page not found"
