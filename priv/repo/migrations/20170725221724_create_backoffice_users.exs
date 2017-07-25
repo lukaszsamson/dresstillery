@@ -1,4 +1,4 @@
-defmodule DresstilleryBackend.Repo.Migrations.CreateBackofficeUsers do
+defmodule Dresstillery.Repo.Migrations.CreateBackofficeUsers do
   use Ecto.Migration
 
   def change do
