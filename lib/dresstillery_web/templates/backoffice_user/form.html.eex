@@ -12,15 +12,12 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :password, class: "control-label" %>
-    <%= text_input f, :password, class: "form-control" %>
-    <%= error_tag f, :password %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :tfa_code, class: "control-label" %>
-    <%= text_input f, :tfa_code, class: "form-control" %>
-    <%= error_tag f, :tfa_code %>
+    <label>Permissions</label>
+    <%= for {permission, has_permission} <- @permissions_values do %>
+      <div class="checkbox">
+      <label><%= checkbox :permissions, String.to_atom("#{permission}"), value: has_permission %><%= permission %></label>
+      </div>
+    <% end %>
   </div>
 
   <div class="form-group">

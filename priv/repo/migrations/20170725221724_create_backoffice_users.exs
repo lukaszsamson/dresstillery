@@ -6,6 +6,8 @@ defmodule Dresstillery.Repo.Migrations.CreateBackofficeUsers do
       add :login, :string
       add :password, :string
       add :tfa_code, :string
+      add :active, :boolean
+      add :permissions, {:array, :map}
 
       timestamps()
     end

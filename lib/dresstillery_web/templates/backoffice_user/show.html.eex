@@ -8,16 +8,27 @@
   </li>
 
   <li>
-    <strong>Password:</strong>
-    <%= @backoffice_user.password %>
+    <strong>Created:</strong>
+    <span class="format-time-seconds"><%= @backoffice_user.inserted_at %></span>
   </li>
 
   <li>
-    <strong>Tfa code:</strong>
-    <%= @backoffice_user.tfa_code %>
+    <strong>Active:</strong>
+    <%= @backoffice_user.active %>
+  </li>
+
+  <li>
+    <strong>Permissions:</strong>
+    <ul>
+    <%= for key <- @backoffice_user.permissions |> Enum.map(&(&1.name)) do %>
+      <li><%= key %></li>
+    <% end %>
+    </ul>
   </li>
 
 </ul>
 
-<span><%= link "Edit", to: backoffice_user_path(@conn, :edit, @backoffice_user) %></span>
-<span><%= link "Back", to: backoffice_user_path(@conn, :index) %></span>
+<span><%= link "Reset password", to: backoffice_user_path(@conn, :reset_password, @backoffice_user), method: :post, data: [confirm: "Are you sure?"], class: "btn btn-warning btn-xs" %></span>
+<span><%= link "Deactivate", to: backoffice_user_path(@conn, :delete, @backoffice_user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+<span><%= link "Edit", to: backoffice_user_path(@conn, :edit, @backoffice_user), class: "btn btn-default btn-xs" %></span>
+<span><%= link "Back", to: backoffice_user_path(@conn, :index), class: "btn btn-default btn-xs" %></span>

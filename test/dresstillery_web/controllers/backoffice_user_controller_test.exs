@@ -2,6 +2,8 @@ defmodule DresstilleryWeb.BackofficeUserControllerTest do
   use DresstilleryWeb.ConnCase
 
   alias Dresstillery.Administration
+  alias Dresstillery.Administration.BackofficeUser
+  alias Dresstillery.Repo
 
   @create_attrs %{login: "some login", password: "some password", tfa_code: "some tfa_code"}
   @update_attrs %{login: "some updated login", password: "some updated password", tfa_code: "some updated tfa_code"}
@@ -28,13 +30,16 @@ defmodule DresstilleryWeb.BackofficeUserControllerTest do
 
   describe "create backoffice_user" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, backoffice_user_path(conn, :create), backoffice_user: @create_attrs
+      conn = post conn, backoffice_user_path(conn, :create), backoffice_user: @create_attrs, permissions: [{"manage_users", "true"}]
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == backoffice_user_path(conn, :show, id)
 
       conn = get conn, backoffice_user_path(conn, :show, id)
       assert html_response(conn, 200) =~ "Show Backoffice user"
+
+      user = Repo.get(BackofficeUser, id)
+      assert user.permissions |> Enum.find(& &1.name == "manage_users")
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -56,16 +61,32 @@ defmodule DresstilleryWeb.BackofficeUserControllerTest do
     setup [:create_backoffice_user]
 
     test "redirects when data is valid", %{conn: conn, backoffice_user: backoffice_user} do
-      conn = put conn, backoffice_user_path(conn, :update, backoffice_user), backoffice_user: @update_attrs
+      conn = put conn, backoffice_user_path(conn, :update, backoffice_user), backoffice_user: @update_attrs, permissions: [{"manage_users", "true"}, {"manage_backoffice_users", "true"}]
       assert redirected_to(conn) == backoffice_user_path(conn, :show, backoffice_user)
 
       conn = get conn, backoffice_user_path(conn, :show, backoffice_user)
       assert html_response(conn, 200) =~ "some updated login"
+
+      user = Repo.get(BackofficeUser, backoffice_user.id)
+      assert user
+      assert user.permissions |> Enum.find(& &1.name == "manage_users")
+      assert user.permissions |> Enum.find(& &1.name == "manage_backoffice_users")
+      refute user.permissions |> Enum.find(& &1.name == "manage_orders")
     end
 
     test "renders errors when data is invalid", %{conn: conn, backoffice_user: backoffice_user} do
       conn = put conn, backoffice_user_path(conn, :update, backoffice_user), backoffice_user: @invalid_attrs
       assert html_response(conn, 200) =~ "Edit Backoffice user"
+    end
+
+    test "resets password and tfa secret", %{conn: conn} do
+      backoffice_user = Repo.insert! %BackofficeUser{login: "some@content", password: Comeonin.Bcrypt.hashpwsalt("pass"), tfa_code: "6567276467245"}
+      conn = post conn, backoffice_user_path(conn, :reset_password, backoffice_user)
+      assert redirected_to(conn) == backoffice_user_path(conn, :index)
+      assert get_flash(conn, :info) == "Password resetted successfully."
+      user =  Repo.get(BackofficeUser, backoffice_user.id)
+      refute user.tfa_code
+      assert Comeonin.Bcrypt.checkpw("p@ssw0rd", user.password)
     end
   end
 
@@ -74,10 +95,10 @@ defmodule DresstilleryWeb.BackofficeUserControllerTest do
 
     test "deletes chosen backoffice_user", %{conn: conn, backoffice_user: backoffice_user} do
       conn = delete conn, backoffice_user_path(conn, :delete, backoffice_user)
-      assert redirected_to(conn) == backoffice_user_path(conn, :index)
-      assert_error_sent 404, fn ->
-        get conn, backoffice_user_path(conn, :show, backoffice_user)
-      end
+      assert redirected_to(conn) == backoffice_user_path(conn, :show, backoffice_user)
+
+      conn = get conn, backoffice_user_path(conn, :show, backoffice_user)
+      assert html_response(conn, 200) =~ "false"
     end
   end
 

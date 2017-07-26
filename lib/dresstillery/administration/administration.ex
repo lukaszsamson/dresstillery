@@ -55,21 +55,21 @@ defmodule Dresstillery.Administration do
     |> Repo.insert()
   end
 
-  @doc """
-  Updates a backoffice_user.
-
-  ## Examples
-
-      iex> update_backoffice_user(backoffice_user, %{field: new_value})
-      {:ok, %BackofficeUser{}}
-
-      iex> update_backoffice_user(backoffice_user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def update_backoffice_user(%BackofficeUser{} = backoffice_user, attrs) do
     backoffice_user
-    |> BackofficeUser.changeset(attrs)
+    |> BackofficeUser.update_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def change_password(%BackofficeUser{} = backoffice_user, attrs) do
+    backoffice_user
+    |> BackofficeUser.change_password(attrs)
+    |> Repo.update()
+  end
+
+  def reset_password(%BackofficeUser{} = backoffice_user) do
+    backoffice_user
+    |> BackofficeUser.reset_password()
     |> Repo.update()
   end
 
@@ -85,8 +85,10 @@ defmodule Dresstillery.Administration do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_backoffice_user(%BackofficeUser{} = backoffice_user) do
-    Repo.delete(backoffice_user)
+  def deactivate(%BackofficeUser{} = backoffice_user) do
+    backoffice_user
+    |> BackofficeUser.deactivate()
+    |> Repo.update()
   end
 
   @doc """

@@ -4,8 +4,8 @@
   <thead>
     <tr>
       <th>Login</th>
-      <th>Password</th>
-      <th>Tfa code</th>
+      <th>Created</th>
+      <th>Active</th>
 
       <th></th>
     </tr>
@@ -14,8 +14,8 @@
 <%= for backoffice_user <- @backoffice_users do %>
     <tr>
       <td><%= backoffice_user.login %></td>
-      <td><%= backoffice_user.password %></td>
-      <td><%= backoffice_user.tfa_code %></td>
+      <td><%= backoffice_user.inserted_at %></td>
+      <td><%= backoffice_user.active %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: backoffice_user_path(@conn, :show, backoffice_user), class: "btn btn-default btn-xs" %></span>
