@@ -1,7 +1,7 @@
 defmodule DresstilleryWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :dresstillery
 
-  @static_options [at: "/", from: :dresstillery_backend, gzip: false]
+  @static_options [at: "/", from: :dresstillery, gzip: false]
 
   socket "/socket", DresstilleryWeb.UserSocket
 
@@ -40,7 +40,8 @@ defmodule DresstilleryWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_dresstillery_key",
-    signing_salt: "8mjattpP"
+    signing_salt: "8mjattpP",
+    max_age: 60 * 60 # 1h
 
   plug DresstilleryWeb.Router
 

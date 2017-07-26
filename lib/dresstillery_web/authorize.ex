@@ -1,7 +1,7 @@
-defmodule DresstilleryBackendWeb.Authorize do
+defmodule DresstilleryWeb.Authorize do
   import Plug.Conn
   import Phoenix.Controller
-  alias DresstilleryBackendWeb.Router.Helpers, as: RouteHelpers
+  alias DresstilleryWeb.Router.Helpers, as: RouteHelpers
 
   def init(opts) do
     MapSet.new opts
@@ -19,7 +19,7 @@ defmodule DresstilleryBackendWeb.Authorize do
   defp handle_error(conn, _opts) do
     conn
     |> put_flash(:error, "Unauthorized")
-    |> redirect(to: RouteHelpers.session_path(conn, :login_page))
+    |> redirect(to: RouteHelpers.page_path(conn, :index))
     |> halt
   end
 end
