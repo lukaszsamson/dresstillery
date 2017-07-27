@@ -37,6 +37,8 @@ defmodule Dresstillery.Administration do
   """
   def get_backoffice_user!(id), do: Repo.get!(BackofficeUser, id)
 
+  def get_active_backoffice_user(id), do: Repo.get_by(BackofficeUser, id: (id || -1), active: true)
+
   @doc """
   Creates a backoffice_user.
 

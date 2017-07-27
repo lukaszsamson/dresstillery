@@ -14,6 +14,7 @@
 import "phoenix_html"
 import 'bootstrap-loader'
 
+window.qrcode = require('qrcode-js')
 // Import local files
 //
 // Local files can be imported directly using relative

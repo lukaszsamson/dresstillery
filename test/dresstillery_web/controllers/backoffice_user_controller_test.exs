@@ -1,5 +1,5 @@
 defmodule DresstilleryWeb.BackofficeUserControllerTest do
-  use DresstilleryWeb.ConnCase
+  use DresstilleryWeb.AuthorizedConnCase
 
   alias Dresstillery.Administration
   alias Dresstillery.Administration.BackofficeUser
@@ -29,13 +29,13 @@ defmodule DresstilleryWeb.BackofficeUserControllerTest do
   end
 
   describe "create backoffice_user" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, backoffice_user_path(conn, :create), backoffice_user: @create_attrs, permissions: [{"manage_users", "true"}]
+    test "redirects to show when data is valid", %{conn: conn_orig} do
+      conn = post conn_orig, backoffice_user_path(conn_orig, :create), backoffice_user: @create_attrs, permissions: [{"manage_users", "true"}]
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == backoffice_user_path(conn, :show, id)
 
-      conn = get conn, backoffice_user_path(conn, :show, id)
+      conn = get conn_orig, backoffice_user_path(conn_orig, :show, id)
       assert html_response(conn, 200) =~ "Show Backoffice user"
 
       user = Repo.get(BackofficeUser, id)
@@ -60,11 +60,11 @@ defmodule DresstilleryWeb.BackofficeUserControllerTest do
   describe "update backoffice_user" do
     setup [:create_backoffice_user]
 
-    test "redirects when data is valid", %{conn: conn, backoffice_user: backoffice_user} do
-      conn = put conn, backoffice_user_path(conn, :update, backoffice_user), backoffice_user: @update_attrs, permissions: [{"manage_users", "true"}, {"manage_backoffice_users", "true"}]
+    test "redirects when data is valid", %{conn: conn_orig, backoffice_user: backoffice_user} do
+      conn = put conn_orig, backoffice_user_path(conn_orig, :update, backoffice_user), backoffice_user: @update_attrs, permissions: [{"manage_users", "true"}, {"manage_backoffice_users", "true"}]
       assert redirected_to(conn) == backoffice_user_path(conn, :show, backoffice_user)
 
-      conn = get conn, backoffice_user_path(conn, :show, backoffice_user)
+      conn = get conn_orig, backoffice_user_path(conn_orig, :show, backoffice_user)
       assert html_response(conn, 200) =~ "some updated login"
 
       user = Repo.get(BackofficeUser, backoffice_user.id)
@@ -93,11 +93,11 @@ defmodule DresstilleryWeb.BackofficeUserControllerTest do
   describe "delete backoffice_user" do
     setup [:create_backoffice_user]
 
-    test "deletes chosen backoffice_user", %{conn: conn, backoffice_user: backoffice_user} do
-      conn = delete conn, backoffice_user_path(conn, :delete, backoffice_user)
+    test "deletes chosen backoffice_user", %{conn: conn_orig, backoffice_user: backoffice_user} do
+      conn = delete conn_orig, backoffice_user_path(conn_orig, :delete, backoffice_user)
       assert redirected_to(conn) == backoffice_user_path(conn, :show, backoffice_user)
 
-      conn = get conn, backoffice_user_path(conn, :show, backoffice_user)
+      conn = get conn_orig, backoffice_user_path(conn_orig, :show, backoffice_user)
       assert html_response(conn, 200) =~ "false"
     end
   end

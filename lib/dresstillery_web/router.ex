@@ -10,7 +10,7 @@ defmodule DresstilleryWeb.Router do
   end
 
   pipeline :browser_secure do
-    # plug DresstilleryWeb.Authenticate
+    plug DresstilleryWeb.Authenticate
   end
 
   pipeline :api do
@@ -20,6 +20,11 @@ defmodule DresstilleryWeb.Router do
   scope "/admin", DresstilleryWeb do
     pipe_through :browser # Use the default browser stack
 
+    get   "/login",   SessionController, :login_page
+    post  "/login",   SessionController, :login
+    get   "/tfa",     SessionController, :tfa_page
+    post  "/tfa",     SessionController, :tfa
+    post  "/logout",  SessionController, :logout
   end
 
   scope "/admin", DresstilleryWeb do
@@ -29,6 +34,9 @@ defmodule DresstilleryWeb.Router do
 
     post "/backoffice_users/:id/reset_password", BackofficeUserController, :reset_password
     resources "/backoffice_users", BackofficeUserController
+
+    get   "/change_password",   SessionController, :change_password_page
+    post  "/change_password",   SessionController, :change_password
   end
 
   # Other scopes may use custom stacks.

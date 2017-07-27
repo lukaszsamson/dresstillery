@@ -1,15 +1,14 @@
-defmodule Backoffice.SessionController do
-  use Backoffice.Web, :controller
-  alias Backoffice.UserLogin
-  alias Backoffice.TfaCode
-  alias Backoffice.ChangePassword
+defmodule DresstilleryWeb.SessionController do
+  use DresstilleryWeb, :controller
+  alias Dresstillery.Session
+  alias Dresstillery.Administration.BackofficeUser
 
   def login_page(conn, _params) do
     cond do
       get_session(conn, :tfa_user) -> redirect(conn, to: session_path(conn, :tfa_page))
-      get_session(conn, :current_user) -> redirect(conn, to: "/")
+      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
       true ->
-        changeset = UserLogin.changeset(%UserLogin{})
+        changeset = Session.login_changeset
         render(conn, "login_page.html", changeset: changeset)
     end
   end
@@ -17,11 +16,10 @@ defmodule Backoffice.SessionController do
   def login(conn, %{"user_login" => user_login_params}) do
     cond do
       get_session(conn, :tfa_user) -> redirect(conn, to: session_path(conn, :tfa_page))
-      get_session(conn, :current_user) -> redirect(conn, to: "/")
+      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
       true ->
-        changeset = UserLogin.changeset(%UserLogin{}, user_login_params)
-        case Session.login(changeset) do
-          {:ok, %Common.BackofficeUser{tfa_secret: nil} = user} ->
+        case Session.login(user_login_params) do
+          {:ok, %BackofficeUser{tfa_code: nil} = user} ->
             conn
             |> configure_session(renew: true)
             |> put_session(:current_user, user.id)
@@ -42,9 +40,9 @@ defmodule Backoffice.SessionController do
   def tfa_page(conn, _params) do
     cond do
       get_session(conn, :tfa_user) ->
-        changeset = TfaCode.changeset(%TfaCode{})
+        changeset = Session.tfa_changeset
         render(conn, "tfa_page.html", changeset: changeset)
-      get_session(conn, :current_user) -> redirect(conn, to: "/")
+      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
       true -> redirect(conn, to: session_path(conn, :login_page))
     end
   end
@@ -52,50 +50,43 @@ defmodule Backoffice.SessionController do
   def tfa(conn, %{"tfa_code" => tfa_code_params}) do
     cond do
       get_session(conn, :tfa_user) ->
-        user = Repo.get_by(Common.BackofficeUser, id: get_session(conn, :tfa_user), active: true)
-        changeset = TfaCode.changeset(%TfaCode{}, tfa_code_params)
-        case Session.tfa(changeset, user) do
+        user = Dresstillery.Administration.get_active_backoffice_user get_session(conn, :tfa_user)
+
+        case Session.tfa(user, tfa_code_params) do
           {:ok, user} ->
             conn
             |> put_session(:current_user, user.id)
             |> delete_session(:tfa_user)
             |> put_flash(:info, "Logged in")
-            |> redirect(to: "/")
+            |> redirect(to: page_path(conn, :index))
           {:error, changeset} ->
             conn
             |> render("tfa_page.html", changeset: changeset)
         end
-      get_session(conn, :current_user) -> redirect(conn, to: "/")
+      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
       true -> redirect(conn, to: session_path(conn, :login_page))
     end
   end
 
   def change_password_page(conn, _params) do
-    tfa_required = if conn.assigns[:current_user].tfa_secret != nil, do: true, else: false
-    changeset = ChangePassword.changeset(%ChangePassword{tfa_secret: :crypto.strong_rand_bytes(10) |> Base.encode32})
-    render(conn, "change_password_page.html", changeset: changeset, email: conn.assigns[:current_user].email, tfa_required: tfa_required)
+    changeset = Session.change_password_changeset
+    render(conn, "change_password_page.html", changeset: changeset, login: conn.assigns[:current_user].login, tfa_required: tfa_required?(conn))
   end
 
   def change_password(conn, %{"change_password" => change_password_params}) do
-    tfa_required = if conn.assigns[:current_user].tfa_secret != nil, do: true, else: false
-    changeset = if tfa_required do
-      ChangePassword.changeset(%ChangePassword{}, change_password_params)
-    else
-      ChangePassword.changeset_no_secret(%ChangePassword{}, change_password_params)
-    end
-    case Session.change_password(changeset, conn.assigns[:current_user]) do
+    case Session.change_password(conn.assigns[:current_user], change_password_params) do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "Password changed")
-        |> redirect(to: "/")
+        |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
         conn
-        |> render("change_password_page.html", changeset: changeset, email: conn.assigns[:current_user].email, tfa_required: tfa_required)
+        |> render("change_password_page.html", changeset: changeset, login: conn.assigns[:current_user].login, tfa_required: tfa_required?(conn))
     end
   end
 
-  def tfa_secret(conn, _params) do
-    render(conn, "tfa_secret.html", user: "admin@alea.com", secret: "MFRGGZDFMZTWQ2LK")
+  defp tfa_required?(conn) do
+    conn.assigns[:current_user].tfa_code != nil
   end
 
   def logout(conn, _) do
