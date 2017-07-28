@@ -7,20 +7,43 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello Dresstillery!</title>
+    <title>Dresstillery Admin Panel</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/backend.css") %>">
   </head>
 
   <body>
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+      <%= link "Dresstillery", to: page_path(@conn, :index), class: "navbar-brand" %>
+
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="navbar-nav mr-auto">
+          <a class="nav-link" href="/">Site</a>
+        </ul>
+
+        <%= if can_logout(@conn) do %>
+          <%= if @conn.assigns[:current_user] do %>
+          <span class="navbar-text">Signed in as: <strong><%= @conn.assigns.current_user.login %></strong></span>
+          <% end %>
+          <%= render "logout_form.html", conn: @conn %>
+          <%= if can_change_password(@conn) do %>
+            <div class="form-inline my-2 my-lg-0">
+            <%= link "Change password", to: session_path(@conn, :change_password), class: "btn btn-outline-success my-2 my-sm-0" %>
+            </div>
+          <% end %>
+        <% end %>
+
+      </div>
+    </nav>
+
+    <%= if view_module(@conn) == Dresstillery.PageView do %>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Dresstillery Admin Panel</h1>
+      </div>
+    </div>
+    <% end %>
+
     <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-          </ul>
-        </nav>
-        <span class="logo"></span>
-      </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
@@ -29,6 +52,11 @@
         <%= render @view_module, @view_template, assigns %>
       </main>
 
+      <hr>
+
+      <footer>
+        <p>&copy; 2017 Łukasz Samson</p>
+      </footer>
     </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/backend.js") %>"></script>
   </body>
