@@ -91,7 +91,7 @@ searchResults items filterText =
                 |> List.filter (itemFilter <| filterText)
 
         message =
-            if List.isEmpty filtered then
+            if List.isEmpty filtered && filterText /= "" then
                 [ div [ class "simpleMessage" ]
                     [ text "Brak wyników dla "
                     , Html.i

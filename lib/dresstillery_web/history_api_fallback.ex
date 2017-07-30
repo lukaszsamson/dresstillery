@@ -2,8 +2,12 @@ defmodule DresstilleryWeb.HistoryApiFallback do
   import Phoenix.Controller
 
   def init(opts) do
-    (opts ++ [only: ~w(index.html)])
+    static_opts = opts
+    |> Keyword.fetch!(:static_opts)
+    |> Keyword.put(:only, ~w(index.html))
     |> Plug.Static.init
+
+    %{static_opts: static_opts, blacklist: Keyword.get(opts, :blacklist, [])}
   end
 
   defp html_accepted?(conn) do
@@ -22,13 +26,18 @@ defmodule DresstilleryWeb.HistoryApiFallback do
     end
   end
 
-  def call(conn, opts) do
+  defp blacklisted?(conn, blacklist) do
+    blacklist
+    |> Enum.any?(& conn.request_path |> String.starts_with?(&1))
+  end
+
+  def call(conn, %{static_opts: static_opts, blacklist: blacklist}) do
     if conn.method in ["GET", "HEAD"]
       and not file_request?(conn)
       and html_accepted?(conn)
-      and not (conn.request_path |> String.starts_with?("/admin")) do
+      and not (blacklisted?(conn, blacklist)) do
       %Plug.Conn{conn | path_info: ["index.html"]}
-      |> Plug.Static.call(opts)
+      |> Plug.Static.call(static_opts)
     else
       conn
     end

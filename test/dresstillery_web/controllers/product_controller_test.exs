@@ -1,5 +1,5 @@
 defmodule DresstilleryWeb.ProductControllerTest do
-  use DresstilleryWeb.ConnCase
+  use DresstilleryWeb.AuthorizedConnCase
 
   alias Dresstillery.Products
 
@@ -27,13 +27,13 @@ defmodule DresstilleryWeb.ProductControllerTest do
   end
 
   describe "create product" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, product_path(conn, :create), product: @create_attrs
+    test "redirects to show when data is valid", %{conn: conn_orig} do
+      conn = post conn_orig, product_path(conn_orig, :create), product: @create_attrs
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == product_path(conn, :show, id)
 
-      conn = get conn, product_path(conn, :show, id)
+      conn = get conn_orig, product_path(conn_orig, :show, id)
       assert html_response(conn, 200) =~ "Show Product"
     end
 
@@ -55,11 +55,11 @@ defmodule DresstilleryWeb.ProductControllerTest do
   describe "update product" do
     setup [:create_product]
 
-    test "redirects when data is valid", %{conn: conn, product: product} do
-      conn = put conn, product_path(conn, :update, product), product: @update_attrs
+    test "redirects when data is valid", %{conn: conn_orig, product: product} do
+      conn = put conn_orig, product_path(conn_orig, :update, product), product: @update_attrs
       assert redirected_to(conn) == product_path(conn, :show, product)
 
-      conn = get conn, product_path(conn, :show, product)
+      conn = get conn_orig, product_path(conn_orig, :show, product)
       assert html_response(conn, 200) =~ "some updated code"
     end
 
@@ -72,11 +72,11 @@ defmodule DresstilleryWeb.ProductControllerTest do
   describe "delete product" do
     setup [:create_product]
 
-    test "deletes chosen product", %{conn: conn, product: product} do
-      conn = delete conn, product_path(conn, :delete, product)
+    test "deletes chosen product", %{conn: conn_orig, product: product} do
+      conn = delete conn_orig, product_path(conn_orig, :delete, product)
       assert redirected_to(conn) == product_path(conn, :index)
       assert_error_sent 404, fn ->
-        get conn, product_path(conn, :show, product)
+        get conn_orig, product_path(conn_orig, :show, product)
       end
     end
   end

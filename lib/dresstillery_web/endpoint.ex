@@ -1,7 +1,7 @@
 defmodule DresstilleryWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :dresstillery
 
-  @static_options [at: "/", from: :dresstillery, gzip: false]
+  @static_opts [at: "/", from: :dresstillery, gzip: false]
 
   socket "/socket", DresstilleryWeb.UserSocket
 
@@ -10,7 +10,7 @@ defmodule DresstilleryWeb.Endpoint do
   # You should set gzip to true if you are running phoenix.digest
   # when deploying your static files in production.
   plug Plug.Static,
-    (@static_options ++
+    (@static_opts ++
     [only: ~w(css fonts img js favicon.ico robots.txt manifest.json browserconfig.xml favicons)])
 
   # Code reloading can be explicitly enabled under the
@@ -21,7 +21,9 @@ defmodule DresstilleryWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
-  plug DresstilleryWeb.HistoryApiFallback, @static_options
+  plug DresstilleryWeb.HistoryApiFallback,
+    static_opts: @static_opts,
+    blacklist: ["/api", "/admin"]
 
   plug Plug.RequestId
   plug Plug.Logger

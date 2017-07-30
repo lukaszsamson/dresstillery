@@ -42,7 +42,9 @@ defmodule DresstilleryWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DresstilleryWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", DresstilleryWeb.Api, as: :api do
+    pipe_through :api
+
+    resources "/products", ProductController, only: [:show, :index]
+  end
 end
