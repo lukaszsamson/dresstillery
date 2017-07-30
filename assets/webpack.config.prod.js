@@ -6,7 +6,7 @@ const path = require('path');
 const elmSource = __dirname + '/src';
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
+  bail: true,
   entry: {
     app: './src/app.js',
     backend: './backend/js/backend.js',
@@ -27,14 +27,26 @@ module.exports = {
     extensions: ['.js', '.elm', '.scss', '.css', '.md']
   },
   plugins: [
-    new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
     new webpack.EnvironmentPlugin(["BACKEND_URL"]),
     new CopyWebpackPlugin([{ from: './static/', to: '..' }]),
     new ExtractTextPlugin({
       // filename: '[name]-[hash].css',
       filename: '../css/[name].css',
       allChunks: true
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      beautify: false,
+      mangle: {
+        screw_ie8: true,
+        keep_fnames: true
+      },
+      compress: {
+        screw_ie8: true
+      },
+      comments: false
     }),
   ],
   module: {
@@ -54,9 +66,7 @@ module.exports = {
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
-        use: [{
-            loader: "elm-hot-loader"
-          },
+        use: [
           {
             loader: "elm-webpack-loader",
             options: {
