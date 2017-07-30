@@ -35,6 +35,8 @@ defmodule DresstilleryWeb.Router do
     post "/backoffice_users/:id/reset_password", BackofficeUserController, :reset_password
     resources "/backoffice_users", BackofficeUserController
 
+    resources "/products", ProductController
+
     get   "/change_password",   SessionController, :change_password_page
     post  "/change_password",   SessionController, :change_password
   end
