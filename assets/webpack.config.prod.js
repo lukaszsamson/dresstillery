@@ -70,7 +70,7 @@ module.exports = {
           {
             loader: "elm-webpack-loader",
             options: {
-              debug: true,
+              debug: false,
               warn: true
             }
           }

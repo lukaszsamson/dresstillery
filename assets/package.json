@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/lukaszsamson/dresstilery"
   },
-  "license": "Unlicensed",
+  "license": "UNLICENSED",
   "devDependencies": {
     "bootstrap-loader": "^2.1.0",
     "copy-webpack-plugin": "^4.0.1",
