@@ -8,10 +8,14 @@ defmodule DresstilleryWeb.AuthorizeTest do
     {:ok, %{conn: conn}}
   end
 
+  defp init do
+    DresstilleryWeb.Authorize.init require: ["test"]
+  end
+
   test "authorize halts and redirects if no permission", %{conn: conn} do
     conn = conn
     |> assign(:current_user_permissions, MapSet.new)
-    |> DresstilleryWeb.Authorize.call(["test"] |> MapSet.new)
+    |> DresstilleryWeb.Authorize.call(init())
 
     assert conn.halted
     assert redirected_to(conn) == page_path(conn, :index)
@@ -21,7 +25,7 @@ defmodule DresstilleryWeb.AuthorizeTest do
   test "authorize passes if permission", %{conn: conn} do
     conn = conn
     |> assign(:current_user_permissions, ["test"] |> MapSet.new)
-    |> DresstilleryWeb.Authorize.call(["test"] |> MapSet.new)
+    |> DresstilleryWeb.Authorize.call(init())
 
     refute conn.halted
     refute get_flash(conn, :error)

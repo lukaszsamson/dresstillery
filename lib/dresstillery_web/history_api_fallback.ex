@@ -12,7 +12,7 @@ defmodule DresstilleryWeb.HistoryApiFallback do
 
   defp html_accepted?(conn) do
     try do
-      accepts(conn, ["html"])
+      _ = accepts(conn, ["html"])
       true
     rescue
       Phoenix.NotAcceptableError -> false

@@ -4,10 +4,13 @@ defmodule DresstilleryWeb.Authorize do
   alias DresstilleryWeb.Router.Helpers, as: RouteHelpers
 
   def init(opts) do
-    MapSet.new opts
+    %{require: opts
+    |> Keyword.fetch!(:require)
+    |> MapSet.new
+    }
   end
 
-  def call(conn, opts) do
+  def call(conn, %{require: opts}) do
     permissions = conn.assigns[:current_user_permissions]
     if MapSet.subset? opts, permissions do
       conn
