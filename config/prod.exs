@@ -58,7 +58,7 @@ config :logger, level: :info
 #
 #     config :dresstillery, DresstilleryWeb.Endpoint, server: true
 #
-config :dresstillery, :upload_directory, "/"
+config :dresstillery, :upload_directory_system, true
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 import_config "prod.secret.exs"

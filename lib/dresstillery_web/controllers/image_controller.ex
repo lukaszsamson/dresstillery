@@ -3,7 +3,15 @@ defmodule DresstilleryWeb.ImageController do
 
   alias Dresstillery.Media
   alias Dresstillery.Media.Image
-  @upload_dir Application.app_dir(:dresstillery, Application.fetch_env!(:dresstillery, :upload_directory))
+  @upload_dir Application.fetch_env!(:dresstillery, :upload_directory)
+
+  defp get_path do
+    if Application.get_env(:dresstillery, :upload_directory_system) do
+      @upload_dir
+    else
+      Application.app_dir(:dresstillery, @upload_dir)
+    end
+  end
 
   def index(conn, _params) do
     images = Media.list_images()
@@ -17,7 +25,7 @@ defmodule DresstilleryWeb.ImageController do
 
   def create(conn, %{"image" => %{"image" => upload = %Plug.Upload{}}}) do
     extension = Path.extname(upload.filename)
-    path = @upload_dir
+    path = get_path()
     |> Path.join("#{:crypto.strong_rand_bytes(6) |> Base.url_encode64}#{extension}")
     File.cp!(upload.path, path)
 
