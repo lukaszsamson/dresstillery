@@ -10,6 +10,9 @@
       <li>
         <%= link "Backoffice users", to: backoffice_user_path(@conn, :index) %>
       </li>
+      <li>
+        <%= link "Images", to: image_path(@conn, :index) %>
+      </li>
     </ul>
   </div>
 
