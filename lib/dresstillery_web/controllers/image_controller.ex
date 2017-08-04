@@ -18,7 +18,7 @@ defmodule DresstilleryWeb.ImageController do
   def create(conn, %{"image" => %{"image" => upload = %Plug.Upload{}}}) do
     extension = Path.extname(upload.filename)
     path = @upload_dir
-    |> Path.join("#{:crypto.strong_rand_bytes(6) |> Base.url_encode64}.#{extension}")
+    |> Path.join("#{:crypto.strong_rand_bytes(6) |> Base.url_encode64}#{extension}")
     File.cp!(upload.path, path)
 
     case Media.create_image(%{path: path}) do
