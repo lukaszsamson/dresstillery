@@ -21,3 +21,5 @@ config :dresstillery, Dresstillery.Repo,
 config :comeonin,
   bcrypt_log_rounds: 1,
   pbkdf2_rounds: 500
+
+config :dresstillery, :upload_directory, "/priv/fixture/uploads"

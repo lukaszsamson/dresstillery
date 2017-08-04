@@ -55,3 +55,5 @@ config :dresstillery, Dresstillery.Repo,
   database: "dresstillery_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :dresstillery, :upload_directory, "/priv/uploads"

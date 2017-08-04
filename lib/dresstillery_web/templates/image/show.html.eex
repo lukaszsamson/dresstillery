@@ -1,0 +1,12 @@
+<h2>Show Image</h2>
+<%= img_tag image_src(@image), class: "image-contained" %>
+<ul>
+
+  <li>
+    <strong>Path:</strong>
+    <%= @image.path %>
+  </li>
+
+</ul>
+
+<span><%= link "Back", to: image_path(@conn, :index) %></span>

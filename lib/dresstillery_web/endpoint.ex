@@ -13,6 +13,9 @@ defmodule DresstilleryWeb.Endpoint do
     (@static_opts ++
     [only: ~w(css fonts img js favicon.ico robots.txt manifest.json browserconfig.xml favicons)])
 
+  plug Plug.Static,
+    at: "/media", from: {:dresstillery, Application.fetch_env!(:dresstillery, :upload_directory)}, gzip: false
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
