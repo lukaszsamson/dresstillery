@@ -60,7 +60,7 @@ defmodule DresstilleryWeb.ImageControllerTest do
 
       image = Media.get_image!(id)
 
-      conn = get conn_orig, image_src(image)
+      conn = get conn_orig, DresstilleryWeb.ImageView.image_src(image)
       assert response(conn, 200)
     end
 
