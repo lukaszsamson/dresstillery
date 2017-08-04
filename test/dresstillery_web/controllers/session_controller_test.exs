@@ -175,6 +175,21 @@ defmodule DresstilleryWeb.SessionControllerTest do
     assert html_response(conn, 200) =~ "Dresstillery"
   end
 
+  test "getting restricted page not possible if not authorized", %{conn: conn} do
+    create_user()
+    oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
+
+    oldconn1 = conn
+    |> recycle_cookies(oldconn)
+    |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
+
+    conn = conn
+    |> recycle_cookies(oldconn1)
+    |> get(backoffice_user_path(conn, :index))
+
+    assert redirected_to(conn) == page_path(conn, :index)
+  end
+
   test "getting password change possible when fully logged in", %{conn: conn} do
     create_user()
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}

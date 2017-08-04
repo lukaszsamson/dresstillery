@@ -5,6 +5,8 @@ defmodule DresstilleryWeb.BackofficeUserController do
   alias Dresstillery.Administration.BackofficeUser
   alias Dresstillery.Administration.BackofficePermissions
 
+  plug DresstilleryWeb.Authorize, require: ~w(manage_backoffice_users)
+
   def index(conn, _params) do
     backoffice_users = Administration.list_backoffice_users()
     render(conn, "index.html", backoffice_users: backoffice_users)
