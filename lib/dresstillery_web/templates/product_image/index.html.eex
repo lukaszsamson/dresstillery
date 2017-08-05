@@ -1,0 +1,31 @@
+<h2>Listing Product images for <%= @product_id %></h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>URL</th>
+      <th>Order</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for product_image <- @product_images do %>
+    <tr>
+      <th><%= img_tag DresstilleryWeb.ImageView.image_src(product_image.image), class: "image-contained" %></th>
+      <td><%= DresstilleryWeb.ImageView.image_src(product_image.image) %></td>
+      <td><%= product_image.order %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: product_image_path(@conn, :show, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: product_image_path(@conn, :edit, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: product_image_path(@conn, :delete, @product_id, product_image), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Product image", to: product_image_path(@conn, :new, @product_id) %></span>
+<span><%= link "Back", to: product_path(@conn, :show, @product_id) %></span>

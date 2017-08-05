@@ -13,6 +13,9 @@
       <li>
         <%= link "Images", to: image_path(@conn, :index) %>
       </li>
+      <li>
+        <%= link "Products", to: product_path(@conn, :index) %>
+      </li>
     </ul>
   </div>
 

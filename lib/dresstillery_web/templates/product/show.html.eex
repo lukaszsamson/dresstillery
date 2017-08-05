@@ -20,4 +20,5 @@
 </ul>
 
 <span><%= link "Edit", to: product_path(@conn, :edit, @product) %></span>
+<span><%= link "Images", to: product_image_path(@conn, :index, @product) %></span>
 <span><%= link "Back", to: product_path(@conn, :index) %></span>

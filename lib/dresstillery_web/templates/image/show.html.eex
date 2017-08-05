@@ -7,6 +7,11 @@
     <%= @image.path %>
   </li>
 
+  <li>
+    <strong>URL:</strong>
+    <%= image_src(@image) %>
+  </li>
+
 </ul>
 
 <span><%= link "Back", to: image_path(@conn, :index) %></span>

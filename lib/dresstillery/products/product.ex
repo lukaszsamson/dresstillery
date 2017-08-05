@@ -9,6 +9,8 @@ defmodule Dresstillery.Products.Product do
     field :label, :string
     field :price, :decimal
 
+    has_many :images, Dresstillery.Products.ProductImage
+
     timestamps()
   end
 

@@ -1,0 +1,21 @@
+<h2>Show Product image</h2>
+
+<%= img_tag DresstilleryWeb.ImageView.image_src(@product_image.image), class: "image-contained" %>
+
+<ul>
+
+  <li>
+    <strong>Order:</strong>
+    <%= @product_image.order %>
+  </li>
+
+  <li>
+    <strong>URL:</strong>
+    <%= DresstilleryWeb.ImageView.image_src(@product_image.image) %>
+  </li>
+
+</ul>
+
+<span><%= link "Image", to: image_path(@conn, :show, @product_image.image_id) %></span>
+<span><%= link "Edit", to: product_image_path(@conn, :edit, @product_image.product_id, @product_image) %></span>
+<span><%= link "Back", to: product_image_path(@conn, :index, @product_image.product_id) %></span>
