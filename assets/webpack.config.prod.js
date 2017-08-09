@@ -37,6 +37,7 @@ module.exports = {
       filename: '../css/[name].css',
       allChunks: true
     }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
       mangle: {
@@ -44,9 +45,11 @@ module.exports = {
         keep_fnames: true
       },
       compress: {
+        warnings: false,
         screw_ie8: true
       },
-      comments: false
+      comments: false,
+      ie8: false
     }),
   ],
   module: {
