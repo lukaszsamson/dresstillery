@@ -65,9 +65,14 @@ item item =
     let
         route =
             Routing.Product item.id
+
+        defaultImage =
+            item.images
+                |> List.head
+                |> Maybe.withDefault ""
     in
     li [ class "buyNowItem" ]
-        [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src item.src ] [] ]
+        [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src defaultImage ] [] ]
         , div [ class "buyNowItemLabel" ]
             [ text item.label
             ]

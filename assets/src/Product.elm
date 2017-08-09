@@ -5,6 +5,7 @@ import CommonElements
 import CommonMessages
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Http
 import Layout
 import Markdown
@@ -20,6 +21,7 @@ type Msg
     | Load
     | Loaded (WebData BuyNowItem)
     | LenghtChanged Lenght
+    | ImageSelected String
     | Parent CommonMessages.Msg
 
 
@@ -39,6 +41,7 @@ type alias Model =
     , flags : Flags
     , selectedLenght : Maybe Lenght
     , justAddedToBasket : Bool
+    , selectedImage : String
     }
 
 
@@ -49,6 +52,7 @@ init flags i =
     , flags = flags
     , selectedLenght = Nothing
     , justAddedToBasket = False
+    , selectedImage = ""
     }
 
 
@@ -64,6 +68,9 @@ update msg model =
         LenghtChanged l ->
             { model | selectedLenght = Just l } ! []
 
+        ImageSelected l ->
+            { model | selectedImage = l } ! []
+
         AfterToBasket ->
             { model | justAddedToBasket = False } ! []
 
@@ -72,15 +79,20 @@ update msg model =
 
         Loaded response ->
             let
-                selectedLenght =
+                ( selectedLenght, selectedImage ) =
                     case response of
                         RemoteData.Success product ->
-                            List.head product.lenghts
+                            ( List.head product.lenghts, product.images |> List.head |> Maybe.withDefault "" )
 
                         _ ->
-                            Nothing
+                            ( Nothing, "" )
             in
-            ( { model | product = response, selectedLenght = selectedLenght }, Cmd.none )
+            ( { model | product = response, selectedLenght = selectedLenght, selectedImage = selectedImage }, Cmd.none )
+
+
+smallImage : String -> Html Msg
+smallImage url =
+    div [ class "productThumbnali" ] [ img [ src url, onClick (ImageSelected url) ] [] ]
 
 
 maybeProduct : Model -> Html Msg
@@ -94,7 +106,10 @@ maybeProduct model =
 
         RemoteData.Success product ->
             div [ class "grid5" ]
-                [ div [ class "wideColumn" ] [ img [ src product.src, class "productMainImage" ] [] ]
+                [ div [ class "wideColumn", class "productImages" ]
+                    ([ div [ class "productMainImage" ] [ img [ src model.selectedImage ] [] ] ]
+                        ++ (product.images |> List.map smallImage)
+                    )
                 , div [ class "productDetails", class "thinColumn" ]
                     [ h2 [] [ text product.label ]
                     , div [ class "productPrice" ] [ text (toString product.price ++ " zł") ]

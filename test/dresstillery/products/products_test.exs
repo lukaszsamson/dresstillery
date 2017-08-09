@@ -17,6 +17,7 @@ defmodule Dresstillery.ProductsTest do
         |> Products.create_product()
 
       product
+      |> Repo.preload([images: :image])
     end
 
     test "list_products/0 returns all products" do

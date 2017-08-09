@@ -31,7 +31,11 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
         "id" => id,
         "code" => "some code",
         "label" => "some label",
-        "price" => "120.5"}
+        "price" => 120.5,
+        "images" => [],
+        "ingridients" => [],
+        "lenghts" => [],
+      }
     end
 
     test "renders errors when id is invalid", %{conn: conn} do

@@ -14,7 +14,7 @@ type alias Ingridient =
 
 type alias BuyNowItem =
     { label : String
-    , src : String
+    , images : List String
     , id : Int
     , price : Float
     , lenghts : List Lenght
