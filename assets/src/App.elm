@@ -111,6 +111,9 @@ load route =
         Routing.Product i ->
             updateComponent_ (product i) Product.Load Nothing
 
+        Routing.ProductZoom i j ->
+            updateComponent_ (product i) (Product.Zoom j) Nothing
+
         _ ->
             \m -> m ! []
 
@@ -143,6 +146,9 @@ mainContent model =
             subView buyNow model
 
         Routing.Product i ->
+            subView (product i) model
+
+        Routing.ProductZoom i j ->
             subView (product i) model
 
         Routing.Basket ->

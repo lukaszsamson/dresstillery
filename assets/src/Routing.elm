@@ -14,6 +14,7 @@ type Route
     | About
     | BuyNow
     | Product Int
+    | ProductZoom Int String
     | Basket
     | FabricsAndAccesories
     | TermsAndConditions
@@ -30,6 +31,7 @@ matchers =
         , map FabricsAndAccesories (s (pathImpl FabricsAndAccesories))
         , map BuyNow (s (pathImpl BuyNow))
         , map Product (s "products" </> int)
+        , map ProductZoom (s "products" </> int </> s "images" </> string)
         , map Basket (s (pathImpl Basket))
         , map TermsAndConditions (s (pathImpl TermsAndConditions))
         , map Contact (s (pathImpl Contact))
@@ -75,6 +77,9 @@ pathImpl r =
 
         Product i ->
             "products/" ++ toString i
+
+        ProductZoom i j ->
+            "products/" ++ toString i ++ "/images/" ++ j
 
         NotFound ->
             ""
