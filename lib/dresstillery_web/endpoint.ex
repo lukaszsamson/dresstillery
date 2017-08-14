@@ -24,7 +24,7 @@ defmodule DresstilleryWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
-  plug DresstilleryWeb.HistoryApiFallback,
+  plug PhoenixHisto,
     static_opts: @static_opts,
     blacklist: ["/api", "/admin"]
 
