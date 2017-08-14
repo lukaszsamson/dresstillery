@@ -35,6 +35,8 @@ defmodule DresstilleryWeb.Router do
     post "/backoffice_users/:id/reset_password", BackofficeUserController, :reset_password
     resources "/backoffice_users", BackofficeUserController
 
+    resources "/product_types", ProductTypeController
+
     resources "/products", ProductController
     resources "/products/:product_id/images", ProductImageController
     resources "/images", ImageController, except: [:edit, :update]

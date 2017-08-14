@@ -1,0 +1,28 @@
+<h2>Show Product type</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @product_type.name %>
+  </li>
+
+  <li>
+    <strong>Code:</strong>
+    <%= @product_type.code %>
+  </li>
+
+  <li>
+    <strong>Short description:</strong>
+    <%= @product_type.short_description %>
+  </li>
+
+  <li>
+    <strong>Main description:</strong>
+    <%= @product_type.main_description %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: product_type_path(@conn, :edit, @product_type) %></span>
+<span><%= link "Back", to: product_type_path(@conn, :index) %></span>

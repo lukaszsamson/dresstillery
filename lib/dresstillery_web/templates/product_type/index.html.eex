@@ -1,0 +1,32 @@
+<h2>Listing Product types</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+      <th>Short description</th>
+      <th>Main description</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for product_type <- @product_types do %>
+    <tr>
+      <td><%= product_type.name %></td>
+      <td><%= product_type.code %></td>
+      <td><%= product_type.short_description %></td>
+      <td><%= product_type.main_description %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: product_type_path(@conn, :show, product_type), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: product_type_path(@conn, :edit, product_type), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: product_type_path(@conn, :delete, product_type), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Product type", to: product_type_path(@conn, :new) %></span>

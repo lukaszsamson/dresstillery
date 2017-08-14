@@ -157,4 +157,70 @@ defmodule Dresstillery.ProductsTest do
       assert %Ecto.Changeset{} = Products.change_product_image(product.id, product_image)
     end
   end
+
+  describe "product_types" do
+    alias Dresstillery.Products.ProductType
+
+    @valid_attrs %{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"}
+    @update_attrs %{code: "some updated code", main_description: "some updated main_description", name: "some updated name", short_description: "some updated short_description"}
+    @invalid_attrs %{code: nil, main_description: nil, name: nil, short_description: nil}
+
+    def product_type_fixture(attrs \\ %{}) do
+      {:ok, product_type} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Products.create_product_type()
+
+      product_type
+    end
+
+    test "list_product_types/0 returns all product_types" do
+      product_type = product_type_fixture()
+      assert Products.list_product_types() == [product_type]
+    end
+
+    test "get_product_type!/1 returns the product_type with given id" do
+      product_type = product_type_fixture()
+      assert Products.get_product_type!(product_type.id) == product_type
+    end
+
+    test "create_product_type/1 with valid data creates a product_type" do
+      assert {:ok, %ProductType{} = product_type} = Products.create_product_type(@valid_attrs)
+      assert product_type.code == "some code"
+      assert product_type.main_description == "some main_description"
+      assert product_type.name == "some name"
+      assert product_type.short_description == "some short_description"
+    end
+
+    test "create_product_type/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Products.create_product_type(@invalid_attrs)
+    end
+
+    test "update_product_type/2 with valid data updates the product_type" do
+      product_type = product_type_fixture()
+      assert {:ok, product_type} = Products.update_product_type(product_type, @update_attrs)
+      assert %ProductType{} = product_type
+      assert product_type.code == "some updated code"
+      assert product_type.main_description == "some updated main_description"
+      assert product_type.name == "some updated name"
+      assert product_type.short_description == "some updated short_description"
+    end
+
+    test "update_product_type/2 with invalid data returns error changeset" do
+      product_type = product_type_fixture()
+      assert {:error, %Ecto.Changeset{}} = Products.update_product_type(product_type, @invalid_attrs)
+      assert product_type == Products.get_product_type!(product_type.id)
+    end
+
+    test "delete_product_type/1 deletes the product_type" do
+      product_type = product_type_fixture()
+      assert {:ok, %ProductType{}} = Products.delete_product_type(product_type)
+      assert_raise Ecto.NoResultsError, fn -> Products.get_product_type!(product_type.id) end
+    end
+
+    test "change_product_type/1 returns a product_type changeset" do
+      product_type = product_type_fixture()
+      assert %Ecto.Changeset{} = Products.change_product_type(product_type)
+    end
+  end
 end

@@ -214,4 +214,100 @@ defmodule Dresstillery.Products do
   def change_product_image(%ProductImage{} = product_image) do
     ProductImage.changeset(product_image, %{})
   end
+
+  alias Dresstillery.Products.ProductType
+
+  @doc """
+  Returns the list of product_types.
+
+  ## Examples
+
+      iex> list_product_types()
+      [%ProductType{}, ...]
+
+  """
+  def list_product_types do
+    Repo.all(ProductType)
+  end
+
+  @doc """
+  Gets a single product_type.
+
+  Raises `Ecto.NoResultsError` if the Product type does not exist.
+
+  ## Examples
+
+      iex> get_product_type!(123)
+      %ProductType{}
+
+      iex> get_product_type!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_product_type!(id), do: Repo.get!(ProductType, id)
+
+  @doc """
+  Creates a product_type.
+
+  ## Examples
+
+      iex> create_product_type(%{field: value})
+      {:ok, %ProductType{}}
+
+      iex> create_product_type(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_product_type(attrs \\ %{}) do
+    %ProductType{}
+    |> ProductType.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a product_type.
+
+  ## Examples
+
+      iex> update_product_type(product_type, %{field: new_value})
+      {:ok, %ProductType{}}
+
+      iex> update_product_type(product_type, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_product_type(%ProductType{} = product_type, attrs) do
+    product_type
+    |> ProductType.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ProductType.
+
+  ## Examples
+
+      iex> delete_product_type(product_type)
+      {:ok, %ProductType{}}
+
+      iex> delete_product_type(product_type)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_product_type(%ProductType{} = product_type) do
+    Repo.delete(product_type)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking product_type changes.
+
+  ## Examples
+
+      iex> change_product_type(product_type)
+      %Ecto.Changeset{source: %ProductType{}}
+
+  """
+  def change_product_type(%ProductType{} = product_type) do
+    ProductType.changeset(product_type, %{})
+  end
 end
