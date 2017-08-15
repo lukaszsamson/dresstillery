@@ -20,6 +20,10 @@ type alias Part =
 
 type alias BuyNowItem =
     { name : String
+    , code : String
+    , shortDescription : String
+    , mainDescription : String
+    , specificDescription : String
     , images : List String
     , id : Int
     , price : Float

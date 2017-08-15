@@ -14,7 +14,6 @@ import ProductModels exposing (..)
 import ProductsApi
 import RemoteData exposing (WebData)
 import Routing exposing (Route, linkHref, onLinkClick)
-import Utils exposing (productText)
 
 
 type Msg
@@ -133,6 +132,37 @@ ingridient a =
     ]
 
 
+productView : Model -> ProductModels.BuyNowItem -> Html Msg
+productView model product =
+    article [ class "grid5" ]
+        [ section [ class "wideColumn", class "productImages" ]
+            (bigImage product model.selectedImage
+                :: (product.images |> List.map smallImage)
+            )
+        , section [ class "productDetails", class "thinColumn" ]
+            [ header []
+                [ h2 [] [ text product.name ]
+                , small [] [ text product.code ]
+                ]
+            , div [ class "productPrice" ] [ text (toString product.price ++ " zł") ]
+            , section []
+                [ h3 [] [ text "Opis" ]
+                , Markdown.toHtml [] product.shortDescription
+                , Markdown.toHtml [] product.mainDescription
+                , Markdown.toHtml [] product.specificDescription
+                ]
+            , partsSection product
+
+            -- , h3 [] [ text "Dostępne warianty" ]
+            -- , CommonElements.lenghtPicker product.lenghts model.selectedLenght LenghtChanged
+            , div [ class "productBasket" ]
+                -- TODO
+                [ CommonElements.toBasketButton model.justAddedToBasket (Parent <| CommonMessages.ToBasket (BasketItem.CatalogItem { item = product, lenght = Mini }))
+                ]
+            ]
+        ]
+
+
 maybeProduct : Model -> Html Msg
 maybeProduct model =
     case model.product of
@@ -143,26 +173,7 @@ maybeProduct model =
             text "Loading..."
 
         RemoteData.Success product ->
-            div [ class "grid5" ]
-                [ div [ class "wideColumn", class "productImages" ]
-                    (bigImage product model.selectedImage
-                        :: (product.images |> List.map smallImage)
-                    )
-                , div [ class "productDetails", class "thinColumn" ]
-                    [ h2 [] [ text product.name ]
-                    , div [ class "productPrice" ] [ text (toString product.price ++ " zł") ]
-                    , h3 [] [ text "Opis" ]
-                    , div [] [ Markdown.toHtml [] productText ]
-                    , partsSection product
-
-                    -- , h3 [] [ text "Dostępne warianty" ]
-                    -- , CommonElements.lenghtPicker product.lenghts model.selectedLenght LenghtChanged
-                    , div [ class "productBasket" ]
-                        -- TODO
-                        [ CommonElements.toBasketButton model.justAddedToBasket (Parent <| CommonMessages.ToBasket (BasketItem.CatalogItem { item = product, lenght = Mini }))
-                        ]
-                    ]
-                ]
+            productView model product
 
         RemoteData.Failure error ->
             case error of

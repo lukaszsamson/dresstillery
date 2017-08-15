@@ -26,6 +26,10 @@ productDecoder : Json.Decode.Decoder BuyNowItem
 productDecoder =
     decode BuyNowItem
         |> required "name" string
+        |> required "code" string
+        |> required "short_description" string
+        |> required "main_description" string
+        |> required "specific_description" string
         |> required "images" (list string)
         |> required "id" int
         |> required "price" float
