@@ -8,6 +8,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
 import Layout
+import List.Extra
 import Markdown
 import Models exposing (..)
 import ProductModels exposing (..)
@@ -20,8 +21,8 @@ type Msg
     = AfterToBasket
     | Load
     | Loaded (WebData BuyNowItem)
-    | ImageSelected String
-    | Zoom String
+    | ImageSelected Int
+    | Zoom Int
     | Parent CommonMessages.Msg
 
 
@@ -40,7 +41,7 @@ type alias Model =
     , id : Int
     , flags : Flags
     , justAddedToBasket : Bool
-    , selectedImage : String
+    , selectedImage : Maybe Int
     , zoom : Bool
     }
 
@@ -51,16 +52,30 @@ init flags i =
     , product = RemoteData.NotAsked
     , flags = flags
     , justAddedToBasket = False
-    , selectedImage = ""
+    , selectedImage = Nothing
     , zoom = False
     }
+
+
+maybeLoad : Model -> ( Model, Cmd Msg )
+maybeLoad model =
+    case model.product of
+        RemoteData.Success p ->
+            ( model, Cmd.none )
+
+        _ ->
+            ( { model | product = RemoteData.Loading }, ProductsApi.fetchProduct model.flags model.id Loaded )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Zoom s ->
-            { model | zoom = True } ! []
+            let
+                model_ =
+                    { model | zoom = True, selectedImage = Just s }
+            in
+            maybeLoad model_
 
         Parent (CommonMessages.ToBasket m) ->
             { model | justAddedToBasket = True } ! [ CommonElements.toBasketButtonAfter AfterToBasket ]
@@ -69,43 +84,56 @@ update msg model =
             model ! []
 
         ImageSelected l ->
-            { model | selectedImage = l } ! []
+            { model | selectedImage = Just l } ! []
 
         AfterToBasket ->
             { model | justAddedToBasket = False } ! []
 
         Load ->
-            ( { model | product = RemoteData.Loading, zoom = False }, ProductsApi.fetchProduct model.flags model.id Loaded )
+            let
+                model_ =
+                    { model | zoom = False }
+            in
+            maybeLoad model_
 
         Loaded response ->
             let
                 selectedImage =
-                    case response of
-                        RemoteData.Success product ->
-                            product.images |> List.head |> Maybe.withDefault ""
+                    case model.selectedImage of
+                        Just x ->
+                            Just x
 
-                        _ ->
-                            ""
+                        Nothing ->
+                            case response of
+                                RemoteData.Success product ->
+                                    Just 0
+
+                                _ ->
+                                    Nothing
             in
             ( { model | product = response, selectedImage = selectedImage }, Cmd.none )
 
 
-smallImage : String -> Html Msg
-smallImage url =
-    div [ class "productThumbnali" ] [ img [ src url, onClick (ImageSelected url) ] [] ]
+smallImage : Int -> String -> Html Msg
+smallImage i url =
+    div [ class "productThumbnali" ] [ img [ src url, onClick (ImageSelected i) ] [] ]
 
 
-bigImage : BuyNowItem -> String -> Html Msg
+bigImage : BuyNowItem -> Maybe Int -> Html Msg
 bigImage product selectedImage =
     let
         image =
-            selectedImage |> String.split "/" |> List.filter (\x -> x |> String.contains ".") |> List.head |> Maybe.withDefault ""
+            product.images
+                |> getSelected selectedImage
+
+        index =
+            selectedImage |> Maybe.withDefault -1
 
         route =
-            Routing.ProductZoom product.id image
+            Routing.ProductZoom product.id index
     in
     div [ class "productMainImage" ]
-        [ a [ class "zoomLink", linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src selectedImage ] [] ]
+        [ a [ class "zoomLink", linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src image ] [] ]
         ]
 
 
@@ -137,7 +165,7 @@ productView model product =
     article [ class "grid5" ]
         [ section [ class "wideColumn", class "productImages" ]
             (bigImage product model.selectedImage
-                :: (product.images |> List.map smallImage)
+                :: (product.images |> List.indexedMap smallImage)
             )
         , section [ class "productDetails", class "thinColumn" ]
             [ header []
@@ -187,14 +215,28 @@ maybeProduct model =
                     text (toString error)
 
 
+getSelected : Maybe Int -> List String -> String
+getSelected selectedImage images =
+    images
+        |> List.Extra.getAt (selectedImage |> Maybe.withDefault -1)
+        |> Maybe.withDefault ""
+
+
 zoom : Model -> Html Msg
 zoom model =
     let
         route =
             Routing.Product (model.product |> RemoteData.toMaybe |> Maybe.map .id |> Maybe.withDefault 0)
+
+        image =
+            model.product
+                |> RemoteData.toMaybe
+                |> Maybe.map .images
+                |> Maybe.withDefault []
+                |> getSelected model.selectedImage
     in
     div [ class "imageZoomContainer", onLinkClick (Parent <| CommonMessages.ChangeLocation route) ]
-        [ img [ src model.selectedImage ] []
+        [ img [ src image ] []
         ]
 
 
