@@ -6,7 +6,44 @@ defmodule DresstilleryWeb.ProductController do
 
   defp get_product_types() do
     Products.list_product_types()
-    |> Enum.map(& {&1.id, &1.name})
+    |> Enum.map(& {&1.name, &1.id})
+  end
+
+  def parts_to_string(parts) do
+    parts
+    |> Enum.map(& "#{&1.name}:#{&1.ingridients |> ingridients_to_string}")
+    |> Enum.join(";")
+  end
+
+  def ingridients_to_string(ingridients) do
+    ingridients
+    |> Enum.map(& "#{&1.name}-#{&1.percentage}")
+    |> Enum.join(",")
+  end
+
+  def ingridients_from_string(nil), do: []
+  def ingridients_from_string(ingridients) do
+    ingridients
+    |> String.split(",")
+    |> Enum.map(fn ing ->
+      spli = ing |> String.split("-")
+      %{"name" => spli |> Enum.at(0), "percentage" => spli |> Enum.at(1)}
+    end)
+  end
+
+  def parts_from_string(nil), do: []
+  def parts_from_string(str) do
+    str
+    |> String.split(";")
+    |> Enum.map(fn pa ->
+      spli = pa |> String.split(":")
+      %{"name" => spli |> Enum.at(0), "ingridients" => spli |> Enum.at(1) |> ingridients_from_string}
+    end)
+  end
+
+  defp prepare_parts(product_params) do
+    product_params
+    |> Map.put("parts", parts_from_string product_params["parts_string"])
   end
 
   def index(conn, _params) do
@@ -20,6 +57,8 @@ defmodule DresstilleryWeb.ProductController do
   end
 
   def create(conn, %{"product" => product_params}) do
+    product_params = prepare_parts product_params
+
     case Products.create_product(product_params) do
       {:ok, product} ->
         conn
@@ -32,17 +71,23 @@ defmodule DresstilleryWeb.ProductController do
 
   def show(conn, %{"id" => id}) do
     product = Products.get_product!(id)
+    product = product
+    |> Map.put(:parts_string, parts_to_string(product.parts))
     render(conn, "show.html", product: product)
   end
 
   def edit(conn, %{"id" => id}) do
     product = Products.get_product!(id)
+    product = product
+    |> Map.put(:parts_string, parts_to_string(product.parts))
     changeset = Products.change_product(product)
     render(conn, "edit.html", product: product, changeset: changeset, available_product_types: get_product_types())
   end
 
   def update(conn, %{"id" => id, "product" => product_params}) do
     product = Products.get_product!(id)
+
+    product_params = prepare_parts product_params
 
     case Products.update_product(product, product_params) do
       {:ok, product} ->

@@ -24,6 +24,18 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :lenght, class: "control-label" %>
+    <%= number_input f, :lenght, step: "any", class: "form-control" %>
+    <%= error_tag f, :lenght %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :parts_string, class: "control-label" %>
+    <%= text_input f, :parts_string, step: "any", class: "form-control" %>
+    <%= error_tag f, :parts_string %>
+  </div>
+
+  <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -3,8 +3,8 @@ defmodule DresstilleryWeb.ProductControllerTest do
 
   alias Dresstillery.Products
 
-  @create_attrs %{specific_description: "some code", price: "120.5"}
-  @update_attrs %{specific_description: "some updated code", price: "456.7"}
+  @create_attrs %{specific_description: "some code", price: "120.5", lenght: 25}
+  @update_attrs %{specific_description: "some updated code", price: "456.7", lenght: 35}
   @invalid_attrs %{specific_description: nil, price: nil}
 
   setup do

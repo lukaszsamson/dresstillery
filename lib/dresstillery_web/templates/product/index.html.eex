@@ -5,7 +5,7 @@
     <tr>
       <th>Name</th>
       <th>Code</th>
-      <th>Label</th>
+      <th>Lenght</th>
       <th>Price</th>
 
       <th></th>
@@ -16,6 +16,7 @@
     <tr>
       <td><%= product.product_type.name %></td>
       <td><%= product.product_type.code %></td>
+      <td><%= product.lenght %></td>
       <td><%= product.price %></td>
 
       <td class="text-right">

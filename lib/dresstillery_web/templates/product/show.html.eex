@@ -32,7 +32,16 @@
     <%= @product.price %>
   </li>
 
+  <li>
+    <strong>Lenght:</strong>
+    <%= @product.lenght %>
+  </li>
+
 </ul>
+<h3>Parts</h3>
+<%= for part <- @product.parts do %>
+  <%= render "part.html", part: part %>
+<% end %>
 
 <span><%= link "Edit", to: product_path(@conn, :edit, @product) %></span>
 <span><%= link "Product type", to: product_type_path(@conn, :show, @product.product_type_id) %></span>

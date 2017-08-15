@@ -3,8 +3,10 @@ defmodule DresstilleryWeb.ProductTypeControllerTest do
 
   alias Dresstillery.Products
 
-  @create_attrs %{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"}
-  @update_attrs %{code: "some updated code", main_description: "some updated main_description", name: "some updated name", short_description: "some updated short_description"}
+  @create_attrs %{code: "some code", main_description: "some main_description",
+  name: "some name", short_description: "some short_description", ingridients: [%{name: "cotton", percentage: 25}]}
+  @update_attrs %{code: "some updated code", main_description: "some updated main_description",
+  name: "some updated name", short_description: "some updated short_description", ingridients: [%{name: "cotton", percentage: 25}]}
   @invalid_attrs %{code: nil, main_description: nil, name: nil, short_description: nil}
 
   def fixture(:product_type) do

@@ -4,7 +4,8 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
   alias Dresstillery.Products
   alias Dresstillery.Products.Product
 
-  @create_attrs %{specific_description: "some code", price: "120.5"}
+  @create_attrs %{specific_description: "some code", price: "120.5", lenght: 25,
+  parts: [%{name: "top", ingridients: [%{name: "cotton", percentage: 25}]}]}
 
   def fixture(:product) do
     {:ok, product_type} = Products.create_product_type(%{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"})
@@ -37,8 +38,8 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
         "specific_description" => "some code",
         "price" => 120.5,
         "images" => [],
-        "ingridients" => [],
-        "lenghts" => [],
+        "parts" => [%{"name" => "top", "ingridients" => [%{"name" => "cotton", "percentage" => 25}]}],
+        "lenght" => 25,
       }
     end
 
