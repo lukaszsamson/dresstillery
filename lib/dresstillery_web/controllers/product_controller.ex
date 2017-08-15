@@ -4,6 +4,11 @@ defmodule DresstilleryWeb.ProductController do
   alias Dresstillery.Products
   alias Dresstillery.Products.Product
 
+  defp get_product_types() do
+    Products.list_product_types()
+    |> Enum.map(& {&1.id, &1.name})
+  end
+
   def index(conn, _params) do
     products = Products.list_products()
     render(conn, "index.html", products: products)
@@ -11,7 +16,7 @@ defmodule DresstilleryWeb.ProductController do
 
   def new(conn, _params) do
     changeset = Products.change_product(%Product{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, available_product_types: get_product_types())
   end
 
   def create(conn, %{"product" => product_params}) do
@@ -21,7 +26,7 @@ defmodule DresstilleryWeb.ProductController do
         |> put_flash(:info, "Product created successfully.")
         |> redirect(to: product_path(conn, :show, product))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, available_product_types: get_product_types())
     end
   end
 
@@ -33,7 +38,7 @@ defmodule DresstilleryWeb.ProductController do
   def edit(conn, %{"id" => id}) do
     product = Products.get_product!(id)
     changeset = Products.change_product(product)
-    render(conn, "edit.html", product: product, changeset: changeset)
+    render(conn, "edit.html", product: product, changeset: changeset, available_product_types: get_product_types())
   end
 
   def update(conn, %{"id" => id, "product" => product_params}) do
@@ -45,7 +50,7 @@ defmodule DresstilleryWeb.ProductController do
         |> put_flash(:info, "Product updated successfully.")
         |> redirect(to: product_path(conn, :show, product))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", product: product, changeset: changeset)
+        render(conn, "edit.html", product: product, changeset: changeset, available_product_types: get_product_types())
     end
   end
 

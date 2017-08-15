@@ -3,12 +3,17 @@ defmodule DresstilleryWeb.ProductControllerTest do
 
   alias Dresstillery.Products
 
-  @create_attrs %{code: "some code", label: "some label", price: "120.5"}
-  @update_attrs %{code: "some updated code", label: "some updated label", price: "456.7"}
-  @invalid_attrs %{code: nil, label: nil, price: nil}
+  @create_attrs %{specific_description: "some code", price: "120.5"}
+  @update_attrs %{specific_description: "some updated code", price: "456.7"}
+  @invalid_attrs %{specific_description: nil, price: nil}
 
-  def fixture(:product) do
-    {:ok, product} = Products.create_product(@create_attrs)
+  setup do
+    {:ok, product_type} = Products.create_product_type(%{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"})
+    {:ok, %{product_type: product_type}}
+  end
+
+  def fixture(product_type, :product) do
+    {:ok, product} = Products.create_product(@create_attrs |> Map.put(:product_type_id, product_type.id))
     product
   end
 
@@ -27,8 +32,8 @@ defmodule DresstilleryWeb.ProductControllerTest do
   end
 
   describe "create product" do
-    test "redirects to show when data is valid", %{conn: conn_orig} do
-      conn = post conn_orig, product_path(conn_orig, :create), product: @create_attrs
+    test "redirects to show when data is valid", %{conn: conn_orig, product_type: product_type} do
+      conn = post conn_orig, product_path(conn_orig, :create), product: @create_attrs |> Map.put(:product_type_id, product_type.id)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == product_path(conn, :show, id)
@@ -55,8 +60,8 @@ defmodule DresstilleryWeb.ProductControllerTest do
   describe "update product" do
     setup [:create_product]
 
-    test "redirects when data is valid", %{conn: conn_orig, product: product} do
-      conn = put conn_orig, product_path(conn_orig, :update, product), product: @update_attrs
+    test "redirects when data is valid", %{conn: conn_orig, product: product, product_type: product_type} do
+      conn = put conn_orig, product_path(conn_orig, :update, product), product: (@update_attrs |> Map.put(:product_type_id, product_type.id))
       assert redirected_to(conn) == product_path(conn, :show, product)
 
       conn = get conn_orig, product_path(conn_orig, :show, product)
@@ -81,8 +86,8 @@ defmodule DresstilleryWeb.ProductControllerTest do
     end
   end
 
-  defp create_product(_) do
-    product = fixture(:product)
+  defp create_product(%{product_type: product_type}) do
+    product = fixture(product_type, :product)
     {:ok, product: product}
   end
 end

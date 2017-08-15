@@ -4,10 +4,11 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
   alias Dresstillery.Products
   alias Dresstillery.Products.Product
 
-  @create_attrs %{code: "some code", label: "some label", price: "120.5"}
+  @create_attrs %{specific_description: "some code", price: "120.5"}
 
   def fixture(:product) do
-    {:ok, product} = Products.create_product(@create_attrs)
+    {:ok, product_type} = Products.create_product_type(%{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"})
+    {:ok, product} = Products.create_product(@create_attrs |> Map.put(:product_type_id, product_type.id))
     product
   end
 
@@ -30,7 +31,10 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "code" => "some code",
-        "label" => "some label",
+        "name" => "some name",
+        "short_description" => "some short_description",
+        "main_description" => "some main_description",
+        "specific_description" => "some code",
         "price" => 120.5,
         "images" => [],
         "ingridients" => [],

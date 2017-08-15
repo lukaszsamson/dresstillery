@@ -12,8 +12,11 @@ defmodule DresstilleryWeb.Api.ProductView do
 
   def render("product.json", %{product: product}) do
     %{id: product.id,
-      code: product.code,
-      label: product.label,
+      name: product.product_type.name,
+      code: product.product_type.code,
+      short_description: product.product_type.short_description,
+      main_description: product.product_type.main_description,
+      specific_description: product.specific_description,
       price: product.price |> Decimal.to_float,
       ingridients: [],
       lenghts: [],

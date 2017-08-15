@@ -6,34 +6,39 @@ defmodule Dresstillery.ProductsTest do
   describe "products" do
     alias Dresstillery.Products.Product
 
-    @valid_attrs %{code: "some code", label: "some label", price: "120.5"}
-    @update_attrs %{code: "some updated code", label: "some updated label", price: "456.7"}
-    @invalid_attrs %{code: nil, label: nil, price: nil}
+    @valid_attrs %{specific_description: "some code", price: "120.5"}
+    @update_attrs %{specific_description: "some updated code", price: "456.7"}
+    @invalid_attrs %{specific_description: nil, price: nil}
 
-    def product_fixture(attrs \\ %{}) do
+    setup do
+      {:ok, product_type} = Products.create_product_type(%{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"})
+      {:ok, %{product_type: product_type}}
+    end
+
+    def product_fixture(product_type, attrs \\ %{}) do
       {:ok, product} =
         attrs
         |> Enum.into(@valid_attrs)
+        |> Map.put(:product_type_id, product_type.id)
         |> Products.create_product()
 
       product
-      |> Repo.preload([images: :image])
+      |> Repo.preload([images: :image, product_type: []])
     end
 
-    test "list_products/0 returns all products" do
-      product = product_fixture()
+    test "list_products/0 returns all products", %{product_type: product_type} do
+      product = product_fixture(product_type)
       assert Products.list_products() == [product]
     end
 
-    test "get_product!/1 returns the product with given id" do
-      product = product_fixture()
+    test "get_product!/1 returns the product with given id", %{product_type: product_type} do
+      product = product_fixture(product_type)
       assert Products.get_product!(product.id) == product
     end
 
-    test "create_product/1 with valid data creates a product" do
-      assert {:ok, %Product{} = product} = Products.create_product(@valid_attrs)
-      assert product.code == "some code"
-      assert product.label == "some label"
+    test "create_product/1 with valid data creates a product", %{product_type: product_type} do
+      assert {:ok, %Product{} = product} = Products.create_product(@valid_attrs |> Map.put(:product_type_id, product_type.id))
+      assert product.specific_description == "some code"
       assert product.price == Decimal.new("120.5")
     end
 
@@ -41,29 +46,28 @@ defmodule Dresstillery.ProductsTest do
       assert {:error, %Ecto.Changeset{}} = Products.create_product(@invalid_attrs)
     end
 
-    test "update_product/2 with valid data updates the product" do
-      product = product_fixture()
+    test "update_product/2 with valid data updates the product", %{product_type: product_type} do
+      product = product_fixture(product_type)
       assert {:ok, product} = Products.update_product(product, @update_attrs)
       assert %Product{} = product
-      assert product.code == "some updated code"
-      assert product.label == "some updated label"
+      assert product.specific_description == "some updated code"
       assert product.price == Decimal.new("456.7")
     end
 
-    test "update_product/2 with invalid data returns error changeset" do
-      product = product_fixture()
+    test "update_product/2 with invalid data returns error changeset", %{product_type: product_type} do
+      product = product_fixture(product_type)
       assert {:error, %Ecto.Changeset{}} = Products.update_product(product, @invalid_attrs)
       assert product == Products.get_product!(product.id)
     end
 
-    test "delete_product/1 deletes the product" do
-      product = product_fixture()
+    test "delete_product/1 deletes the product", %{product_type: product_type} do
+      product = product_fixture(product_type)
       assert {:ok, %Product{}} = Products.delete_product(product)
       assert_raise Ecto.NoResultsError, fn -> Products.get_product!(product.id) end
     end
 
-    test "change_product/1 returns a product changeset" do
-      product = product_fixture()
+    test "change_product/1 returns a product changeset", %{product_type: product_type}  do
+      product = product_fixture(product_type)
       assert %Ecto.Changeset{} = Products.change_product(product)
     end
   end
@@ -77,7 +81,8 @@ defmodule Dresstillery.ProductsTest do
     @invalid_attrs %{order: nil}
 
     setup do
-      {:ok, product} = Products.create_product(%{code: "some code", label: "some label", price: "120.5"})
+      {:ok, product_type} = Products.create_product_type(%{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"})
+      {:ok, product} = Products.create_product(%{specific_description: "some code", price: "120.5", product_type_id: product_type.id})
       {:ok, image} = Media.create_image(%{path: "some path"})
       {:ok, image1} = Media.create_image(%{path: "some path"})
       {:ok, product: product, image: image, image1: image1}

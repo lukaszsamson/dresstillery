@@ -19,7 +19,7 @@ defmodule Dresstillery.Products do
   """
   def list_products do
     from(p in Product,
-    preload: [images: [:image]]
+    preload: [images: [:image], product_type: []]
     )
     |> Repo.all
   end
@@ -38,7 +38,10 @@ defmodule Dresstillery.Products do
       ** (Ecto.NoResultsError)
 
   """
-  def get_product!(id), do: Repo.get!(Product, id) |> Repo.preload(images: [:image])
+  def get_product!(id) do
+    Repo.get!(Product, id)
+    |> Repo.preload(images: [:image], product_type: [])
+  end
 
   @doc """
   Creates a product.

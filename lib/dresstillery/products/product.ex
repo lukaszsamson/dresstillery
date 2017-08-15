@@ -5,11 +5,11 @@ defmodule Dresstillery.Products.Product do
 
 
   schema "products" do
-    field :code, :string
-    field :label, :string
     field :price, :decimal
+    field :specific_description, :string
 
     has_many :images, Dresstillery.Products.ProductImage
+    belongs_to :product_type, Dresstillery.Products.ProductType
 
     timestamps()
   end
@@ -17,8 +17,8 @@ defmodule Dresstillery.Products.Product do
   @doc false
   def changeset(%Product{} = product, attrs) do
     product
-    |> cast(attrs, [:code, :label, :price])
-    |> validate_required([:code, :label, :price])
-    |> unique_constraint(:code)
+    |> cast(attrs, [:price, :specific_description, :product_type_id])
+    |> validate_required([:price, :specific_description, :product_type_id])
+
   end
 end

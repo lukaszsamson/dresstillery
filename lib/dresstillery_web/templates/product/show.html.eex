@@ -3,13 +3,28 @@
 <ul>
 
   <li>
-    <strong>Code:</strong>
-    <%= @product.code %>
+    <strong>Name:</strong>
+    <%= @product.product_type.name %>
   </li>
 
   <li>
-    <strong>Label:</strong>
-    <%= @product.label %>
+    <strong>Code:</strong>
+    <%= @product.product_type.code %>
+  </li>
+
+  <li>
+    <strong>Short description:</strong>
+    <%= @product.product_type.short_description %>
+  </li>
+
+  <li>
+    <strong>Main description:</strong>
+    <%= @product.product_type.main_description %>
+  </li>
+
+  <li>
+    <strong>Specific description:</strong>
+    <%= @product.specific_description %>
   </li>
 
   <li>
@@ -20,5 +35,6 @@
 </ul>
 
 <span><%= link "Edit", to: product_path(@conn, :edit, @product) %></span>
+<span><%= link "Product type", to: product_type_path(@conn, :show, @product.product_type_id) %></span>
 <span><%= link "Images", to: product_image_path(@conn, :index, @product) %></span>
 <span><%= link "Back", to: product_path(@conn, :index) %></span>

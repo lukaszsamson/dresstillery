@@ -18,5 +18,6 @@ defmodule Dresstillery.Products.ProductType do
     product_type
     |> cast(attrs, [:name, :code, :short_description, :main_description])
     |> validate_required([:name, :code, :short_description, :main_description])
+    |> unique_constraint(:code)
   end
 end
