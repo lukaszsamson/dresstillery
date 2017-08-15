@@ -126,7 +126,7 @@ itemLabel : BasketItem -> Html Msg
 itemLabel item =
     case item of
         BasketItem.CatalogItem item_ ->
-            text (item_.item.label ++ ", " ++ toString item_.lenght)
+            text (item_.item.name ++ ", " ++ toString item_.lenght)
 
         BasketItem.CustomItem item_ ->
             text "custom item"

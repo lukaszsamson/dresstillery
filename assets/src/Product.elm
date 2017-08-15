@@ -21,7 +21,6 @@ type Msg
     = AfterToBasket
     | Load
     | Loaded (WebData BuyNowItem)
-    | LenghtChanged Lenght
     | ImageSelected String
     | Zoom String
     | Parent CommonMessages.Msg
@@ -41,7 +40,6 @@ type alias Model =
     { product : WebData BuyNowItem
     , id : Int
     , flags : Flags
-    , selectedLenght : Maybe Lenght
     , justAddedToBasket : Bool
     , selectedImage : String
     , zoom : Bool
@@ -53,7 +51,6 @@ init flags i =
     { id = i
     , product = RemoteData.NotAsked
     , flags = flags
-    , selectedLenght = Nothing
     , justAddedToBasket = False
     , selectedImage = ""
     , zoom = False
@@ -72,9 +69,6 @@ update msg model =
         Parent _ ->
             model ! []
 
-        LenghtChanged l ->
-            { model | selectedLenght = Just l } ! []
-
         ImageSelected l ->
             { model | selectedImage = l } ! []
 
@@ -86,15 +80,15 @@ update msg model =
 
         Loaded response ->
             let
-                ( selectedLenght, selectedImage ) =
+                selectedImage =
                     case response of
                         RemoteData.Success product ->
-                            ( List.head product.lenghts, product.images |> List.head |> Maybe.withDefault "" )
+                            product.images |> List.head |> Maybe.withDefault ""
 
                         _ ->
-                            ( Nothing, "" )
+                            ""
             in
-            ( { model | product = response, selectedLenght = selectedLenght, selectedImage = selectedImage }, Cmd.none )
+            ( { model | product = response, selectedImage = selectedImage }, Cmd.none )
 
 
 smallImage : String -> Html Msg
@@ -116,6 +110,29 @@ bigImage product selectedImage =
         ]
 
 
+partsSection : ProductModels.BuyNowItem -> Html msg
+partsSection product =
+    section []
+        (h3 [] [ text "Skład" ]
+            :: (product.parts |> List.map part)
+        )
+
+
+part : ProductModels.Part -> Html msg
+part p =
+    article []
+        [ h4 [] [ text p.name ]
+        , dl [] (p.ingridients |> List.map ingridient |> List.concat)
+        ]
+
+
+ingridient : ProductModels.Ingridient -> List (Html msg)
+ingridient a =
+    [ dt [] [ text a.name ]
+    , dd [] [ text (toString a.percentage ++ "%") ]
+    ]
+
+
 maybeProduct : Model -> Html Msg
 maybeProduct model =
     case model.product of
@@ -132,24 +149,17 @@ maybeProduct model =
                         :: (product.images |> List.map smallImage)
                     )
                 , div [ class "productDetails", class "thinColumn" ]
-                    [ h2 [] [ text product.label ]
+                    [ h2 [] [ text product.name ]
                     , div [ class "productPrice" ] [ text (toString product.price ++ " zł") ]
                     , h3 [] [ text "Opis" ]
                     , div [] [ Markdown.toHtml [] productText ]
-                    , h3 [] [ text "Skład" ]
-                    , dl []
-                        (product.ingridients
-                            |> List.concatMap
-                                (\a ->
-                                    [ dt [] [ text a.name ]
-                                    , dd [] [ text (toString a.percentage ++ "%") ]
-                                    ]
-                                )
-                        )
-                    , h3 [] [ text "Dostępne warianty" ]
-                    , CommonElements.lenghtPicker product.lenghts model.selectedLenght LenghtChanged
+                    , partsSection product
+
+                    -- , h3 [] [ text "Dostępne warianty" ]
+                    -- , CommonElements.lenghtPicker product.lenghts model.selectedLenght LenghtChanged
                     , div [ class "productBasket" ]
-                        [ CommonElements.toBasketButton model.justAddedToBasket (Parent <| CommonMessages.ToBasket (BasketItem.CatalogItem { item = product, lenght = Maybe.withDefault Mini model.selectedLenght }))
+                        -- TODO
+                        [ CommonElements.toBasketButton model.justAddedToBasket (Parent <| CommonMessages.ToBasket (BasketItem.CatalogItem { item = product, lenght = Mini }))
                         ]
                     ]
                 ]

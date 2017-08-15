@@ -74,7 +74,7 @@ item item =
     li [ class "buyNowItem" ]
         [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src defaultImage ] [] ]
         , div [ class "buyNowItemLabel" ]
-            [ text item.label
+            [ text item.name
             ]
         ]
 
@@ -85,7 +85,7 @@ itemFilter filterText item =
         normalize =
             String.trim << String.toLower
     in
-    normalize item.label |> String.contains (normalize filterText)
+    normalize item.name |> String.contains (normalize filterText)
 
 
 searchResults : List BuyNowItem -> String -> Html Msg

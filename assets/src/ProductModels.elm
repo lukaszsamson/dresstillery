@@ -12,11 +12,17 @@ type alias Ingridient =
     }
 
 
+type alias Part =
+    { name : String
+    , ingridients : List Ingridient
+    }
+
+
 type alias BuyNowItem =
-    { label : String
+    { name : String
     , images : List String
     , id : Int
     , price : Float
-    , lenghts : List Lenght
-    , ingridients : List Ingridient
+    , lenght : Int
+    , parts : List Part
     }

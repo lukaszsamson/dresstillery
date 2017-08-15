@@ -15,34 +15,37 @@ ingridientDecoder =
         |> required "percentage" int
 
 
+partDecoder : Json.Decode.Decoder Part
+partDecoder =
+    decode Part
+        |> required "name" string
+        |> required "ingridients" (list ingridientDecoder)
+
+
 productDecoder : Json.Decode.Decoder BuyNowItem
 productDecoder =
     decode BuyNowItem
-        |> required "label" string
+        |> required "name" string
         |> required "images" (list string)
         |> required "id" int
         |> required "price" float
-        |> required "lenghts"
-            (list
-                (string
-                    |> andThen lenghtDecoder
-                )
-            )
-        |> required "ingridients"
-            (list ingridientDecoder)
+        |> required "lenght" int
+        |> required "parts"
+            (list partDecoder)
 
 
-lenghtDecoder : String -> Decoder Lenght
-lenghtDecoder val =
-    case val of
-        "midi" ->
-            succeed Midi
 
-        "mini" ->
-            succeed Mini
-
-        _ ->
-            fail ("Unknown value: " ++ val)
+-- lenghtDecoder : String -> Decoder Lenght
+-- lenghtDecoder val =
+--     case val of
+--         "midi" ->
+--             succeed Midi
+--
+--         "mini" ->
+--             succeed Mini
+--
+--         _ ->
+--             fail ("Unknown value: " ++ val)
 
 
 fetchProducts : Flags -> (WebData (List BuyNowItem) -> msg) -> Cmd msg
