@@ -13,7 +13,7 @@
 
   <div class="form-group">
     <%= label f, :specific_description, class: "control-label" %>
-    <%= text_input f, :specific_description, class: "form-control" %>
+    <%= textarea f, :specific_description, class: "form-control" %>
     <%= error_tag f, :specific_description %>
   </div>
 
