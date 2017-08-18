@@ -56,12 +56,6 @@ defmodule DresstilleryWeb.SessionControllerTest do
     assert redirected_to(conn) == session_path(conn, :login_page)
   end
 
-  defp recycle_cookies(new_conn, old_conn) do
-    Enum.reduce Plug.Conn.fetch_cookies(old_conn).cookies, new_conn, fn
-      {key, value}, acc -> put_req_cookie(acc, to_string(key), value)
-    end
-  end
-
   defp create_user(active \\ true) do
     Repo.insert! %BackofficeUser{id: 332, login: "admin@example.com", password: "$2b$12$R3nBGCoa53vS4M1XgBpTgu7LROinWVaYEhKLG0Xo77Nghx1DtRVu.",
       tfa_code: "MFRGGZDFMZTWQ2LK", active: active}
@@ -77,7 +71,7 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     conn = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> get(session_path(conn, :tfa_page))
     assert html_response(conn, 200) =~ "Two factor auth"
   end
@@ -87,7 +81,7 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     conn = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
     assert redirected_to(conn) == page_path(conn, :index)
     assert get_session(conn, :current_user) == 332
@@ -105,7 +99,7 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     conn = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: invalid("MFRGGZDFMZTWQ2LK")}))
     assert html_response(conn, 200) =~ "Two factor auth"
   end
@@ -123,11 +117,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> post(session_path(conn, :logout))
 
     assert redirected_to(conn) == session_path(conn, :login_page)
@@ -141,7 +135,7 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     conn = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :logout))
 
     assert redirected_to(conn) == session_path(conn, :login_page)
@@ -165,11 +159,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> get(page_path(conn, :index))
 
     assert html_response(conn, 200) =~ "Dresstillery"
@@ -180,11 +174,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> get(backoffice_user_path(conn, :index))
 
     assert redirected_to(conn) == page_path(conn, :index)
@@ -195,11 +189,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> get(session_path(conn, :change_password_page))
 
     assert html_response(conn, 200) =~ "Change password"
@@ -210,11 +204,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> post(session_path(conn, :change_password), change_password: %{password: "p@ssw0rd",
       new_password: "qwerttyrqwer", new_password_confirmation: "qwerttyrqwer", tfa_code: "2345234525", code: :pot.totp("MFRGGZDFMZTWQ2LK")})
     assert redirected_to(conn) == page_path(conn, :index)
@@ -230,7 +224,7 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     conn = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :change_password), change_password: %{password: "p@ssw0rd",
       new_password: "qwerttyrqwer", new_password_confirmation: "qwerttyrqwer", tfa_code: "2345234525"})
     assert redirected_to(conn) == page_path(conn, :index)
@@ -246,11 +240,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> post(session_path(conn, :change_password), change_password: %{password: "p@ssw0rd",
       new_password: "qwerttyrqwer", new_password_confirmation: "qwerttyrqwer", tfa_code: "2345234525", code: invalid("MFRGGZDFMZTWQ2LK")})
     assert html_response(conn, 200) =~ "Change password"
@@ -261,11 +255,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> post(session_path(conn, :change_password), change_password: %{password: "p@ssw0rd2",
       new_password: "qwerttyrqwer", new_password_confirmation: "qwerttyrqwer", tfa_code: "2345234525"})
 
@@ -277,11 +271,11 @@ defmodule DresstilleryWeb.SessionControllerTest do
     oldconn = post conn, session_path(conn, :login), user_login: %{login: "admin@example.com", password: "p@ssw0rd"}
 
     oldconn1 = conn
-    |> recycle_cookies(oldconn)
+    |> Plug.Test.recycle_cookies(oldconn)
     |> post(session_path(conn, :tfa, tfa_code: %{code: :pot.totp("MFRGGZDFMZTWQ2LK")}))
 
     conn = conn
-    |> recycle_cookies(oldconn1)
+    |> Plug.Test.recycle_cookies(oldconn1)
     |> post(session_path(conn, :change_password), change_password: %{password: "p@ssw0rd",
       new_password: "qwerttyrqwer", new_password_confirmation: "qwerttyrqwe", tfa_code: "2345234525"})
 
