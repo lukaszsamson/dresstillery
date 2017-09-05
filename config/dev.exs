@@ -57,3 +57,7 @@ config :dresstillery, Dresstillery.Repo,
   pool_size: 10
 
 config :dresstillery, :upload_directory, "/priv/uploads"
+
+config :comeonin,
+  bcrypt_log_rounds: 1,
+  pbkdf2_rounds: 500
