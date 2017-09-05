@@ -12,7 +12,7 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <%= link "Dresstillery", to: page_path(@conn, :index), class: "navbar-brand" %>
 
       <div id="navbar" class="navbar-collapse collapse">
