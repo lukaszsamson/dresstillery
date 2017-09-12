@@ -41,6 +41,8 @@ defmodule DresstilleryWeb.Router do
     resources "/products/:product_id/images", ProductImageController
     resources "/images", ImageController, except: [:edit, :update]
 
+    resources "/fabrics", FabricController
+
     get   "/change_password",   SessionController, :change_password_page
     post  "/change_password",   SessionController, :change_password
   end

@@ -1,0 +1,5 @@
+<h2>Edit Fabric</h2>
+
+<%= render "form.html", Map.put(assigns, :action, fabric_path(@conn, :update, @fabric)) %>
+
+<span><%= link "Back", to: fabric_path(@conn, :index) %></span>

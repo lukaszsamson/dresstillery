@@ -1,0 +1,18 @@
+<h2>Show Fabric</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @fabric.name %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @fabric.description %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: fabric_path(@conn, :edit, @fabric) %></span>
+<span><%= link "Back", to: fabric_path(@conn, :index) %></span>
