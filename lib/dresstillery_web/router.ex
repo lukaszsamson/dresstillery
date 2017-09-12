@@ -52,5 +52,6 @@ defmodule DresstilleryWeb.Router do
     pipe_through :api
 
     resources "/products", ProductController, only: [:show, :index]
+    resources "/fabrics", FabricController, only: [:show, :index]
   end
 end
