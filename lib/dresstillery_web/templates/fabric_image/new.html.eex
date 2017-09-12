@@ -1,0 +1,5 @@
+<h2>New Fabric image</h2>
+
+<%= render "form.html", Map.put(assigns, :action, fabric_image_path(@conn, :create, @fabric_id)) %>
+
+<span><%= link "Back", to: fabric_image_path(@conn, :index, @fabric_id) %></span>

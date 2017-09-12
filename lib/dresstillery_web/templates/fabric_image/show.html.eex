@@ -1,0 +1,21 @@
+<h2>Show Fabric image</h2>
+
+<%= img_tag DresstilleryWeb.ImageView.image_src(@fabric_image.image), class: "image-contained" %>
+
+<ul>
+
+  <li>
+    <strong>Order:</strong>
+    <%= @fabric_image.order %>
+  </li>
+
+  <li>
+    <strong>URL:</strong>
+    <%= DresstilleryWeb.ImageView.image_src(@fabric_image.image) %>
+  </li>
+
+</ul>
+
+<span><%= link "Image", to: image_path(@conn, :show, @fabric_image.image_id) %></span>
+<span><%= link "Edit", to: fabric_image_path(@conn, :edit, @fabric_image.fabric_id, @fabric_image) %></span>
+<span><%= link "Back", to: fabric_image_path(@conn, :index, @fabric_image.fabric_id) %></span>

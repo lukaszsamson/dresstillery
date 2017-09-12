@@ -15,4 +15,5 @@
 </ul>
 
 <span><%= link "Edit", to: fabric_path(@conn, :edit, @fabric) %></span>
+<span><%= link "Images", to: fabric_image_path(@conn, :index, @fabric) %></span>
 <span><%= link "Back", to: fabric_path(@conn, :index) %></span>

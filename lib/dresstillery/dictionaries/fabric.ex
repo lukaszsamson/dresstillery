@@ -8,6 +8,8 @@ defmodule Dresstillery.Dictionaries.Fabric do
     field :description, :string
     field :name, :string
 
+    has_many :images, Dresstillery.Dictionaries.FabricImage
+
     timestamps()
   end
 
