@@ -31,7 +31,7 @@
 
   <div class="form-group">
     <%= label f, :parts_string, class: "control-label" %>
-    <%= text_input f, :parts_string, step: "any", class: "form-control" %>
+    <%= text_input f, :parts_string, class: "form-control" %>
     <%= error_tag f, :parts_string %>
   </div>
 

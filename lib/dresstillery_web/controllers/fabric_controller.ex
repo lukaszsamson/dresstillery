@@ -4,6 +4,27 @@ defmodule DresstilleryWeb.FabricController do
   alias Dresstillery.Dictionaries
   alias Dresstillery.Dictionaries.Fabric
 
+  def ingridients_to_string(ingridients) do
+    ingridients
+    |> Enum.map(& "#{&1.name}-#{&1.percentage}")
+    |> Enum.join(",")
+  end
+
+  def ingridients_from_string(nil), do: []
+  def ingridients_from_string(ingridients) do
+    ingridients
+    |> String.split(",")
+    |> Enum.map(fn ing ->
+      spli = ing |> String.split("-")
+      %{"name" => spli |> Enum.at(0), "percentage" => spli |> Enum.at(1)}
+    end)
+  end
+
+  defp prepare_ingridients(fabric_params) do
+    fabric_params
+    |> Map.put("ingridients", ingridients_from_string fabric_params["ingridients_string"])
+  end
+
   def index(conn, _params) do
     fabrics = Dictionaries.list_fabrics()
     render(conn, "index.html", fabrics: fabrics)
@@ -15,6 +36,7 @@ defmodule DresstilleryWeb.FabricController do
   end
 
   def create(conn, %{"fabric" => fabric_params}) do
+    fabric_params = prepare_ingridients fabric_params
     case Dictionaries.create_fabric(fabric_params) do
       {:ok, fabric} ->
         conn
@@ -32,12 +54,16 @@ defmodule DresstilleryWeb.FabricController do
 
   def edit(conn, %{"id" => id}) do
     fabric = Dictionaries.get_fabric!(id)
+    fabric = fabric
+    |> Map.put(:ingridients_string, ingridients_to_string(fabric.ingridients))
     changeset = Dictionaries.change_fabric(fabric)
     render(conn, "edit.html", fabric: fabric, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "fabric" => fabric_params}) do
     fabric = Dictionaries.get_fabric!(id)
+
+    fabric_params = prepare_ingridients fabric_params
 
     case Dictionaries.update_fabric(fabric, fabric_params) do
       {:ok, fabric} ->

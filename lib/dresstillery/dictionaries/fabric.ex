@@ -8,6 +8,8 @@ defmodule Dresstillery.Dictionaries.Fabric do
     field :description, :string
     field :name, :string
 
+    embeds_many :ingridients, Dresstillery.Dictionaries.Ingridient, on_replace: :delete
+
     has_many :images, Dresstillery.Dictionaries.FabricImage
 
     timestamps()
@@ -18,5 +20,6 @@ defmodule Dresstillery.Dictionaries.Fabric do
     fabric
     |> cast(attrs, [:name, :description])
     |> validate_required([:name, :description])
+    |> cast_embed(:ingridients, attrs[:ingridients] || [])
   end
 end

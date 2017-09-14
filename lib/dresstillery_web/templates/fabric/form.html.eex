@@ -18,6 +18,12 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :ingridients_string, class: "control-label" %>
+    <%= text_input f, :ingridients_string, class: "form-control" %>
+    <%= error_tag f, :ingridients_string %>
+  </div>
+
+  <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>

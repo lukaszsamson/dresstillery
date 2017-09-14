@@ -71,8 +71,6 @@ defmodule DresstilleryWeb.ProductController do
 
   def show(conn, %{"id" => id}) do
     product = Products.get_product!(id)
-    product = product
-    |> Map.put(:parts_string, parts_to_string(product.parts))
     render(conn, "show.html", product: product)
   end
 

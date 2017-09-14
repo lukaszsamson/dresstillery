@@ -19,6 +19,9 @@
       <li>
         <%= link "Products", to: product_path(@conn, :index) %>
       </li>
+      <li>
+        <%= link "Fabrics", to: fabric_path(@conn, :index) %>
+      </li>
     </ul>
   </div>
 

@@ -12,6 +12,16 @@
     <%= @fabric.description %>
   </li>
 
+  <li>
+    <strong>Ingridients:</strong>
+    <dl>
+    <%= for ingridient <- @fabric.ingridients do %>
+      <dt><%= ingridient.name %></dt>
+      <dd><%= ingridient.percentage %>%</dd>
+    <% end %>
+    </dl>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: fabric_path(@conn, :edit, @fabric) %></span>
