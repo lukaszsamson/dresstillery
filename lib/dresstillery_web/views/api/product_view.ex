@@ -21,7 +21,9 @@ defmodule DresstilleryWeb.Api.ProductView do
       price: product.price |> Decimal.to_float,
       parts: render_many(product.parts, ProductPartView, "product_part.json"),
       lenght: product.lenght,
-      images: product.images |> Enum.map(& &1.image |> DresstilleryWeb.ImageView.image_src)
+      images: product.images
+      |> Enum.sort_by(& &1.order)
+      |> Enum.map(& &1.image |> DresstilleryWeb.ImageView.image_src)
     }
   end
 
