@@ -22,6 +22,16 @@
     </dl>
   </li>
 
+  <li>
+    <strong>Available:</strong>
+    <%= @fabric.available %>
+  </li>
+
+  <li>
+    <strong>Hidden:</strong>
+    <%= @fabric.hidden %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: fabric_path(@conn, :edit, @fabric) %></span>

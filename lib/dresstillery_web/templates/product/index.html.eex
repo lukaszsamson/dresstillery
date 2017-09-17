@@ -7,6 +7,8 @@
       <th>Code</th>
       <th>Lenght</th>
       <th>Price</th>
+      <th>Available</th>
+      <th>Hidden</th>
 
       <th></th>
     </tr>
@@ -18,6 +20,8 @@
       <td><%= product.product_type.code %></td>
       <td><%= product.lenght %></td>
       <td><%= product.price %></td>
+      <td><%= product.available %></td>
+      <td><%= product.hidden %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: product_path(@conn, :show, product), class: "btn btn-default btn-xs" %></span>

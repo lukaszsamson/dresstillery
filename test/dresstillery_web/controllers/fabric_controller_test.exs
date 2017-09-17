@@ -3,8 +3,10 @@ defmodule DresstilleryWeb.FabricControllerTest do
 
   alias Dresstillery.Dictionaries
 
-  @create_attrs %{description: "some description", name: "some name"}
-  @update_attrs %{description: "some updated description", name: "some updated name"}
+  @create_attrs %{description: "some description", name: "some name", code: "some code",
+  available: true, hidden: false,}
+  @update_attrs %{description: "some updated description", name: "some updated name", code: "some updated code",
+  available: false, hidden: true,}
   @invalid_attrs %{description: nil, name: nil}
 
   def fixture(:fabric) do

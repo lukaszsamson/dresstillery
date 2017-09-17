@@ -36,6 +36,18 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :available, class: "control-label" %>
+    <%= checkbox f, :available, class: "checkbox" %>
+    <%= error_tag f, :available %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :hidden, class: "control-label" %>
+    <%= checkbox f, :hidden, class: "checkbox" %>
+    <%= error_tag f, :hidden %>
+  </div>
+
+  <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>

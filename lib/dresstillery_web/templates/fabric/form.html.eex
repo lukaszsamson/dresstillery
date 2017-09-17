@@ -12,6 +12,12 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :code, class: "control-label" %>
+    <%= text_input f, :code, class: "form-control" %>
+    <%= error_tag f, :code %>
+  </div>
+
+  <div class="form-group">
     <%= label f, :description, class: "control-label" %>
     <%= text_input f, :description, class: "form-control" %>
     <%= error_tag f, :description %>
@@ -21,6 +27,18 @@
     <%= label f, :ingridients_string, class: "control-label" %>
     <%= text_input f, :ingridients_string, class: "form-control" %>
     <%= error_tag f, :ingridients_string %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :available, class: "control-label" %>
+    <%= checkbox f, :available, class: "checkbox" %>
+    <%= error_tag f, :available %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :hidden, class: "control-label" %>
+    <%= checkbox f, :hidden, class: "checkbox" %>
+    <%= error_tag f, :hidden %>
   </div>
 
   <div class="form-group">

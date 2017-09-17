@@ -9,7 +9,8 @@ defmodule DresstilleryWeb.FabricImageControllerTest do
   @invalid_attrs %{order: nil}
 
   setup do
-    {:ok, fabric} = Dictionaries.create_fabric(%{name: "some name", description: "some description"})
+    {:ok, fabric} = Dictionaries.create_fabric(%{name: "some name", description: "some description", code: "some code",
+    available: true, hidden: false,})
     {:ok, image} = Media.create_image(%{path: "some path"})
     {:ok, fabric: fabric, image: image}
   end

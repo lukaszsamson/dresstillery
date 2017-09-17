@@ -4,7 +4,9 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Description</th>
+      <th>Code</th>
+      <th>Available</th>
+      <th>Hidden</th>
 
       <th></th>
     </tr>
@@ -13,7 +15,9 @@
 <%= for fabric <- @fabrics do %>
     <tr>
       <td><%= fabric.name %></td>
-      <td><%= fabric.description %></td>
+      <td><%= fabric.code %></td>
+      <td><%= fabric.available %></td>
+      <td><%= fabric.hidden %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: fabric_path(@conn, :show, fabric), class: "btn btn-default btn-xs" %></span>

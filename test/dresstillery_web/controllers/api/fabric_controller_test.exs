@@ -4,7 +4,9 @@ defmodule DresstilleryWeb.Api.FabricControllerTest do
   alias Dresstillery.Dictionaries
   alias Dresstillery.Dictionaries.Fabric
 
-  @create_attrs %{description: "some description", name: "some name"}
+  @create_attrs %{description: "some description", name: "some name", code: "some code",
+  available: false, hidden: true,
+  ingridients: [%{name: "cotton", percentage: 25}]}
 
   def fixture(:fabric) do
     {:ok, fabric} = Dictionaries.create_fabric(@create_attrs)

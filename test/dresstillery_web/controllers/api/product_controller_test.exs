@@ -5,6 +5,7 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
   alias Dresstillery.Products.Product
 
   @create_attrs %{specific_description: "some code", price: "120.5", lenght: 25,
+  available: false, hidden: true,
   parts: [%{name: "top", ingridients: [%{name: "cotton", percentage: 25}]}]}
 
   def fixture(:product) do

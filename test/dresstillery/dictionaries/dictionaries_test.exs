@@ -6,8 +6,12 @@ defmodule Dresstillery.DictionariesTest do
   describe "fabrics" do
     alias Dresstillery.Dictionaries.Fabric
 
-    @valid_attrs %{description: "some description", name: "some name"}
-    @update_attrs %{description: "some updated description", name: "some updated name"}
+    @valid_attrs %{description: "some description", name: "some name", code: "some code",
+    available: true, hidden: false,
+    ingridients: [%{name: "cotton", percentage: 25}]}
+    @update_attrs %{description: "some updated description", name: "some updated name", code: "some updated code",
+    available: false, hidden: true,
+    ingridients: [%{name: "wool", percentage: 35}]}
     @invalid_attrs %{description: nil, name: nil}
 
     def fabric_fixture(attrs \\ %{}) do
@@ -33,6 +37,12 @@ defmodule Dresstillery.DictionariesTest do
       assert {:ok, %Fabric{} = fabric} = Dictionaries.create_fabric(@valid_attrs)
       assert fabric.description == "some description"
       assert fabric.name == "some name"
+      assert fabric.code == "some code"
+      assert fabric.available
+      refute fabric.hidden
+      assert [ing] = fabric.ingridients
+      assert ing.name == "cotton"
+      assert ing.percentage == 25
     end
 
     test "create_fabric/1 with invalid data returns error changeset" do
@@ -45,6 +55,12 @@ defmodule Dresstillery.DictionariesTest do
       assert %Fabric{} = fabric
       assert fabric.description == "some updated description"
       assert fabric.name == "some updated name"
+      assert fabric.code == "some updated code"
+      refute fabric.available
+      assert fabric.hidden
+      assert [ing] = fabric.ingridients
+      assert ing.name == "wool"
+      assert ing.percentage == 35
     end
 
     test "update_fabric/2 with invalid data returns error changeset" do
@@ -74,7 +90,8 @@ defmodule Dresstillery.DictionariesTest do
     @invalid_attrs %{order: nil}
 
     setup do
-      {:ok, fabric} = Dictionaries.create_fabric(%{name: "some name", description: "some description"})
+      {:ok, fabric} = Dictionaries.create_fabric(%{name: "some name", description: "some description", code: "some code",
+      available: true, hidden: false,})
       {:ok, image} = Media.create_image(%{path: "some path"})
       {:ok, image1} = Media.create_image(%{path: "some path"})
       {:ok, fabric: fabric, image: image, image1: image1}

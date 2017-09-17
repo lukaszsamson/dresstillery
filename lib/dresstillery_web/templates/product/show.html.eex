@@ -37,6 +37,16 @@
     <%= @product.lenght %>
   </li>
 
+  <li>
+    <strong>Available:</strong>
+    <%= @product.available %>
+  </li>
+
+  <li>
+    <strong>Hidden:</strong>
+    <%= @product.hidden %>
+  </li>
+
 </ul>
 <h3>Parts</h3>
 <%= for part <- @product.parts do %>

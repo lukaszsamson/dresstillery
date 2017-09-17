@@ -8,6 +8,8 @@ defmodule Dresstillery.Products.Product do
     field :price, :decimal
     field :lenght, :integer
     field :specific_description, :string
+    field :available, :boolean
+    field :hidden, :boolean
 
     has_many :images, Dresstillery.Products.ProductImage
     belongs_to :product_type, Dresstillery.Products.ProductType
@@ -20,12 +22,12 @@ defmodule Dresstillery.Products.Product do
   @doc false
   def changeset(%Product{} = product, attrs) do
     product
-    |> cast(attrs, [:price, :specific_description, :product_type_id, :lenght])
-    |> validate_required([:price, :specific_description, :product_type_id, :lenght])
+    |> cast(attrs, [:price, :specific_description, :product_type_id, :lenght, :available, :hidden])
+    |> validate_required([:price, :specific_description, :product_type_id, :lenght, :available, :hidden])
     |> cast_embed(:parts, attrs[:parts] || [])
   end
 
-  
+
 end
 
 # podszewka:bawełna:25,wiskoza:75;wierzch:wełna:100

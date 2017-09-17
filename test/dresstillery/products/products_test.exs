@@ -7,8 +7,10 @@ defmodule Dresstillery.ProductsTest do
     alias Dresstillery.Products.Product
 
     @valid_attrs %{specific_description: "some code", price: "120.5", lenght: 25,
+    available: true, hidden: false,
     parts: [%{name: "top", ingridients: [%{name: "cotton", percentage: 25}]}]}
     @update_attrs %{specific_description: "some updated code", price: "456.7", lenght: 26,
+    available: false, hidden: true,
     parts: [%{name: "top", ingridients: [%{name: "wool", percentage: 35}]}]}
     @invalid_attrs %{specific_description: nil, price: nil}
 
@@ -48,6 +50,8 @@ defmodule Dresstillery.ProductsTest do
       assert [ing] = part.ingridients
       assert ing.name == "cotton"
       assert ing.percentage == 25
+      assert product.available
+      refute product.hidden
     end
 
     test "create_product/1 with invalid data returns error changeset" do
@@ -67,6 +71,9 @@ defmodule Dresstillery.ProductsTest do
       assert [ing] = part.ingridients
       assert ing.name == "wool"
       assert ing.percentage == 35
+
+      refute product.available
+      assert product.hidden
     end
 
     test "update_product/2 with invalid data returns error changeset", %{product_type: product_type} do
@@ -97,7 +104,8 @@ defmodule Dresstillery.ProductsTest do
 
     setup do
       {:ok, product_type} = Products.create_product_type(%{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"})
-      {:ok, product} = Products.create_product(%{specific_description: "some code", lenght: 25, price: "120.5", product_type_id: product_type.id})
+      {:ok, product} = Products.create_product(%{specific_description: "some code", lenght: 25, price: "120.5", product_type_id: product_type.id,
+      available: true, hidden: false,})
       {:ok, image} = Media.create_image(%{path: "some path"})
       {:ok, image1} = Media.create_image(%{path: "some path"})
       {:ok, product: product, image: image, image1: image1}
