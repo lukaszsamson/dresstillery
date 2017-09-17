@@ -1,6 +1,7 @@
 defmodule DresstilleryWeb.Api.FabricView do
   use DresstilleryWeb, :view
   alias DresstilleryWeb.Api.FabricView
+  alias DresstilleryWeb.Api.IngridientView
 
   def render("index.json", %{fabrics: fabrics}) do
     %{data: render_many(fabrics, FabricView, "fabric.json")}
@@ -13,6 +14,13 @@ defmodule DresstilleryWeb.Api.FabricView do
   def render("fabric.json", %{fabric: fabric}) do
     %{id: fabric.id,
       name: fabric.name,
-      description: fabric.description}
+      code: fabric.code,
+      available: fabric.available,
+      description: fabric.description,
+      images: fabric.images
+      |> Enum.sort_by(& &1.order)
+      |> Enum.map(& &1.image |> DresstilleryWeb.ImageView.image_src),
+      ingridients: render_many(fabric.ingridients, IngridientView, "ingridient.json"),
+    }
   end
 end

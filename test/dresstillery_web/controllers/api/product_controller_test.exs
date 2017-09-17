@@ -3,14 +3,17 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
 
   alias Dresstillery.Products
   alias Dresstillery.Products.Product
+  alias Dresstillery.Media
 
   @create_attrs %{specific_description: "some code", price: "120.5", lenght: 25,
-  available: false, hidden: true,
+  available: false, hidden: false,
   parts: [%{name: "top", ingridients: [%{name: "cotton", percentage: 25}]}]}
 
   def fixture(:product) do
+    {:ok, image} = Media.create_image(%{path: "some path"})
     {:ok, product_type} = Products.create_product_type(%{code: "some code", main_description: "some main_description", name: "some name", short_description: "some short_description"})
     {:ok, product} = Products.create_product(@create_attrs |> Map.put(:product_type_id, product_type.id))
+    {:ok, _fi} = Products.create_product_image(product.id, %{order: 1, image_id: image.id})
     product
   end
 
@@ -38,9 +41,10 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
         "main_description" => "some main_description",
         "specific_description" => "some code",
         "price" => 120.5,
-        "images" => [],
+        "images" => ["/media/some path"],
         "parts" => [%{"name" => "top", "ingridients" => [%{"name" => "cotton", "percentage" => 25}]}],
         "lenght" => 25,
+        "available" => false
       }
     end
 

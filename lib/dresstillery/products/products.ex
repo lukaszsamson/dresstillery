@@ -19,6 +19,18 @@ defmodule Dresstillery.Products do
   """
   def list_products do
     from(p in Product,
+    join: pt in assoc(p, :product_type),
+    order_by: pt.code,
+    preload: [images: [:image], product_type: []]
+    )
+    |> Repo.all
+  end
+
+  def list_visible_products do
+    from(p in Product,
+    join: pt in assoc(p, :product_type),
+    where: p.hidden == false,
+    order_by: pt.code,
     preload: [images: [:image], product_type: []]
     )
     |> Repo.all
@@ -40,6 +52,11 @@ defmodule Dresstillery.Products do
   """
   def get_product!(id) do
     Repo.get!(Product, id)
+    |> Repo.preload(images: [:image], product_type: [])
+  end
+
+  def get_visible_product!(id) do
+    Repo.get_by!(Product, id: id, hidden: false)
     |> Repo.preload(images: [:image], product_type: [])
   end
 

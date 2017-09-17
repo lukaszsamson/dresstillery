@@ -18,7 +18,16 @@ defmodule Dresstillery.Dictionaries do
 
   """
   def list_fabrics do
-    Repo.all(Fabric)
+    Repo.all(from f in Fabric,
+    order_by: f.code,
+    preload: [images: [:image]])
+  end
+
+  def list_visible_fabrics do
+    Repo.all(from f in Fabric,
+    where: f.hidden == false,
+    order_by: f.code,
+    preload: [images: [:image]])
   end
 
   @doc """
@@ -35,7 +44,15 @@ defmodule Dresstillery.Dictionaries do
       ** (Ecto.NoResultsError)
 
   """
-  def get_fabric!(id), do: Repo.get!(Fabric, id)
+  def get_fabric!(id) do
+    Repo.get!(Fabric, id)
+    |> Repo.preload(images: [:image])
+  end
+
+  def get_visible_fabric!(id) do
+    Repo.get_by!(Fabric, id: id, hidden: false)
+    |> Repo.preload(images: [:image])
+  end
 
   @doc """
   Creates a fabric.

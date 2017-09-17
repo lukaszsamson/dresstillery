@@ -15,6 +15,7 @@ defmodule DresstilleryWeb.Api.ProductView do
     %{id: product.id,
       name: product.product_type.name,
       code: product.product_type.code,
+      available: product.available,
       short_description: product.product_type.short_description,
       main_description: product.product_type.main_description,
       specific_description: product.specific_description,

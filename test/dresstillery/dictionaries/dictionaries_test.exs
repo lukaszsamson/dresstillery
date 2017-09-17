@@ -25,12 +25,14 @@ defmodule Dresstillery.DictionariesTest do
 
     test "list_fabrics/0 returns all fabrics" do
       fabric = fabric_fixture()
-      assert Dictionaries.list_fabrics() == [fabric]
+      assert [f] = Dictionaries.list_fabrics()
+      assert f.id == fabric.id
     end
 
     test "get_fabric!/1 returns the fabric with given id" do
       fabric = fabric_fixture()
-      assert Dictionaries.get_fabric!(fabric.id) == fabric
+      f = Dictionaries.get_fabric!(fabric.id)
+      assert f.id == fabric.id
     end
 
     test "create_fabric/1 with valid data creates a fabric" do
@@ -66,7 +68,6 @@ defmodule Dresstillery.DictionariesTest do
     test "update_fabric/2 with invalid data returns error changeset" do
       fabric = fabric_fixture()
       assert {:error, %Ecto.Changeset{}} = Dictionaries.update_fabric(fabric, @invalid_attrs)
-      assert fabric == Dictionaries.get_fabric!(fabric.id)
     end
 
     test "delete_fabric/1 deletes the fabric" do

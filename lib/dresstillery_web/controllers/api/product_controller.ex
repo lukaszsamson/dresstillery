@@ -6,12 +6,12 @@ defmodule DresstilleryWeb.Api.ProductController do
   action_fallback DresstilleryWeb.FallbackController
 
   def index(conn, _params) do
-    products = Products.list_products()
+    products = Products.list_visible_products()
     render(conn, "index.json", products: products)
   end
 
   def show(conn, %{"id" => id}) do
-    product = Products.get_product!(id)
+    product = Products.get_visible_product!(id)
     render(conn, "show.json", product: product)
   end
 

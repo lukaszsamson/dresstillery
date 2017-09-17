@@ -3,13 +3,16 @@ defmodule DresstilleryWeb.Api.FabricControllerTest do
 
   alias Dresstillery.Dictionaries
   alias Dresstillery.Dictionaries.Fabric
+  alias Dresstillery.Media
 
   @create_attrs %{description: "some description", name: "some name", code: "some code",
-  available: false, hidden: true,
+  available: false, hidden: false,
   ingridients: [%{name: "cotton", percentage: 25}]}
 
   def fixture(:fabric) do
+    {:ok, image} = Media.create_image(%{path: "some path"})
     {:ok, fabric} = Dictionaries.create_fabric(@create_attrs)
+    {:ok, _fi} = Dictionaries.create_fabric_image(fabric.id, %{order: 1, image_id: image.id})
     fabric
   end
 
@@ -32,7 +35,12 @@ defmodule DresstilleryWeb.Api.FabricControllerTest do
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "description" => "some description",
-        "name" => "some name"}
+        "name" => "some name",
+        "code" => "some code",
+        "available" => false,
+        "images" => ["/media/some path"],
+        "ingridients" => [%{"name" => "cotton", "percentage" => 25}],
+      }
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
