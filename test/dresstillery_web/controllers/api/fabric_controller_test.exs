@@ -10,7 +10,7 @@ defmodule DresstilleryWeb.Api.FabricControllerTest do
   ingridients: [%{name: "cotton", percentage: 25}]}
 
   def fixture(:fabric) do
-    {:ok, image} = Media.create_image(%{path: "some path"})
+    {:ok, image} = Media.create_image(%{path: "some path", file_name: "some name"})
     {:ok, fabric} = Dictionaries.create_fabric(@create_attrs)
     {:ok, _fi} = Dictionaries.create_fabric_image(fabric.id, %{order: 1, image_id: image.id})
     fabric

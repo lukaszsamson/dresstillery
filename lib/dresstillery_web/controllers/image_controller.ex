@@ -29,7 +29,7 @@ defmodule DresstilleryWeb.ImageController do
     |> Path.join("#{:crypto.strong_rand_bytes(6) |> Base.url_encode64}#{extension}")
     File.cp!(upload.path, path)
 
-    case Media.create_image(%{path: path}) do
+    case Media.create_image(%{path: path, file_name: upload.filename}) do
       {:ok, image} ->
         conn
         |> put_flash(:info, "Image created successfully.")

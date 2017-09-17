@@ -14,7 +14,7 @@ defmodule DresstilleryWeb.ProductImageControllerTest do
     {:ok, product} = Products.create_product(%{specific_description: "some code", price: "120.5", product_type_id: product_type.id,
     lenght: 25,
     available: true, hidden: false,})
-    {:ok, image} = Media.create_image(%{path: "some path"})
+    {:ok, image} = Media.create_image(%{path: "some path", file_name: "some name"})
     {:ok, product: product, image: image}
   end
 

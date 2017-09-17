@@ -93,8 +93,8 @@ defmodule Dresstillery.DictionariesTest do
     setup do
       {:ok, fabric} = Dictionaries.create_fabric(%{name: "some name", description: "some description", code: "some code",
       available: true, hidden: false,})
-      {:ok, image} = Media.create_image(%{path: "some path"})
-      {:ok, image1} = Media.create_image(%{path: "some path"})
+      {:ok, image} = Media.create_image(%{path: "some path", file_name: "some name"})
+      {:ok, image1} = Media.create_image(%{path: "some path", file_name: "some name"})
       {:ok, fabric: fabric, image: image, image1: image1}
     end
 

@@ -6,6 +6,7 @@ defmodule Dresstillery.Media.Image do
 
   schema "images" do
     field :path, :string
+    field :file_name, :string
 
     timestamps()
   end
@@ -13,7 +14,7 @@ defmodule Dresstillery.Media.Image do
   @doc false
   def changeset(%Image{} = image, attrs) do
     image
-    |> cast(attrs, [:path])
-    |> validate_required([:path])
+    |> cast(attrs, [:path, :file_name])
+    |> validate_required([:path, :file_name])
   end
 end

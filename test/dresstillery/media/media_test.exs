@@ -6,8 +6,8 @@ defmodule Dresstillery.MediaTest do
   describe "images" do
     alias Dresstillery.Media.Image
 
-    @valid_attrs %{path: "some path"}
-    @update_attrs %{path: "some updated path"}
+    @valid_attrs %{path: "some path", file_name: "some name"}
+    @update_attrs %{path: "some updated path", file_name: "some updated name"}
     @invalid_attrs %{path: nil}
 
     def image_fixture(attrs \\ %{}) do
@@ -32,6 +32,7 @@ defmodule Dresstillery.MediaTest do
     test "create_image/1 with valid data creates a image" do
       assert {:ok, %Image{} = image} = Media.create_image(@valid_attrs)
       assert image.path == "some path"
+      assert image.file_name == "some name"
     end
 
     test "create_image/1 with invalid data returns error changeset" do
@@ -43,6 +44,7 @@ defmodule Dresstillery.MediaTest do
       assert {:ok, image} = Media.update_image(image, @update_attrs)
       assert %Image{} = image
       assert image.path == "some updated path"
+      assert image.file_name == "some updated name"
     end
 
     test "update_image/2 with invalid data returns error changeset" do
