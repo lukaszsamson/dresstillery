@@ -11,7 +11,7 @@ defmodule DresstilleryWeb.ProductImageController do
 
     Media.list_images()
     |> Enum.filter(& not(&1.id in product_images))
-    |> Enum.map(& {&1.id, &1.id})
+    |> Enum.map(& {&1.file_name, &1.id})
   end
 
   def index(conn, %{"product_id" => product_id}) do

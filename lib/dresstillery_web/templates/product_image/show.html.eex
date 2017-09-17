@@ -5,6 +5,11 @@
 <ul>
 
   <li>
+    <strong>File name:</strong>
+    <%= @product_image.image.file_name %>
+  </li>
+
+  <li>
     <strong>Order:</strong>
     <%= @product_image.order %>
   </li>

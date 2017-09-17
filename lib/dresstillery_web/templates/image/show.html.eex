@@ -3,6 +3,11 @@
 <ul>
 
   <li>
+    <strong>File name:</strong>
+    <%= @image.file_name %>
+  </li>
+
+  <li>
     <strong>Path:</strong>
     <%= @image.path %>
   </li>

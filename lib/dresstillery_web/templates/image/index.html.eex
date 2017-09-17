@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th></th>
+      <th>File name</th>
       <th>URL</th>
 
       <th></th>
@@ -12,7 +13,8 @@
   <tbody>
 <%= for image <- @images do %>
     <tr>
-      <th><%= img_tag image_src(image), class: "image-contained" %></th>
+      <td><%= img_tag image_src(image), class: "image-contained" %></td>
+      <td><%= image.file_name %></td>
       <td><%= image_src(image) %></td>
 
       <td class="text-right">

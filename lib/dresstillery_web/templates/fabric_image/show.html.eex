@@ -5,6 +5,11 @@
 <ul>
 
   <li>
+    <strong>File name:</strong>
+    <%= @fabric_image.image.file_name %>
+  </li>
+
+  <li>
     <strong>Order:</strong>
     <%= @fabric_image.order %>
   </li>
