@@ -4,6 +4,7 @@ import Basket
 import CommonMessages
 import Creator
 import Dict
+import Fabrics
 import Home
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -20,6 +21,7 @@ import Utils exposing (..)
 type Msg
     = OnLocationChange Navigation.Location
     | ToggleMenu
+    | FabricsMessage Fabrics.Msg (Maybe CommonMessages.Msg)
     | ProductsMessage Products.Msg (Maybe CommonMessages.Msg)
     | ProductMessage Int Product.Msg (Maybe CommonMessages.Msg)
     | CreatorMessage Creator.Msg (Maybe CommonMessages.Msg)
@@ -32,6 +34,7 @@ type alias Model =
     , flags : Flags
     , menuShown : Bool
     , products : Products.Model
+    , fabrics : Fabrics.Model
     , creator : Creator.Model
     , basket : Basket.Model
     , productDict : Dict.Dict Int Product.Model
@@ -46,6 +49,7 @@ initialModel flags =
     , creator = Creator.init flags
     , basket = Basket.init
     , products = Products.init flags
+    , fabrics = Fabrics.init flags
     , productDict = Dict.empty
     }
 
@@ -79,6 +83,9 @@ update msg model =
         CreatorMessage cMsg pMsg ->
             updateComponent_ creator cMsg pMsg model
 
+        FabricsMessage cMsg pMsg ->
+            updateComponent_ fabrics cMsg pMsg model
+
         ProductsMessage cMsg pMsg ->
             updateComponent_ products cMsg pMsg model
 
@@ -104,6 +111,9 @@ load route =
     case route of
         Routing.Creator ->
             updateComponent_ creator Creator.Load Nothing
+
+        Routing.Fabrics ->
+            updateComponent_ fabrics Fabrics.Load Nothing
 
         Routing.Products ->
             updateComponent_ products Products.Load Nothing
@@ -144,6 +154,9 @@ mainContent model =
 
         Routing.Products ->
             subView products model
+
+        Routing.Fabrics ->
+            subView fabrics model
 
         Routing.Product i ->
             subView (product i) model
@@ -197,6 +210,16 @@ creator =
     , update = Creator.update
     , view = Creator.view
     , wrap = wrap CreatorMessage Creator.toParent
+    }
+
+
+fabrics : Component Model Msg Fabrics.Model Fabrics.Msg
+fabrics =
+    { getter = \m -> m.fabrics
+    , setter = \m b -> { m | fabrics = b }
+    , update = Fabrics.update
+    , view = Fabrics.view
+    , wrap = wrap FabricsMessage Fabrics.toParent
     }
 
 

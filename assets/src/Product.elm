@@ -3,6 +3,7 @@ module Product exposing (..)
 import BasketItem exposing (BasketItem)
 import CommonElements
 import CommonMessages
+import FabricModels
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -153,7 +154,7 @@ part p =
         ]
 
 
-ingridient : ProductModels.Ingridient -> List (Html msg)
+ingridient : FabricModels.Ingridient -> List (Html msg)
 ingridient a =
     [ dt [] [ text a.name ]
     , dd [] [ text (toString a.percentage ++ "%") ]

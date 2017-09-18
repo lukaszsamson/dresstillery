@@ -1,6 +1,7 @@
 module ProductsApi exposing (..)
 
 import Api exposing (..)
+import FabricsApi
 import Json.Decode exposing (Decoder, andThen, fail, field, float, int, list, string, succeed)
 import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
 import Models exposing (..)
@@ -8,18 +9,11 @@ import ProductModels exposing (..)
 import RemoteData exposing (WebData)
 
 
-ingridientDecoder : Json.Decode.Decoder Ingridient
-ingridientDecoder =
-    decode Ingridient
-        |> required "name" string
-        |> required "percentage" int
-
-
 partDecoder : Json.Decode.Decoder Part
 partDecoder =
     decode Part
         |> required "name" string
-        |> required "ingridients" (list ingridientDecoder)
+        |> required "ingridients" (list FabricsApi.ingridientDecoder)
 
 
 productDecoder : Json.Decode.Decoder ProductsItem

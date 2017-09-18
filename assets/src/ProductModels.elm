@@ -1,20 +1,16 @@
 module ProductModels exposing (..)
 
+import FabricModels
+
 
 type Lenght
     = Mini
     | Midi
 
 
-type alias Ingridient =
-    { name : String
-    , percentage : Int
-    }
-
-
 type alias Part =
     { name : String
-    , ingridients : List Ingridient
+    , ingridients : List FabricModels.Ingridient
     }
 
 
