@@ -20,7 +20,7 @@ import Routing exposing (Route, linkHref, onLinkClick)
 type Msg
     = AfterToBasket
     | Load
-    | Loaded (WebData BuyNowItem)
+    | Loaded (WebData ProductsItem)
     | ImageSelected Int
     | Zoom Int
     | Parent CommonMessages.Msg
@@ -37,7 +37,7 @@ toParent msg =
 
 
 type alias Model =
-    { product : WebData BuyNowItem
+    { product : WebData ProductsItem
     , id : Int
     , flags : Flags
     , justAddedToBasket : Bool
@@ -119,7 +119,7 @@ smallImage i url =
     div [ class "productThumbnali" ] [ img [ src url, onClick (ImageSelected i) ] [] ]
 
 
-bigImage : BuyNowItem -> Maybe Int -> Html Msg
+bigImage : ProductsItem -> Maybe Int -> Html Msg
 bigImage product selectedImage =
     let
         image =
@@ -137,7 +137,7 @@ bigImage product selectedImage =
         ]
 
 
-partsSection : ProductModels.BuyNowItem -> Html msg
+partsSection : ProductModels.ProductsItem -> Html msg
 partsSection product =
     section []
         (h3 [] [ text "Skład" ]
@@ -160,7 +160,7 @@ ingridient a =
     ]
 
 
-productView : Model -> ProductModels.BuyNowItem -> Html Msg
+productView : Model -> ProductModels.ProductsItem -> Html Msg
 productView model product =
     article [ class "grid5" ]
         [ section [ class "wideColumn", class "productImages" ]

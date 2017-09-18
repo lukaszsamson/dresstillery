@@ -22,9 +22,9 @@ partDecoder =
         |> required "ingridients" (list ingridientDecoder)
 
 
-productDecoder : Json.Decode.Decoder BuyNowItem
+productDecoder : Json.Decode.Decoder ProductsItem
 productDecoder =
-    decode BuyNowItem
+    decode ProductsItem
         |> required "name" string
         |> required "code" string
         |> required "short_description" string
@@ -52,11 +52,11 @@ productDecoder =
 --             fail ("Unknown value: " ++ val)
 
 
-fetchProducts : Flags -> (WebData (List BuyNowItem) -> msg) -> Cmd msg
+fetchProducts : Flags -> (WebData (List ProductsItem) -> msg) -> Cmd msg
 fetchProducts flags msg =
     get (flags.backendUrl ++ "/products") (field "data" (list productDecoder)) msg
 
 
-fetchProduct : Flags -> Int -> (WebData BuyNowItem -> msg) -> Cmd msg
+fetchProduct : Flags -> Int -> (WebData ProductsItem -> msg) -> Cmd msg
 fetchProduct flags i msg =
     get (flags.backendUrl ++ "/products/" ++ toString i) (field "data" productDecoder) msg

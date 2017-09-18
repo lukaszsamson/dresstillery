@@ -12,7 +12,7 @@ type Route
     = Home
     | Creator
     | About
-    | BuyNow
+    | Products
     | Product Int
     | ProductZoom Int Int
     | Basket
@@ -29,7 +29,7 @@ matchers =
         , map Creator (s (pathImpl Creator))
         , map About (s (pathImpl About))
         , map FabricsAndAccesories (s (pathImpl FabricsAndAccesories))
-        , map BuyNow (s (pathImpl BuyNow))
+        , map Products (s (pathImpl Products))
         , map Product (s "products" </> int)
         , map ProductZoom (s "products" </> int </> s "images" </> int)
         , map Basket (s (pathImpl Basket))
@@ -63,8 +63,8 @@ pathImpl r =
         FabricsAndAccesories ->
             "fabrics_and_accesories"
 
-        BuyNow ->
-            "buy_now"
+        Products ->
+            "products"
 
         Basket ->
             "basket"

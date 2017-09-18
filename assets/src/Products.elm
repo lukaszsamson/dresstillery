@@ -1,4 +1,4 @@
-module BuyNow exposing (..)
+module Products exposing (..)
 
 import CommonMessages
 import Html exposing (..)
@@ -16,7 +16,7 @@ type Msg
     = Load
     | Parent CommonMessages.Msg
     | FilterChange String
-    | Loaded (WebData (List BuyNowItem))
+    | Loaded (WebData (List ProductsItem))
 
 
 toParent : Msg -> Maybe CommonMessages.Msg
@@ -30,7 +30,7 @@ toParent msg =
 
 
 type alias Model =
-    { items : WebData (List BuyNowItem)
+    { items : WebData (List ProductsItem)
     , filterText : String
     , flags : Flags
     }
@@ -60,7 +60,7 @@ update msg model =
             model ! []
 
 
-item : BuyNowItem -> Html Msg
+item : ProductsItem -> Html Msg
 item item =
     let
         route =
@@ -71,15 +71,15 @@ item item =
                 |> List.head
                 |> Maybe.withDefault ""
     in
-    li [ class "buyNowItem" ]
+    li [ class "productsItem" ]
         [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src defaultImage ] [] ]
-        , div [ class "buyNowItemLabel" ]
+        , div [ class "productsItemLabel" ]
             [ text item.name
             ]
         ]
 
 
-itemFilter : String -> BuyNowItem -> Bool
+itemFilter : String -> ProductsItem -> Bool
 itemFilter filterText item =
     let
         normalize =
@@ -88,7 +88,7 @@ itemFilter filterText item =
     normalize item.name |> String.contains (normalize filterText)
 
 
-searchResults : List BuyNowItem -> String -> Html Msg
+searchResults : List ProductsItem -> String -> Html Msg
 searchResults items filterText =
     let
         filtered =
@@ -129,7 +129,7 @@ maybeList model =
 
         RemoteData.Success items ->
             div []
-                [ div [ class "buyNowSearch", class "grid3" ]
+                [ div [ class "productsSearch", class "grid3" ]
                     [ div [ class "centeredColumn" ]
                         [ input [ type_ "text", onInput FilterChange, placeholder "Szukaj" ] []
                         ]

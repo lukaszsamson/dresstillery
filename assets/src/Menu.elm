@@ -41,7 +41,7 @@ menu changeRoute =
         , ul []
             [ l Routing.Home "Home"
             , l Routing.About "Kim jesteśmy"
-            , l Routing.BuyNow "Kup teraz"
+            , l Routing.Products "Kup teraz"
             , l Routing.Creator "Zaprojektuj własną spódnicę"
             , l Routing.FabricsAndAccesories "Tkaniny i akcesoria"
             , l Routing.TermsAndConditions "Warunki zakupów"

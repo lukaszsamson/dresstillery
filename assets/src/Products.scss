@@ -1,4 +1,4 @@
-.buyNowSearch {
+.productsSearch {
   padding: 1.25rem;
   & input {
     width: 100%;
@@ -9,21 +9,21 @@ ul.searchResults {
   padding-left: 0;
 }
 
-$buyNowItemHeight: 40vh;
-.buyNowItem {
+$productsItemHeight: 40vh;
+.productsItem {
   display: flex;
   flex-direction: column;
   & a {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-height: $buyNowItemHeight;
+    max-height: $productsItemHeight;
     padding: 1.25rem;
     box-sizing: content-box;
     flex-grow: 2;
   }
   & img {
-    max-height: $buyNowItemHeight;
+    max-height: $productsItemHeight;
     max-width: 100%;
   }
   transition: all 0.3s ease-out;
@@ -31,6 +31,6 @@ $buyNowItemHeight: 40vh;
     background: rgba(0,0,0,.075)
   }
 }
-.buyNowItemLabel {
+.productsItemLabel {
   text-align: center;
 }

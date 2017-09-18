@@ -18,7 +18,7 @@ type alias Part =
     }
 
 
-type alias BuyNowItem =
+type alias ProductsItem =
     { name : String
     , code : String
     , shortDescription : String

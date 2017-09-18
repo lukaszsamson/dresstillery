@@ -1,7 +1,6 @@
 module App exposing (..)
 
 import Basket
-import BuyNow
 import CommonMessages
 import Creator
 import Dict
@@ -13,6 +12,7 @@ import Menu
 import Models exposing (..)
 import Navigation
 import Product
+import Products
 import Routing
 import Utils exposing (..)
 
@@ -20,7 +20,7 @@ import Utils exposing (..)
 type Msg
     = OnLocationChange Navigation.Location
     | ToggleMenu
-    | BuyNowMessage BuyNow.Msg (Maybe CommonMessages.Msg)
+    | ProductsMessage Products.Msg (Maybe CommonMessages.Msg)
     | ProductMessage Int Product.Msg (Maybe CommonMessages.Msg)
     | CreatorMessage Creator.Msg (Maybe CommonMessages.Msg)
     | BasketMessage Basket.Msg (Maybe CommonMessages.Msg)
@@ -31,10 +31,10 @@ type alias Model =
     { route : Routing.Route
     , flags : Flags
     , menuShown : Bool
-    , buyNow : BuyNow.Model
+    , products : Products.Model
     , creator : Creator.Model
     , basket : Basket.Model
-    , products : Dict.Dict Int Product.Model
+    , productDict : Dict.Dict Int Product.Model
     }
 
 
@@ -45,8 +45,8 @@ initialModel flags =
     , menuShown = False
     , creator = Creator.init flags
     , basket = Basket.init
-    , buyNow = BuyNow.init flags
-    , products = Dict.empty
+    , products = Products.init flags
+    , productDict = Dict.empty
     }
 
 
@@ -79,8 +79,8 @@ update msg model =
         CreatorMessage cMsg pMsg ->
             updateComponent_ creator cMsg pMsg model
 
-        BuyNowMessage cMsg pMsg ->
-            updateComponent_ buyNow cMsg pMsg model
+        ProductsMessage cMsg pMsg ->
+            updateComponent_ products cMsg pMsg model
 
         ProductMessage i cMsg pMsg ->
             updateComponent_ (product i) cMsg pMsg model
@@ -105,8 +105,8 @@ load route =
         Routing.Creator ->
             updateComponent_ creator Creator.Load Nothing
 
-        Routing.BuyNow ->
-            updateComponent_ buyNow BuyNow.Load Nothing
+        Routing.Products ->
+            updateComponent_ products Products.Load Nothing
 
         Routing.Product i ->
             updateComponent_ (product i) Product.Load Nothing
@@ -142,8 +142,8 @@ mainContent model =
         Routing.About ->
             aboutView model.flags.o_mnie
 
-        Routing.BuyNow ->
-            subView buyNow model
+        Routing.Products ->
+            subView products model
 
         Routing.Product i ->
             subView (product i) model
@@ -200,13 +200,13 @@ creator =
     }
 
 
-buyNow : Component Model Msg BuyNow.Model BuyNow.Msg
-buyNow =
-    { getter = \m -> m.buyNow
-    , setter = \m b -> { m | buyNow = b }
-    , update = BuyNow.update
-    , view = BuyNow.view
-    , wrap = wrap BuyNowMessage BuyNow.toParent
+products : Component Model Msg Products.Model Products.Msg
+products =
+    { getter = \m -> m.products
+    , setter = \m b -> { m | products = b }
+    , update = Products.update
+    , view = Products.view
+    , wrap = wrap ProductsMessage Products.toParent
     }
 
 
@@ -214,10 +214,10 @@ product : Int -> Component Model Msg Product.Model Product.Msg
 product i =
     { getter =
         \m ->
-            m.products
+            m.productDict
                 |> Dict.get i
                 |> Maybe.withDefault (Product.init m.flags i)
-    , setter = \m a -> { m | products = Dict.insert i a m.products }
+    , setter = \m a -> { m | productDict = Dict.insert i a m.productDict }
     , update = Product.update
     , view = Product.view
     , wrap = wrap (ProductMessage i) Product.toParent
