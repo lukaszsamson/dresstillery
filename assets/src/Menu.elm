@@ -4,7 +4,7 @@ import Color
 import CommonElements exposing (icon)
 import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
-import Html.Attributes exposing (class, classList, href, src, style)
+import Html.Attributes exposing (alt, class, classList, href, src, style)
 import Html.Events exposing (onClick, onWithOptions)
 import Routing
 
@@ -36,7 +36,7 @@ menu changeRoute =
     div [ class "menu" ]
         [ div [ class "logo" ]
             [ a [ Routing.linkHref Routing.Home, Routing.onLinkClick <| changeRoute Routing.Home ]
-                [ img [ src "/img/logo/Falda_logo_vertical_black.svg" ] [] ]
+                [ img [ src "/img/logo/Falda_logo_vertical_black.svg", alt "Strona główna" ] [] ]
             ]
         , ul []
             [ l Routing.Home "Home"

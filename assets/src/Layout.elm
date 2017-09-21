@@ -1,7 +1,5 @@
 module Layout exposing (..)
 
-import Color
-import FontAwesome
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Markdown
@@ -10,7 +8,7 @@ import Markdown
 header : Html msg
 header =
     div [ class "header" ]
-        [ img [ src "/img/logo/Falda_logo_horizontal_black.svg", class "headerLogo" ]
+        [ img [ src "/img/logo/Falda_logo_horizontal_black.svg", class "headerLogo", alt "Logo firmy" ]
             []
         , div
             [ class "headerIcons" ]
@@ -38,7 +36,7 @@ aboutView : String -> Html msg
 aboutView o_mnie =
     div [ class "content", class "grid3" ]
         [ Markdown.toHtml [ class "wideColumn", class "textContainer" ] o_mnie
-        , div [ class "logo-woman" ] [ img [ src "/img/logo/FALDA grafika_fin.svg" ] [] ]
+        , div [ class "logo-woman" ] [ img [ src "/img/logo/FALDA grafika_fin.svg", alt "Logo firmy duże" ] [] ]
         ]
 
 
