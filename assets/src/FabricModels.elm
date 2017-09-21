@@ -14,4 +14,5 @@ type alias FabricsItem =
     , images : List String
     , id : Int
     , ingridients : List Ingridient
+    , hidden : Bool
     }

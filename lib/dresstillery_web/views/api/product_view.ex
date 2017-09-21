@@ -24,7 +24,8 @@ defmodule DresstilleryWeb.Api.ProductView do
       lenght: product.lenght,
       images: product.images
       |> Enum.sort_by(& &1.order)
-      |> Enum.map(& &1.image |> DresstilleryWeb.ImageView.image_src)
+      |> Enum.map(& &1.image |> DresstilleryWeb.ImageView.image_src),
+      hidden: product.hidden,
     }
   end
 

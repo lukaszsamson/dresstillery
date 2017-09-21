@@ -2,7 +2,7 @@ module FabricsApi exposing (..)
 
 import Api exposing (..)
 import FabricModels exposing (..)
-import Json.Decode exposing (Decoder, andThen, fail, field, float, int, list, string, succeed)
+import Json.Decode exposing (Decoder, andThen, bool, fail, field, float, int, list, string, succeed)
 import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
 import Models exposing (..)
 import RemoteData exposing (WebData)
@@ -25,6 +25,7 @@ fabricDecoder =
         |> required "id" int
         |> required "ingridients"
             (list ingridientDecoder)
+        |> required "hidden" bool
 
 
 fetchFabrics : Flags -> (WebData (List FabricsItem) -> msg) -> Cmd msg

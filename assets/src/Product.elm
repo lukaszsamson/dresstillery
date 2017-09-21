@@ -170,7 +170,16 @@ productView model product =
             )
         , section [ class "productDetails", class "thinColumn" ]
             [ header []
-                [ h2 [] [ text product.name ]
+                [ h2 []
+                    [ text
+                        (product.name
+                            ++ (if product.hidden then
+                                    " - Ukryty"
+                                else
+                                    ""
+                               )
+                        )
+                    ]
                 , small [] [ text product.code ]
                 ]
             , div [ class "productPrice" ] [ text (toString product.price ++ " zł") ]

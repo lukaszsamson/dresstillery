@@ -15,6 +15,8 @@ defmodule DresstilleryWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug DresstilleryWeb.Authenticate, require_session: false
   end
 
   scope "/admin", DresstilleryWeb do

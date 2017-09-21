@@ -12,6 +12,15 @@ defmodule DresstilleryWeb.AuthenticateTest do
     {:ok, %{conn: conn}}
   end
 
+  test "authenticate passes if no session but not required", %{conn: conn} do
+    conn = conn
+    |> DresstilleryWeb.Authenticate.call([require_session: false])
+
+    refute conn.halted
+    refute conn.assigns[:current_user]
+    refute conn.assigns[:current_user_permissions]
+  end
+
 
   test "authenticate halts and redirects if no session", %{conn: conn} do
     conn = conn

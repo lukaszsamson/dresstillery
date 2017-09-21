@@ -25,4 +25,5 @@ type alias ProductsItem =
     , price : Float
     , lenght : Int
     , parts : List Part
+    , hidden : Bool
     }

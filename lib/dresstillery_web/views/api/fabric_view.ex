@@ -21,6 +21,7 @@ defmodule DresstilleryWeb.Api.FabricView do
       |> Enum.sort_by(& &1.order)
       |> Enum.map(& &1.image |> DresstilleryWeb.ImageView.image_src),
       ingridients: render_many(fabric.ingridients, IngridientView, "ingridient.json"),
+      hidden: fabric.hidden,
     }
   end
 end

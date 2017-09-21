@@ -2,7 +2,7 @@ module ProductsApi exposing (..)
 
 import Api exposing (..)
 import FabricsApi
-import Json.Decode exposing (Decoder, andThen, fail, field, float, int, list, string, succeed)
+import Json.Decode exposing (Decoder, andThen, bool, fail, field, float, int, list, string, succeed)
 import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
 import Models exposing (..)
 import ProductModels exposing (..)
@@ -30,6 +30,7 @@ productDecoder =
         |> required "lenght" int
         |> required "parts"
             (list partDecoder)
+        |> required "hidden" bool
 
 
 

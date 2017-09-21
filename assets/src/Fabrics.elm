@@ -75,7 +75,14 @@ item item =
     li [ class "fabricsItem" ]
         [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src defaultImage ] [] ]
         , div [ class "fabricsItemLabel" ]
-            [ text item.name
+            [ text
+                (item.name
+                    ++ (if item.hidden then
+                            " - Ukryty"
+                        else
+                            ""
+                       )
+                )
             ]
         ]
 
