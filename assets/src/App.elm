@@ -183,7 +183,7 @@ mainContent model =
 view : Model -> Html Msg
 view model =
     div [ class "wrap" ]
-        [ header
+        [ header changeLocation
         , Menu.menuContainer model.menuShown ToggleMenu changeLocation
         , mainContent model
         , footer

@@ -3,18 +3,19 @@ module Layout exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Markdown
+import Routing
 
 
-header : Html msg
-header =
+header : (Routing.Route -> msg) -> Html msg
+header changeRoute =
     div [ class "header" ]
-        [ img [ src "/img/logo/Falda_logo_horizontal_black.svg", class "headerLogo", alt "Logo firmy" ]
+        [ img [ src "/img/logo/Falda_logo_horizontal_black.svg", class "headerLogo", alt "Logo formy Falda" ]
             []
         , div
             [ class "headerIcons" ]
             [ -- FontAwesome.bars (Color.rgb 0 0 0) 45
               --, FontAwesome.bars (Color.rgb 0 0 0) 45
-              a [ href "#" ] [ text "Koszyk" ]
+              a [ Routing.linkHref Routing.Basket, Routing.onLinkClick (changeRoute Routing.Basket) ] [ text "Koszyk" ]
             , a [ href "#" ] [ text "Zaloguj" ]
             ]
         ]
