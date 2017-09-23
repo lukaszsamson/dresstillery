@@ -152,6 +152,6 @@ maybeList model =
 view : Model -> Html Msg
 view model =
     div [ class "content" ]
-        [ h1 [] [ text "Tkaniny" ]
+        [ h1 [] [ text "Tkaniny i dodatki" ]
         , maybeList model
         ]

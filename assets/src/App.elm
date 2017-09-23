@@ -170,9 +170,6 @@ mainContent model =
         Routing.TermsAndConditions ->
             termsAndConditionsView
 
-        Routing.FabricsAndAccesories ->
-            fabricsAndAccesoriesView
-
         Routing.Contact ->
             contactView
 

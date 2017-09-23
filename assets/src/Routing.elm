@@ -17,7 +17,6 @@ type Route
     | Product Int
     | ProductZoom Int Int
     | Basket
-    | FabricsAndAccesories
     | TermsAndConditions
     | Contact
     | NotFound
@@ -29,7 +28,6 @@ matchers =
         [ map Home top
         , map Creator (s (pathImpl Creator))
         , map About (s (pathImpl About))
-        , map FabricsAndAccesories (s (pathImpl FabricsAndAccesories))
         , map Products (s (pathImpl Products))
         , map Fabrics (s (pathImpl Fabrics))
         , map Product (s "products" </> int)
@@ -61,9 +59,6 @@ pathImpl r =
 
         Creator ->
             "creator"
-
-        FabricsAndAccesories ->
-            "fabrics_and_accesories"
 
         Products ->
             "products"

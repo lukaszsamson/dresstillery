@@ -1,4 +1,4 @@
-# O nas
+# Kim jesteśmy
 ## Od pomysłu do&nbsp;realizacji&hellip;
 Pewnego dnia zakiełkowała mi w&nbsp;głowie myśl:  
 *"Dlaczego by nie uszyć własnej spódnicy? Przecież ciągle marnuję czas na&nbsp;poszukiwania wymarzonego kroju i&nbsp;kolorystyki i&nbsp;mam już dosyć kompromisów. Ta ma nie&nbsp;ten fason, ta zaporową cenę, a tą ma już koleżanka z&nbsp;pracy".*  

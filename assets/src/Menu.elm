@@ -4,7 +4,7 @@ import Color
 import CommonElements exposing (icon)
 import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
-import Html.Attributes exposing (alt, class, classList, href, src, style)
+import Html.Attributes exposing (alt, class, classList, href, src, style, title)
 import Html.Events exposing (onClick, onWithOptions)
 import Routing
 
@@ -35,18 +35,19 @@ menu changeRoute =
     in
     div [ class "menu" ]
         [ div [ class "logo" ]
-            [ a [ Routing.linkHref Routing.Home, Routing.onLinkClick <| changeRoute Routing.Home ]
-                [ img [ src "/img/logo/Falda_logo_vertical_black.svg", alt "Strona główna" ] [] ]
+            [ a [ Routing.linkHref Routing.Home, Routing.onLinkClick <| changeRoute Routing.Home, title "Strona główna" ]
+                [ img [ src "/img/logo/Falda_logo_vertical_black.svg", alt "Logo falda" ] [] ]
             ]
         , ul []
-            [ l Routing.Home "Home"
-            , l Routing.About "Kim jesteśmy"
-            , l Routing.Fabrics "Tkaniny"
-            , l Routing.Products "Kup teraz"
+            [ l Routing.About "Kim jesteśmy"
+            , l Routing.Products "Nasza kolekcja"
             , l Routing.Creator "Zaprojektuj własną spódnicę"
-            , l Routing.FabricsAndAccesories "Tkaniny i akcesoria"
-            , l Routing.TermsAndConditions "Warunki zakupów"
-            , l Routing.Basket "Koszyk"
+            , l Routing.Fabrics "Tkaniny i dodatki"
+
+            -- TODO "Falda w obiektywie"
+            -- TODO "Kontakt"
+            -- , l Routing.TermsAndConditions "Warunki zakupów"
+            -- , l Routing.Basket "Koszyk"
             ]
         , div [ class "social" ]
             [ icon FontAwesome.instagram

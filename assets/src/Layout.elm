@@ -45,11 +45,6 @@ termsAndConditionsView =
     div [ class "content" ] [ text "termsAndConditions" ]
 
 
-fabricsAndAccesoriesView : Html msg
-fabricsAndAccesoriesView =
-    div [ class "content" ] [ text "fabricsAndAccesories" ]
-
-
 contactView : Html msg
 contactView =
     div [ class "content" ] [ text "contact" ]
