@@ -24,13 +24,16 @@ header changeRoute =
 footer : Html msg
 footer =
     div [ class "footer" ]
-        [ p [] [ text "Copyright Ⓒ ja" ]
+        [ p [] [ text "Copyright Ⓒ Falda" ]
         ]
 
 
 pageNotFound : Html msg
 pageNotFound =
-    div [ class "content" ] [ text "404" ]
+    div [ class "content" ]
+        [ h1 [] [ text "404" ]
+        , div [] [ text "Nie znaleziono strony" ]
+        ]
 
 
 aboutView : String -> Html msg
@@ -43,9 +46,9 @@ aboutView o_mnie =
 
 termsAndConditionsView : Html msg
 termsAndConditionsView =
-    div [ class "content" ] [ text "termsAndConditions" ]
+    div [ class "content" ] [ h1 [] [ text "Requlamin" ] ]
 
 
 contactView : Html msg
 contactView =
-    div [ class "content" ] [ text "contact" ]
+    div [ class "content" ] [ h1 [] [ text "Kontakt" ] ]

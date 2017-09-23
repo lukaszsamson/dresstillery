@@ -42,13 +42,19 @@
   & a {
     // font-family: 'Tillana', cursive;
     font-size: 1em;
+    line-height: 1.15em;
     text-align: center;
-    color: black;
+    color: #0c0c0c;
     margin-bottom: 1em;
     text-decoration: none;
+    transition: all 0.3s ease-out;
     &:link, &:visited, &:hover, &:focus, &:active {
-      color: black;
+      color: #0c0c0c;
       outline: none;
+    }
+    &:hover, &:focus {
+      transform: scale(1.15);
+      color: #030303;
     }
   }
   .logo {
@@ -67,6 +73,10 @@
     align-items: flex-end;
     width: 100%;
     min-height: 68px;
+    svg {
+      height: 40px;
+      width: 40px;
+    }
   }
 }
 
