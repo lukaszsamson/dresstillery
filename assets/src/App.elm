@@ -147,7 +147,7 @@ mainContent : Model -> Html Msg
 mainContent model =
     case model.route of
         Routing.Home ->
-            Home.view
+            Home.view model.flags.home_witamy
 
         Routing.About ->
             aboutView model.flags.o_mnie

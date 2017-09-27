@@ -1,13 +1,13 @@
 .menuIcon {
   position: fixed;
-  z-index: 3;
+  z-index: 11;
   top: 1.25rem;
   left: 1.25rem;
 }
 .menuShown {
   .menu {
     transform: translateX(0);
-    z-index: 2;
+    z-index: 10;
   }
   .menuOverlay {
     opacity: 0.7;
@@ -23,17 +23,29 @@
   height: 100%;
   left: 0px;
   top: 0px;
-  z-index: 1;
+  z-index: 10;
   background-color: white;
   box-shadow: 0px 0px 10px 7px rgba(204, 204, 204, 0.25);
   padding-top: 2.5rem;
+  transform: translateX(-100%);
+  transition: all 0.3s ease-out;
+  width: 100vw;
+  @include media-small2() {
+    width: 50vw;
+  }
+  @include media-medium1() {
+    width: calc(100vw / 3);
+  }
+  @include media-large1() {
+    width: $menuWidth;
+    transform: translateX(0);
+  }
   &::after {
     flex: 0 0 1.25rem;
     content: '';
   }
   & ul {
-    padding: 0;
-    list-style: none;
+    @include listReset;
     li {
       display: flex;
       justify-content: center;
@@ -86,7 +98,7 @@
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 1;
+  z-index: 9;
   background-color: black;
   opacity: 0;
   transition: opacity 0.3s ease-out;

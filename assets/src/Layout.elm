@@ -23,8 +23,28 @@ header changeRoute =
 
 footer : Html msg
 footer =
-    div [ class "footer" ]
-        [ p [] [ text "Copyright Ⓒ Falda" ]
+    Html.footer [ class "layoutFooter" ]
+        [ section [ class "footerContent", class "grid3", class "container" ]
+            [ section [ class "contactInfo" ]
+                [ section [ class "companyName" ] [ text "Falda" ]
+                , section [ class "companyAddress" ]
+                    [ text "Ulica 123/45"
+                    , br [] []
+                    , text "12-123 Miasto"
+                    ]
+                , section [ class "companyEmail" ]
+                    [ a [ href "mailto:kontakt@falda.pl" ] [ text "kontakt@falda.pl" ] ]
+                ]
+            , nav [ class "footerLinks" ]
+                [ ul []
+                    [ li [] [ a [ href "#" ] [ text "Regulamin" ] ]
+                    , li [] [ a [ href "#" ] [ text "Polityka prywatności" ] ]
+                    , li [] [ a [ href "#" ] [ text "Polityka zwrotów" ] ]
+                    ]
+                ]
+            , div [] []
+            ]
+        , section [ class "copyrightInfo" ] [ text "Copyright Ⓒ Falda" ]
         ]
 
 

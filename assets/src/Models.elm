@@ -1,10 +1,8 @@
 module Models exposing (..)
 
-import Navigation exposing (Location)
-import Routing
-
 
 type alias Flags =
     { backendUrl : String
     , o_mnie : String
+    , home_witamy : String
     }

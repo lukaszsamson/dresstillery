@@ -2,8 +2,18 @@
 @import url('../node_modules/normalize.css/normalize.css');
 $menuWidth: 300px;
 $headerHeight: 50vh;
-$gray: #f7f7f7;
+$gray: #e1e1e1;
+$dark: #151515;
+$text: #666666;
+$darkText: #cacaca;
 $buttonColor: $gray;
+
+@import "Mixins.scss";
+
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+}
+
 *, button, input, optgroup, select, textarea {
   font-family: 'Lato', sans-serif;
   box-sizing: border-box;
@@ -44,7 +54,6 @@ body {
   }
 }
 .content {
-  min-height: 80vh;
   & h1 {
     text-align: center;
     margin-top: 2.5rem;
@@ -65,27 +74,33 @@ body {
   // grid-auto-rows: minmax(100px, auto);
 }
 
-.footer {
-  height: 20vh;
-  display: flex;
-  align-items: center;
-  padding: 2em;
-  & p {
-    margin-top: 1rem;
+.layoutFooter {
+  .copyrightInfo {
+    text-align: center;
+    line-height: 4rem;
   }
-  background-color: $gray;
-
-}
-.menu {
-  transform: translateX(-100%);
-  transition: all 0.3s ease-out;
-  width: 100vw;
-}
-
-@media (min-width: 576px) {
-  .content {
-    min-height: 70vh;
+  .footerContent {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    background-color: $dark;
+    color: $darkText;
+    a {
+      color: $darkText;
+      transition: all 0.3s ease-in;
+    }
+    a:hover, a:focus {
+      color: lighten($darkText, 20%);
+    }
   }
+  nav ul {
+    @include listReset;
+  }
+  @include media-large1() {
+    margin-left: $menuWidth;
+  }
+}
+
+@include media-small2() {
   .grid3 {
     grid-template-columns: repeat(2, 1fr);
     & .centeredColumn {
@@ -95,14 +110,8 @@ body {
   .grid5 {
     grid-template-columns: repeat(2, 1fr);
   }
-  .menu {
-    width: 50vw;
-  }
 }
-@media (min-width: 768px) {
-  .content {
-    min-height: 60vh;
-  }
+@include media-medium1() {
   .grid3 {
     grid-template-columns: repeat(3, 1fr);
     & .centeredColumn {
@@ -122,14 +131,8 @@ body {
     }
   }
 
-  .menu {
-    width: calc(100vw / 3);
-  }
 }
-@media (min-width: 992px) {
-  .content {
-    min-height: 50vh;
-  }
+@include media-medium2() {
   .grid5 {
     grid-template-columns: repeat(5, 1fr);
     & .wideColumn {
@@ -140,11 +143,7 @@ body {
     }
   }
 }
-@media (min-width: 1200px) {
-  .menu {
-    width: $menuWidth;
-    transform: translateX(0);
-  }
+@include media-large1() {
   .menuIcon.icon {
     display: none;
   }
@@ -154,12 +153,13 @@ body {
   .header {
     margin-left: $menuWidth;
     height: 2rem;
+    background-color: transparent;
+    position: absolute;
+    right: 0;
+    box-shadow: none;
   }
   .headerLogo {
     display: none;
-  }
-  .footer {
-    margin-left: $menuWidth;
   }
 }
 
@@ -174,6 +174,11 @@ body {
   p {
     line-height: 1.5rem;
   }
+}
+
+.container {
+  padding-left: 6rem;
+  padding-right: 6rem;
 }
 
 @import "Accordion.scss";

@@ -1,0 +1,36 @@
+@mixin listReset() {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+@mixin media-small1() {
+    @media only screen and (max-width: 575px) {
+        @content;
+    }
+}
+
+@mixin media-small2() {
+    @media only screen and (min-width: 576px) {
+        @content;
+    }
+}
+
+@mixin media-medium1() {
+    @media only screen and (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin media-medium2() {
+    @media only screen and (min-width: 992px) {
+        @content;
+    }
+}
+
+@mixin media-large1() {
+    @media only screen and (min-width: 1200px) {
+        @content;
+    }
+}
