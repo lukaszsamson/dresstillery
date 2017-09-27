@@ -40,6 +40,7 @@ defmodule DresstilleryWeb.Api.FabricControllerTest do
         "available" => false,
         "images" => ["/media/some path"],
         "ingridients" => [%{"name" => "cotton", "percentage" => 25}],
+        "hidden" => false,
       }
     end
 

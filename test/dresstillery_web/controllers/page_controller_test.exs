@@ -3,12 +3,12 @@ defmodule DresstilleryWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"
-    assert html_response(conn, 200) =~ "Dresstillery"
+    assert html_response(conn, 200) =~ "Falda"
   end
 
   test "GET /client_route", %{conn: conn} do
     conn = get conn, "/client_route"
-    assert html_response(conn, 200) =~ "Dresstillery"
+    assert html_response(conn, 200) =~ "Falda"
   end
 
   test "GET /non_existing.jpg", %{conn: conn} do

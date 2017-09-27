@@ -44,7 +44,8 @@ defmodule DresstilleryWeb.Api.ProductControllerTest do
         "images" => ["/media/some path"],
         "parts" => [%{"name" => "top", "ingridients" => [%{"name" => "cotton", "percentage" => 25}]}],
         "lenght" => 25,
-        "available" => false
+        "available" => false,
+        "hidden" => false,
       }
     end
 
