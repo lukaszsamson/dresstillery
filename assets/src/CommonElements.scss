@@ -1,6 +1,6 @@
 .icon {
   padding: 0.25rem;
-  display: flex;
+  display: inline-block;
   background-color: rgba($buttonColor, 0.5);
   &:hover {
     transition: all 0.3s ease-out;
@@ -39,7 +39,4 @@ button, .button {
   &:hover {
     background-color: darken($buttonColor, 10%);
   }
-}
-button:focus {
-  outline: none;
 }

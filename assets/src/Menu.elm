@@ -22,7 +22,10 @@ menuContainer menuShown toggle changeRoute =
         [ classList [ ( "menuShown", menuShown ) ]
         ]
         [ menu changeRoute
-        , div [ class "menuIcon", class "icon", onClick toggle ] [ FontAwesome.bars (Color.rgb 0 0 0) 45 ]
+        , button [ class "menuIcon", onClick toggle ]
+            [ icon FontAwesome.bars
+            , Html.span [] [ text "Menu" ]
+            ]
         , div [ class "menuOverlay", onClick toggle ] []
         ]
 

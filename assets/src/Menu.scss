@@ -1,8 +1,36 @@
 .menuIcon {
   position: fixed;
   z-index: 11;
-  top: 1.25rem;
-  left: 1.25rem;
+  top: 1rem;
+  left: 1rem;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+  span {
+    display: none;
+  }
+  @include media-medium1() {
+    top: 1.5rem;
+  }
+  @include media-large1() {
+    display: none;
+  }
+  &:hover {
+    background-color: transparent;
+  }
+  svg {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    @include media-small2() {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    @include media-medium1() {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
 }
 .menuShown {
   .menu {

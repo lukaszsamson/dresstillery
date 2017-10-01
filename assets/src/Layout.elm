@@ -1,5 +1,7 @@
 module Layout exposing (..)
 
+import CommonElements exposing (icon)
+import FontAwesome
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Markdown
@@ -15,8 +17,11 @@ header changeRoute =
             [ class "headerIcons" ]
             [ -- FontAwesome.bars (Color.rgb 0 0 0) 45
               --, FontAwesome.bars (Color.rgb 0 0 0) 45
-              a [ Routing.linkHref Routing.Basket, Routing.onLinkClick (changeRoute Routing.Basket) ] [ text "Koszyk" ]
-            , a [ href "#" ] [ text "Zaloguj" ]
+              a [ Routing.linkHref Routing.Basket, Routing.onLinkClick (changeRoute Routing.Basket) ]
+                [ icon FontAwesome.shopping_bag
+                , span [] [ text "Koszyk" ]
+                ]
+            , a [ href "#" ] [ icon FontAwesome.sign_in, span [] [ text "Zaloguj" ] ]
             ]
         ]
 
