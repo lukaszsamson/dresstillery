@@ -147,7 +147,7 @@ mainContent : Model -> Html Msg
 mainContent model =
     case model.route of
         Routing.Home ->
-            Home.view model.flags.home_witamy
+            Home.view model.flags.home_witamy model.flags.aktualna_kolekcja model.flags.galeria_tkanin model.flags.otworz_konfigurator
 
         Routing.About ->
             aboutView model.flags.o_mnie

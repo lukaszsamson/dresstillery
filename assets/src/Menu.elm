@@ -33,8 +33,9 @@ menu changeRoute =
         l =
             \r l -> menuLink r l changeRoute
     in
-    div [ class "menu" ]
-        [ div [ class "logo" ]
+    Html.nav [ class "menu" ]
+        [ Html.h5 [ class "seo" ] [ text "Menu główne" ]
+        , div [ class "logo" ]
             [ a [ Routing.linkHref Routing.Home, Routing.onLinkClick <| changeRoute Routing.Home, title "Strona główna" ]
                 [ img [ src "/img/logo/Falda_logo_vertical_black.svg", alt "Logo falda" ] [] ]
             ]
@@ -49,8 +50,9 @@ menu changeRoute =
             -- , l Routing.TermsAndConditions "Warunki zakupów"
             -- , l Routing.Basket "Koszyk"
             ]
-        , div [ class "social" ]
-            [ icon FontAwesome.instagram
+        , Html.section [ class "social" ]
+            [ Html.h3 [ class "seo" ] [ text "Odnośniki do profili Falda na portalach społecznościowych" ]
+            , icon FontAwesome.instagram
             , icon FontAwesome.facebook_official
             , icon FontAwesome.twitter
             ]

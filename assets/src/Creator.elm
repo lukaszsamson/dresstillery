@@ -201,7 +201,7 @@ toBasket model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "content", class "grid3" ]
+    section [ class "content", class "grid3" ]
         [ div [ class "controls" ]
             [ colorPicker model
             , lenghtPicker model

@@ -5,21 +5,26 @@
 }
 
 .homeHeaderImage {
-  z-index: 0;
-  width: 100%;
-  grid-row: 1 / 2;
   grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  width: 100%;
+  z-index: 0;
 }
 
 .homeHeaderText {
-  z-index: 1;
-  grid-row: 1 / 2;
   grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  z-index: 1;
 }
 
 .navItem {
   display: grid;
-  grid-template-columns: repeat(2, 50%);
+  grid-template-columns: repeat(1, auto);
+  @include media-medium1() {
+    grid-template-columns: repeat(2, 50%);
+  }
+
+
   img {
     width: 100%;
   }
@@ -30,22 +35,28 @@
 
 .navItem:nth-child(even) {
   &>:first-child {
-    grid-column: 2/3;
-    grid-row: 1/2;
+    @include media-medium1() {
+      grid-column: 2/3;
+      grid-row: 1/2;
+    }
   }
+
   &>:last-child {
-    grid-column: 1/2;
-    grid-row: 1/2;
+    @include media-medium1() {
+      grid-column: 1/2;
+      grid-row: 1/2;
+    }
   }
 }
 
 .navItem:last-child {
   &>:first-child {
+    background-color: transparent;
     grid-column: 1/2;
     grid-row: 1/2;
     z-index: 1;
-    background-color: transparent;
   }
+
   &>:last-child {
     grid-column: 1/3;
     grid-row: 1/2;
@@ -61,6 +72,11 @@
   justify-content: center;
   text-align: center;
   font-size: 0.875em;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
   a {
     text-transform: uppercase;
     border: solid 2px $text;
@@ -70,40 +86,24 @@
     padding-bottom: 1.125em;
     padding-left: 1.75em;
     padding-right: 1.75em;
+
     &:hover, &:active, &:link, &:visited {
       color: inherit;
     }
+
+    &:hover {
+      color: black;
+      border-color: black;
+    }
   }
 }
-// .nav3 {
-//   grid-row: span 2;
-//   .imgContainer {
-//     // object-fit: contain;
-//     // height: 100%;
-//   }
-// }
-// .nav5 {
-//   grid-row: 2/3;
-// }
-.homeGrid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-gap: 0;
-}
-.nav5 {
-  text-align: center;
-}
+
 @include media-small2() {
 
 }
 @include media-medium1() {
-  .homeGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @include media-large1() {
-  .homeGrid {
-    // height: calc(50vw - 150px);
-  }
+
 }

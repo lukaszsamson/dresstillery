@@ -7,9 +7,9 @@ import Markdown
 
 navItem : String -> String -> String -> String -> String -> Html msg
 navItem caption linkCaption linkHref imageUrl imageAlt =
-    div [ class "navItem" ]
+    article [ class "navItem" ]
         [ div [ class "navItemCaption" ]
-            [ p [] [ text caption ]
+            [ Markdown.toHtml [] caption
             , a [ href linkHref ]
                 [ text linkCaption
                 ]
@@ -18,18 +18,28 @@ navItem caption linkCaption linkHref imageUrl imageAlt =
         ]
 
 
-view : String -> Html msg
-view home_witamy =
-    div [ class "content" ]
-        [ div [ class "homeHeader" ]
+view : String -> String -> String -> String -> Html msg
+view home_witamy aktualna_kolekcja galeria_tkanin otworz_konfigurator =
+    section [ class "content" ]
+        [ header [ class "homeHeader" ]
             [ img [ class "homeHeaderImage", src "/img/home/strona tytułowa.jpg", alt "TODO" ] []
             , div [ class "homeHeaderText" ]
-                [ p [] [ text "Text na stronę główną" ] ]
+                [ h1 [ class "seo" ] [ text "Strona główna" ]
+                , p [] [ text "Text na stronę główną" ]
+                ]
             ]
-        , navItem "Poznaj kolekcję Falda" "Kolekcja" "#" "/img/home/poznaj kolekcję Falda.jpg" "TODO"
-        , navItem "Zaprojektuj własną spódnicę" "Otwórz kreator" "#" "/img/home/zaprojektuj własną spódnicę.jpg" "TODO"
-        , navItem "Tkaniny" "Zobacz" "#" "/img/home/tkaniny.jpg" "TODO"
-        , navItem "Falda w obiektywie" "Galeria" "#" "/img/home/Falda w obiektywie.jpg" "TODO"
+        , navItem aktualna_kolekcja "Aktualna kolekcja" "#" "/img/home/poznaj kolekcję Falda.jpg" "TODO"
+        , navItem otworz_konfigurator "Otwórz konfigurator" "#" "/img/home/zaprojektuj własną spódnicę.jpg" "TODO"
+        , navItem galeria_tkanin "Galeria tkanin" "#" "/img/home/tkaniny.jpg" "TODO"
+        , article [ class "navItem" ]
+            [ div [ class "navItemCaption" ]
+                [ h3 [] [ text "Falda w obiektywie" ]
+                , a [ href "#" ]
+                    [ text "Lookbook"
+                    ]
+                ]
+            , img [ src "/img/home/Falda w obiektywie.jpg", alt "TODO" ] []
+            ]
         ]
 
 

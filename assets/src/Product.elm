@@ -252,7 +252,7 @@ zoom model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "content" ]
+    section [ class "content" ]
         (maybeProduct model
             :: (if model.zoom then
                     [ zoom model ]

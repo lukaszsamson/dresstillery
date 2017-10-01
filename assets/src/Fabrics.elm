@@ -74,7 +74,7 @@ item item =
     in
     li [ class "fabricsItem" ]
         [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src defaultImage ] [] ]
-        , div [ class "fabricsItemLabel" ]
+        , h5 [ class "fabricsItemLabel" ]
             [ text
                 (item.name
                     ++ (if item.hidden then
@@ -151,7 +151,7 @@ maybeList model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "content" ]
+    section [ class "content" ]
         [ h1 [] [ text "Tkaniny i dodatki" ]
         , maybeList model
         ]

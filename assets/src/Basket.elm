@@ -159,7 +159,7 @@ view model =
         items =
             model.items |> Array.indexedMap (\i a -> ( toString i, item i a )) |> Array.toList
     in
-    div [ class "content" ]
+    section [ class "content" ]
         ([ h1 [] [ text "Koszyk" ] ]
             ++ (if Array.isEmpty model.items then
                     [ div [ class "simpleMessage" ] [ text "Twój koszyk jest pusty." ] ]

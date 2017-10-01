@@ -73,7 +73,7 @@ item item =
     in
     li [ class "productsItem" ]
         [ a [ linkHref route, onLinkClick (Parent <| CommonMessages.ChangeLocation route) ] [ img [ src defaultImage ] [] ]
-        , div [ class "productsItemLabel" ]
+        , h5 [ class "productsItemLabel" ]
             [ text
                 (item.name
                     ++ (if item.hidden then
@@ -150,7 +150,7 @@ maybeList model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "content" ]
+    section [ class "content" ]
         [ h1 [] [ text "Nasza kolekcja" ]
         , maybeList model
         ]

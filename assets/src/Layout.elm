@@ -8,7 +8,7 @@ import Routing
 
 header : (Routing.Route -> msg) -> Html msg
 header changeRoute =
-    div [ class "header" ]
+    Html.header [ class "header" ]
         [ img [ src "/img/logo/Falda_logo_horizontal_black.svg", class "headerLogo", alt "Logo formy Falda" ]
             []
         , div
@@ -24,19 +24,26 @@ header changeRoute =
 footer : Html msg
 footer =
     Html.footer [ class "layoutFooter" ]
-        [ section [ class "footerContent", class "grid3", class "container" ]
-            [ section [ class "contactInfo" ]
-                [ section [ class "companyName" ] [ text "Falda" ]
-                , section [ class "companyAddress" ]
-                    [ text "Ulica 123/45"
-                    , br [] []
-                    , text "12-123 Miasto"
+        [ div [ class "footerContent", class "grid3", class "container" ]
+            [ section []
+                [ address [ class "contactInfo" ]
+                    [ h3 [ class "seo" ] [ text "Informacje kontaktowe" ]
+                    , div [ class "companyName" ] [ h4 [ class "seo" ] [ text "Nazwa firmy" ], text "Falda" ]
+                    , div [ class "companyAddress" ]
+                        [ h4 [ class "seo" ] [ text "Adres" ]
+                        , text "Ulica 123/45"
+                        , br [] []
+                        , text "12-123 Miasto"
+                        ]
+                    , div [ class "companyEmail" ]
+                        [ h4 [ class "seo" ] [ text "Adres email" ]
+                        , a [ href "mailto:kontakt@falda.pl" ] [ text "kontakt@falda.pl" ]
+                        ]
                     ]
-                , section [ class "companyEmail" ]
-                    [ a [ href "mailto:kontakt@falda.pl" ] [ text "kontakt@falda.pl" ] ]
                 ]
             , nav [ class "footerLinks" ]
-                [ ul []
+                [ h3 [ class "seo" ] [ text "Odnośniki do informacji prawnych" ]
+                , ul []
                     [ li [] [ a [ href "#" ] [ text "Regulamin" ] ]
                     , li [] [ a [ href "#" ] [ text "Polityka prywatności" ] ]
                     , li [] [ a [ href "#" ] [ text "Polityka zwrotów" ] ]
@@ -44,13 +51,16 @@ footer =
                 ]
             , div [] []
             ]
-        , section [ class "copyrightInfo" ] [ text "Copyright Ⓒ Falda" ]
+        , section [ class "copyrightInfo" ]
+            [ h3 [ class "seo" ] [ text "Informacje o prawach autorskich" ]
+            , text "Copyright Ⓒ Falda"
+            ]
         ]
 
 
 pageNotFound : Html msg
 pageNotFound =
-    div [ class "content" ]
+    section [ class "content" ]
         [ h1 [] [ text "404" ]
         , div [] [ text "Nie znaleziono strony" ]
         ]
@@ -58,7 +68,7 @@ pageNotFound =
 
 aboutView : String -> Html msg
 aboutView o_mnie =
-    div [ class "content", class "grid3" ]
+    section [ class "content", class "grid3" ]
         [ Markdown.toHtml [ class "wideColumn", class "textContainer" ] o_mnie
         , div [ class "logo-woman" ] [ img [ src "/img/logo/FALDA grafika_fin.svg", alt "Logo firmy duże" ] [] ]
         ]
@@ -66,9 +76,9 @@ aboutView o_mnie =
 
 termsAndConditionsView : Html msg
 termsAndConditionsView =
-    div [ class "content" ] [ h1 [] [ text "Requlamin" ] ]
+    section [ class "content" ] [ h1 [] [ text "Requlamin" ] ]
 
 
 contactView : Html msg
 contactView =
-    div [ class "content" ] [ h1 [] [ text "Kontakt" ] ]
+    section [ class "content" ] [ h1 [] [ text "Kontakt" ] ]
