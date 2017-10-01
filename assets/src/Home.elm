@@ -3,14 +3,15 @@ module Home exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Markdown
+import Routing
 
 
-navItem : String -> String -> String -> String -> String -> Html msg
-navItem caption linkCaption linkHref imageUrl imageAlt =
+navItem : (Routing.Route -> msg) -> String -> String -> Routing.Route -> String -> String -> Html msg
+navItem changeRoute caption linkCaption route imageUrl imageAlt =
     article [ class "navItem" ]
         [ div [ class "navItemCaption" ]
             [ Markdown.toHtml [] caption
-            , a [ href linkHref ]
+            , a [ Routing.linkHref route, Routing.onLinkClick <| changeRoute route ]
                 [ text linkCaption
                 ]
             ]
@@ -18,8 +19,8 @@ navItem caption linkCaption linkHref imageUrl imageAlt =
         ]
 
 
-view : String -> String -> String -> String -> Html msg
-view home_witamy aktualna_kolekcja galeria_tkanin otworz_konfigurator =
+view : (Routing.Route -> msg) -> String -> String -> String -> String -> Html msg
+view changeRoute home_witamy aktualna_kolekcja galeria_tkanin otworz_konfigurator =
     section [ class "content" ]
         [ header [ class "homeHeader" ]
             [ img [ class "homeHeaderImage", src "/img/home/strona tytułowa.jpg", alt "TODO" ] []
@@ -28,13 +29,13 @@ view home_witamy aktualna_kolekcja galeria_tkanin otworz_konfigurator =
                 , p [] [ text "Text na stronę główną" ]
                 ]
             ]
-        , navItem aktualna_kolekcja "Aktualna kolekcja" "#" "/img/home/poznaj kolekcję Falda.jpg" "TODO"
-        , navItem otworz_konfigurator "Otwórz konfigurator" "#" "/img/home/zaprojektuj własną spódnicę.jpg" "TODO"
-        , navItem galeria_tkanin "Galeria tkanin" "#" "/img/home/tkaniny.jpg" "TODO"
+        , navItem changeRoute aktualna_kolekcja "Aktualna kolekcja" Routing.Products "/img/home/poznaj kolekcję Falda.jpg" "TODO"
+        , navItem changeRoute otworz_konfigurator "Otwórz konfigurator" Routing.Creator "/img/home/zaprojektuj własną spódnicę.jpg" "TODO"
+        , navItem changeRoute galeria_tkanin "Galeria tkanin" Routing.Fabrics "/img/home/tkaniny.jpg" "TODO"
         , article [ class "navItem" ]
             [ div [ class "navItemCaption" ]
                 [ h3 [] [ text "Falda w obiektywie" ]
-                , a [ href "#" ]
+                , a [ href "#TODO" ]
                     [ text "Lookbook"
                     ]
                 ]
