@@ -39,7 +39,7 @@ defmodule Dresstillery.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:ecto, "~> 2.2", override: true},
-      {:decimal, github: "ericmj/decimal", override: true},
+      {:decimal, "~> 1.4.1", override: true},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
