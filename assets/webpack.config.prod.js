@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 
 const elmSource = __dirname + '/src';
@@ -36,6 +37,12 @@ module.exports = {
       // filename: '[name]-[hash].css',
       filename: '../css/[name].css',
       allChunks: true
+    }),
+    new OptimizeCssAssetsPlugin({
+      assetNameRegExp: /\.css$/g,
+      cssProcessor: require('cssnano'),
+      cssProcessorOptions: { discardComments: { removeAll: true } },
+      canPrint: true
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin({
@@ -82,12 +89,22 @@ module.exports = {
       {
         test: /\.scss$/,
         exclude: [/elm-stuff/, /node_modules/],
-        loaders: ["style-loader", "css-loader", "sass-loader"]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          //resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader', 'sass-loader']
+        })
+        // loaders: ["style-loader", "css-loader", "sass-loader"]
       },
       {
         test: /\.css$/,
         exclude: [/elm-stuff/],
-        loaders: ["style-loader", "css-loader"]
+        // loaders: ["style-loader", "css-loader"]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          //resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader']
+        })
       },
       {
         test: /\.(jpg|png|gif|svg|ico)$/,

@@ -69,12 +69,22 @@ module.exports = {
       {
         test: /\.scss$/,
         exclude: [/elm-stuff/, /node_modules/],
-        loaders: ["style-loader", "css-loader", "sass-loader"]
+        // loaders: ["style-loader", "css-loader", "sass-loader"]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          //resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader', "sass-loader"]
+        })
       },
       {
         test: /\.css$/,
         exclude: [/elm-stuff/],
-        loaders: ["style-loader", "css-loader"]
+        // loaders: ["style-loader", "css-loader"]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          //resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader']
+        })
       },
       {
         test: /\.(jpg|png|gif|svg|ico)$/,
