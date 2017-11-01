@@ -5,6 +5,7 @@ import CommonElements exposing (icon)
 import FontAwesome
 import Html exposing (Attribute, Html, a, button, div, h1, img, li, p, text, ul)
 import Html.Attributes exposing (alt, class, classList, href, src, style, title)
+import Html.Attributes.Aria
 import Html.Events exposing (onClick, onWithOptions)
 import Routing
 
@@ -22,10 +23,8 @@ menuContainer menuShown toggle changeRoute =
         [ classList [ ( "menuShown", menuShown ) ]
         ]
         [ menu changeRoute
-        , button [ class "menuIcon", onClick toggle ]
-            [ icon FontAwesome.bars
-            , Html.span [] [ text "Menu" ]
-            ]
+        , button [ class "menuIcon", onClick toggle, Html.Attributes.Aria.ariaLabel "Menu" ]
+            [ icon FontAwesome.bars ]
         , div [ class "menuOverlay", onClick toggle ] []
         ]
 
