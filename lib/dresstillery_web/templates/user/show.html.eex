@@ -1,0 +1,12 @@
+<h2>Show User</h2>
+
+<ul>
+
+  <li>
+    <strong>Registered:</strong>
+    <%= @user.inserted_at %>
+  </li>
+
+</ul>
+
+<span><%= link "Back", to: user_path(@conn, :index) %></span>
