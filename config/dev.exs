@@ -61,3 +61,9 @@ config :dresstillery, :upload_directory, "/priv/uploads"
 config :comeonin,
   bcrypt_log_rounds: 1,
   pbkdf2_rounds: 500
+
+config :dresstillery, :oauth,
+  facebook_app_id: "129842534345154",
+  facebook_verify_token_url: "https://graph.facebook.com/debug_token"
+
+import_config "dev.secret.exs"

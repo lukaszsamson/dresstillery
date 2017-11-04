@@ -49,6 +49,7 @@ defmodule Dresstillery.Mixfile do
       {:pot, "~> 0.9.5"},
       {:comeonin, "~> 3.0"},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
+      {:httpoison, "~> 0.13"},
    ]
   end
 
