@@ -27,9 +27,13 @@ module.exports = {
     extensions: ['.js', '.elm', '.scss', '.css', '.md']
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+      'process.env.FB_APP_ID': JSON.stringify('129842534345154'),
+      'process.env.BACKEND_URL': JSON.stringify('/api')
+    }),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.EnvironmentPlugin(["BACKEND_URL"]),
     new CopyWebpackPlugin([{ from: './static/', to: '..' }]),
     new ExtractTextPlugin({
       // filename: '[name]-[hash].css',

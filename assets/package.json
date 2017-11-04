@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "description": "Dress shop in elm",
   "scripts": {
-    "deploy": "BACKEND_URL=/api webpack --config webpack.config.prod.js --display-optimization-bailout",
-    "watch": "BACKEND_URL=/api webpack --watch --progress --color --config webpack.config.phoenix.js",
+    "deploy": "webpack --color --config webpack.config.production.js --display-optimization-bailout",
+    "watch": "webpack --watch --progress --color --config webpack.config.development.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "elm-package install -y"
   },

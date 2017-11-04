@@ -29,9 +29,10 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.FB_APP_ID': JSON.stringify('191715151387019'),
+      'process.env.BACKEND_URL': JSON.stringify('/api')
     }),
-    new webpack.EnvironmentPlugin(["BACKEND_URL"]),
     new CopyWebpackPlugin([{ from: './static/', to: '..' }]),
     new ExtractTextPlugin({
       // filename: '[name]-[hash].css',
