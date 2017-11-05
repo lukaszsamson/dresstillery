@@ -8,6 +8,7 @@ defmodule Dresstillery.Administration.User do
     timestamps()
 
     has_one :facebook_authentication, Dresstillery.Administration.FacebookAuthentication
+    has_one :password_authentication, Dresstillery.Administration.PasswordAuthentication
   end
 
   @doc false

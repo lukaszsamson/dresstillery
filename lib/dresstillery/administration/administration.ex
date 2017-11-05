@@ -7,7 +7,7 @@ defmodule Dresstillery.Administration do
   alias Dresstillery.Repo
 
   alias Dresstillery.Administration.BackofficeUser
-  alias Dresstillery.Administration.{User, FacebookAuthentication}
+  alias Dresstillery.Administration.{User, FacebookAuthentication, PasswordAuthentication}
   @facebook_api Application.get_env(:dresstillery, :facebook_api, Dresstillery.FacebookApi)
 
   @doc """
@@ -163,6 +163,28 @@ defmodule Dresstillery.Administration do
       |> Ecto.Changeset.put_assoc(:facebook_authentication, fb)
       |> Repo.insert()
       user -> {:ok, user}
+    end
+  end
+
+  def register(attrs \\ %{}) do
+    pass = %PasswordAuthentication{}
+    |> PasswordAuthentication.changeset(attrs)
+    %User{}
+    |> User.changeset(%{})
+    |> Ecto.Changeset.put_assoc(:password_authentication, pass)
+    |> Repo.insert()
+  end
+
+  def login(attrs \\ %{}) do
+    user = (from u in User,
+    join: fb in assoc(u, :password_authentication),
+    where: fb.login == ^attrs[:login],
+    preload: [:password_authentication])
+    |> Repo.one
+    if PasswordAuthentication.check_password(user, attrs[:password]) do
+      {:ok, user}
+    else
+      {:error, :invalid_login_or_password}
     end
   end
 

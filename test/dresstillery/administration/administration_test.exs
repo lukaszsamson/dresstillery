@@ -165,6 +165,12 @@ defmodule Dresstillery.AdministrationTest do
       assert %Ecto.Changeset{} = Administration.change_user(user)
     end
 
+  end
+
+  describe "facebook" do
+    alias Dresstillery.Administration.User
+    alias Dresstillery.Administration.FacebookAuthentication
+
     test "login_facebook/1 creates new user if token valid" do
       assert {:ok, user} = Administration.login_facebook(%{token: "valid_token"})
       assert user.facebook_authentication.external_id == "12345"
@@ -188,6 +194,43 @@ defmodule Dresstillery.AdministrationTest do
       assert {:ok, existing_user} = Administration.login_facebook(%{token: "valid_token"})
       assert user.id == existing_user.id
       assert existing_user.facebook_authentication.external_id == "12345"
+    end
+
+  end
+
+  describe "password" do
+    alias Dresstillery.Administration.User
+    alias Dresstillery.Administration.PasswordAuthentication
+
+    test "register/1 creates new user" do
+      assert {:ok, user} = Administration.register(%{login: "login", password: "password"})
+      assert user.password_authentication.login == "login"
+      assert Comeonin.Bcrypt.checkpw("password", user.password_authentication.password)
+    end
+
+    test "login/1 gets existing user if pass valid" do
+      user = user_fixture()
+      %PasswordAuthentication{}
+      |> PasswordAuthentication.changeset(%{login: "login", password: "p@ssw0rd"})
+      |> Ecto.Changeset.put_assoc(:user, user)
+      |> Repo.insert!
+
+      assert {:ok, user} = Administration.login(%{login: "login", password: "p@ssw0rd"})
+      assert user.password_authentication.login == "login"
+    end
+
+    test "login/1 fails if pass not valid" do
+      user = user_fixture()
+      %PasswordAuthentication{}
+      |> PasswordAuthentication.changeset(%{login: "login", password: "p@ssw0rd"})
+      |> Ecto.Changeset.put_assoc(:user, user)
+      |> Repo.insert!
+
+      assert {:error, :invalid_login_or_password} = Administration.login(%{login: "login", password: "go"})
+    end
+
+    test "login/1 fails if login not valid" do
+      assert {:error, :invalid_login_or_password} = Administration.login(%{login: "login", password: "go"})
     end
   end
 
