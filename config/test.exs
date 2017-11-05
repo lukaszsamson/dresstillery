@@ -28,3 +28,5 @@ config :dresstillery, :oauth,
   facebook_app_id: "12345",
   facebook_app_secret: "67890",
   facebook_verify_token_url: "https://graph.facebook.com/debug_token"
+
+config :dresstillery, :facebook_api, Dresstillery.FacebookApiStub

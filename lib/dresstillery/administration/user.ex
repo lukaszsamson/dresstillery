@@ -5,8 +5,9 @@ defmodule Dresstillery.Administration.User do
 
 
   schema "users" do
-
     timestamps()
+
+    has_one :facebook_authentication, Dresstillery.Administration.FacebookAuthentication
   end
 
   @doc false

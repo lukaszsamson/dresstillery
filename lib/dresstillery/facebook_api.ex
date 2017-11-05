@@ -1,7 +1,10 @@
 defmodule Dresstillery.FacebookApi do
   require Logger
   @conf Application.fetch_env! :dresstillery, :oauth
+  @access_token (@conf |> Keyword.fetch!(:facebook_app_id)) <> "|" <> (@conf |> Keyword.fetch!(:facebook_app_secret))
+  @url @conf |> Keyword.fetch!(:facebook_verify_token_url)
 
+  def is_valid(nil), do: false
   def is_valid(token) do
     do_request(token, 0)
   end
@@ -22,9 +25,9 @@ defmodule Dresstillery.FacebookApi do
   end
 
   defp do_request(token) do
-    query = [input_token: token, access_token: @conf.facebook_app_id <> "|" <> @conf.facebook_app_secret]
+    query = [input_token: token, access_token: @access_token]
     headers = [Connection: "keep-alive"]
-    response = HTTPoison.get!(@conf.facebook_verify_token_url, headers, %{params: query})
+    response = HTTPoison.get!(@url, headers, %{params: query})
     if response.status_code >= 200 and response.status_code < 300 do
       :ok
     else

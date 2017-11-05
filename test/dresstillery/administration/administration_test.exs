@@ -105,6 +105,7 @@ defmodule Dresstillery.AdministrationTest do
 
   describe "users" do
     alias Dresstillery.Administration.User
+    alias Dresstillery.Administration.FacebookAuthentication
 
     @valid_attrs %{}
     @update_attrs %{}
@@ -163,5 +164,31 @@ defmodule Dresstillery.AdministrationTest do
       user = user_fixture()
       assert %Ecto.Changeset{} = Administration.change_user(user)
     end
+
+    test "login_facebook/1 creates new user if token valid" do
+      assert {:ok, user} = Administration.login_facebook(%{token: "valid_token"})
+      assert user.facebook_authentication.external_id == "12345"
+    end
+
+    test "login_facebook/1 returns error if token invalid" do
+      assert {:error, :token_not_valid} = Administration.login_facebook(%{token: "invalid"})
+    end
+
+    test "login_facebook/1 returns error if api not available" do
+      assert {:error, :facebook_api_error} = Administration.login_facebook(%{token: "api_down"})
+    end
+
+    test "login_facebook/1 returns existing user if token valid" do
+      user = user_fixture()
+      %FacebookAuthentication{}
+      |> FacebookAuthentication.changeset(%{external_id: "12345"})
+      |> Ecto.Changeset.put_assoc(:user, user)
+      |> Repo.insert!
+
+      assert {:ok, existing_user} = Administration.login_facebook(%{token: "valid_token"})
+      assert user.id == existing_user.id
+      assert existing_user.facebook_authentication.external_id == "12345"
+    end
   end
+
 end

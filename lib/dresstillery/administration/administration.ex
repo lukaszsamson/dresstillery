@@ -7,6 +7,8 @@ defmodule Dresstillery.Administration do
   alias Dresstillery.Repo
 
   alias Dresstillery.Administration.BackofficeUser
+  alias Dresstillery.Administration.{User, FacebookAuthentication}
+  @facebook_api Application.get_env(:dresstillery, :facebook_api, Dresstillery.FacebookApi)
 
   @doc """
   Returns the list of backoffice_users.
@@ -136,6 +138,33 @@ defmodule Dresstillery.Administration do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  def login_facebook(attrs \\ %{}) do
+    case @facebook_api.is_valid(attrs[:token]) do
+      false -> {:error, :token_not_valid}
+      :error -> {:error, :facebook_api_error}
+      {true, fb_id} ->
+        get_or_create_facebook_user(fb_id)
+    end
+  end
+
+  defp get_or_create_facebook_user(fb_id) do
+    user = (from u in User,
+    join: fb in assoc(u, :facebook_authentication),
+    where: fb.external_id == ^fb_id,
+    preload: [:facebook_authentication])
+    |> Repo.one
+    case user do
+      nil ->
+      fb = %FacebookAuthentication{}
+      |> FacebookAuthentication.changeset(%{external_id: fb_id})
+      %User{}
+      |> User.changeset(%{})
+      |> Ecto.Changeset.put_assoc(:facebook_authentication, fb)
+      |> Repo.insert()
+      user -> {:ok, user}
+    end
+  end
 
   @doc """
   Creates a user.
