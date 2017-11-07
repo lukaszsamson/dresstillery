@@ -14,7 +14,7 @@ defmodule Dresstillery.FacebookApi do
       do_request(token)
     rescue
       e in HTTPoison.Error ->
-        Logger.error "Dresstillery.FacebookApi.is_valid error: #{e.message}"
+        Logger.error "Dresstillery.FacebookApi.is_valid error: #{e.reason}"
         if cnt < 3 do
           Process.sleep(50 * (cnt + 1) * (cnt + 1))
           do_request(token, cnt + 1)
@@ -26,12 +26,12 @@ defmodule Dresstillery.FacebookApi do
 
   defp do_request(token) do
     query = [input_token: token, access_token: @access_token]
-    headers = [Connection: "keep-alive"]
-    response = HTTPoison.get!(@url, headers, %{params: query})
+    headers = [{"Connection", "keep-alive"}]
+    response = HTTPoison.get!(@url, headers, params: query)
     if response.status_code >= 200 and response.status_code < 300 do
       :ok
     else
-      raise HTTPoison.Error, message: "Dresstillery.FacebookApi.is_valid failed with code #{response.status_code}, #{response.body}"
+      raise HTTPoison.Error, reason: "Dresstillery.FacebookApi.is_valid failed with code #{response.status_code}, #{response.body}"
     end
     Logger.info "Dresstillery.FacebookApi.is_valid response: #{response.status_code}, #{response.body}"
     parsed = Poison.Parser.parse!(response.body)
