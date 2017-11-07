@@ -19,4 +19,18 @@ defmodule DresstilleryWeb.FallbackController do
     |> put_view(DresstilleryWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :facebook_api_error}) do
+    conn
+    |> put_status(:service_unavailable)
+    |> put_view(DresstilleryWeb.ErrorView)
+    |> render(:"503")
+  end
+
+  def call(conn, {:error, code}) when code in [:invalid_login_or_password, :token_not_valid] do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(DresstilleryWeb.ErrorView)
+    |> render(:"401")
+  end
 end

@@ -140,7 +140,7 @@ defmodule Dresstillery.Administration do
   def get_user!(id), do: Repo.get!(User, id)
 
   def login_facebook(attrs \\ %{}) do
-    case @facebook_api.is_valid(attrs[:token]) do
+    case @facebook_api.is_valid(attrs[:token] || attrs["token"]) do
       false -> {:error, :token_not_valid}
       :error -> {:error, :facebook_api_error}
       {true, fb_id} ->
@@ -178,10 +178,10 @@ defmodule Dresstillery.Administration do
   def login(attrs \\ %{}) do
     user = (from u in User,
     join: fb in assoc(u, :password_authentication),
-    where: fb.login == ^attrs[:login],
+    where: fb.login == ^(attrs[:login] || attrs["login"] || ""),
     preload: [:password_authentication])
     |> Repo.one
-    if PasswordAuthentication.check_password(user, attrs[:password]) do
+    if PasswordAuthentication.check_password(user, attrs[:password] || attrs["password"] || "") do
       {:ok, user}
     else
       {:error, :invalid_login_or_password}

@@ -9,9 +9,24 @@ defmodule DresstilleryWeb.ErrorViewTest do
            "Page not found"
   end
 
+  test "render 503.html" do
+    assert render_to_string(DresstilleryWeb.ErrorView, "503.html", []) ==
+           "Service temporarily unavailable"
+  end
+
   test "render 500.html" do
     assert render_to_string(DresstilleryWeb.ErrorView, "500.html", []) ==
            "Internal server error"
+  end
+
+  test "renders 404.json" do
+    assert render(DresstilleryWeb.ErrorView, "404.json", []) ==
+           %{error: "Not found"}
+  end
+
+  test "renders 503.json" do
+    assert render(DresstilleryWeb.ErrorView, "503.json", []) ==
+           %{error: "Service temporarily unavailable"}
   end
 
   test "render any other" do

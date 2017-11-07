@@ -58,5 +58,9 @@ defmodule DresstilleryWeb.Router do
 
     resources "/products", ProductController, only: [:show, :index]
     resources "/fabrics", FabricController, only: [:show, :index]
+
+    post "/account/login", UserController, :login
+    post "/account/register", UserController, :register
+    post "/account/login_facebook", UserController, :login_facebook
   end
 end
