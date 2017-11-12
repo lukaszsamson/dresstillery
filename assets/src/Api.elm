@@ -29,11 +29,49 @@ type alias ApiError =
     Dict String (List String)
 
 
-errorDecoder : String -> Result String ApiError
-errorDecoder json =
-    Decode.decodeString
-        (Decode.field "errors" (Decode.dict (Decode.list Decode.string)))
-        json
+type ApiErrorNode
+    = DictNode (Dict String ApiErrorNode)
+    | ListNode (List String)
+
+
+errorNodeDecoder : Decoder ApiErrorNode
+errorNodeDecoder =
+    Decode.oneOf
+        [ Decode.dict (Decode.lazy (\_ -> errorNodeDecoder)) |> Decode.map DictNode
+        , Decode.list Decode.string |> Decode.map ListNode
+        ]
+
+
+flatten :
+    ApiErrorNode
+    -> String
+    -> Dict String (List String)
+    -> Dict String (List String)
+flatten d key acc =
+    case d of
+        ListNode list ->
+            acc |> Dict.insert key list
+
+        DictNode dict ->
+            dict
+                |> Dict.foldl
+                    (\k v a ->
+                        let
+                            key_ =
+                                if key == "_" then
+                                    k
+                                else
+                                    key ++ "." ++ k
+                        in
+                        flatten v key_ a
+                    )
+                    acc
+
+
+errorDecoder : Decoder (Dict String (List String))
+errorDecoder =
+    Decode.field "errors" errorNodeDecoder
+        |> Decode.map (\v -> flatten v "_" Dict.empty)
 
 
 buildError : String -> ApiError
@@ -45,7 +83,7 @@ handleBadStatus : Http.Response String -> ApiError
 handleBadStatus response =
     case response.status.code of
         422 ->
-            case errorDecoder response.body of
+            case Decode.decodeString errorDecoder response.body of
                 Ok error ->
                     error
 

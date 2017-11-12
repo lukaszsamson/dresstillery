@@ -20,6 +20,7 @@ type Route
     | TermsAndConditions
     | Contact
     | User
+    | Register
     | NotFound
 
 
@@ -29,6 +30,7 @@ matchers =
         [ map Home top
         , map Creator (s (pathImpl Creator))
         , map User (s (pathImpl User))
+        , map Register (s "account" </> s "register")
         , map About (s (pathImpl About))
         , map Products (s (pathImpl Products))
         , map Fabrics (s (pathImpl Fabrics))
@@ -72,7 +74,10 @@ pathImpl r =
             "basket"
 
         User ->
-            "user"
+            "account"
+
+        Register ->
+            "account/register"
 
         TermsAndConditions ->
             "terms_and_conditions"

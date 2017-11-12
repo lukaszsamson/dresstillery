@@ -1,6 +1,6 @@
 defmodule DresstilleryWeb.Locale do
   import Plug.Conn
-  import Logger
+  require Logger
 
   def init(default), do: default
 
@@ -25,7 +25,6 @@ defmodule DresstilleryWeb.Locale do
     |> Enum.filter(fn locale ->
          Enum.member?(DresstilleryWeb.Gettext.supported_locales(), locale)
        end)
-    |> IO.inspect()
   end
 
   defp extract_accept_language(conn) do

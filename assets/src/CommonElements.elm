@@ -1,6 +1,8 @@
 module CommonElements exposing (..)
 
+import Api exposing (ApiError)
 import Color exposing (Color)
+import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -47,3 +49,9 @@ lenghtPicker lenghts selectedLenght msg =
                         ]
                 )
         )
+
+
+formError : ApiError -> String -> Html msg
+formError error field =
+    Html.div [ class "form-error" ]
+        (error |> Dict.get field |> Maybe.withDefault [] |> List.map text)

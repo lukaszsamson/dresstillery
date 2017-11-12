@@ -15,6 +15,7 @@ import Navigation
 import Product
 import Products
 import Routing
+import User.Register
 import User.User
 import Utils exposing (..)
 
@@ -29,6 +30,7 @@ type Msg
     | BasketMessage Basket.Msg (Maybe CommonMessages.Msg)
     | CommonMessage CommonMessages.Msg
     | UserMessage User.User.Msg (Maybe CommonMessages.Msg)
+    | RegisterMessage User.Register.Msg (Maybe CommonMessages.Msg)
 
 
 type alias Model =
@@ -41,6 +43,7 @@ type alias Model =
     , basket : Basket.Model
     , productDict : Dict.Dict Int Product.Model
     , user : User.User.Model
+    , register : User.Register.Model
     }
 
 
@@ -55,6 +58,7 @@ initialModel flags =
     , fabrics = Fabrics.init flags
     , productDict = Dict.empty
     , user = User.User.init flags
+    , register = User.Register.init flags
     }
 
 
@@ -102,6 +106,9 @@ update msg model =
 
         UserMessage cMsg pMsg ->
             updateComponent_ user cMsg pMsg model
+
+        RegisterMessage cMsg pMsg ->
+            updateComponent_ register cMsg pMsg model
 
 
 updateCommon : CommonMessages.Msg -> Model -> ( Model, Cmd Msg )
@@ -162,6 +169,9 @@ mainContent model =
 
         Routing.User ->
             subView user model
+
+        Routing.Register ->
+            subView register model
 
         Routing.Products ->
             subView products model
@@ -228,6 +238,16 @@ user =
     , update = User.User.update
     , view = User.User.view
     , wrap = wrap UserMessage User.User.toParent
+    }
+
+
+register : Component Model Msg User.Register.Model User.Register.Msg
+register =
+    { getter = \m -> m.register
+    , setter = \m b -> { m | register = b }
+    , update = User.Register.update
+    , view = User.Register.view
+    , wrap = wrap RegisterMessage User.Register.toParent
     }
 
 

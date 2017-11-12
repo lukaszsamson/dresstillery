@@ -42,3 +42,8 @@ loginFacebook flags token msg =
 loginPassword : Flags -> String -> String -> (WebData LoginResponse -> msg) -> Cmd msg
 loginPassword flags login password msg =
     post (flags.backendUrl ++ "/account/login") (loginPasswordEncode login password) (field "data" loginResponseDecoder) msg
+
+
+register : Flags -> String -> String -> (WebData LoginResponse -> msg) -> Cmd msg
+register flags login password msg =
+    post (flags.backendUrl ++ "/account/register") (loginPasswordEncode login password) (field "data" loginResponseDecoder) msg

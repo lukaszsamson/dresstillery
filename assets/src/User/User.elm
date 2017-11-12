@@ -1,13 +1,14 @@
 port module User.User exposing (..)
 
 import Api exposing (ApiError, handleFailure)
+import CommonElements exposing (formError)
 import CommonMessages
-import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Models exposing (..)
 import RemoteData exposing (WebData)
+import Routing
 import User.Api exposing (LoginResponse, loginFacebook, loginPassword)
 import User.Decoder exposing (getToken)
 
@@ -117,6 +118,8 @@ update msg model =
 
                 loginStatus =
                     updateLoginStatus response model.loginStatus PasswordLoggedIn
+
+                -- TODO reset form
             in
             ( { model | loginStatus = loginStatus, loginPasswordResponse = response }, Cmd.none )
 
@@ -170,17 +173,10 @@ update msg model =
                     ( { model | loginStatus = LoggingOut }, facebookLogout {} )
 
                 PasswordLoggedIn ->
-                    -- TODO
-                    ( model, Cmd.none )
+                    ( { model | loginStatus = NotLoggedIn }, Cmd.none )
 
         Parent msg_ ->
             ( model, Cmd.none )
-
-
-formError : ApiError -> String -> Html msg
-formError error field =
-    Html.div [ class "form-error" ]
-        (error |> Dict.get field |> Maybe.withDefault [] |> List.map text)
 
 
 loginPasswordForm : Model -> Html Msg
@@ -195,9 +191,9 @@ loginPasswordForm model =
             , input [ value model.login, onInput LoginFieldChanged ] []
             , formError error "login"
             ]
-        , Html.label [ type_ "password" ]
+        , Html.label []
             [ text "Hasło"
-            , input [ value model.password, onInput PasswordFieldChanged ] []
+            , input [ type_ "password", value model.password, onInput PasswordFieldChanged ] []
             , formError error "password"
             ]
         , formError error "_"
@@ -231,6 +227,9 @@ view model =
                 NotLoggedIn ->
                     [ loginPasswordForm model
                     , loginFacebookForm model
+                    , a [ Routing.linkHref Routing.Register, Routing.onLinkClick (Parent (CommonMessages.ChangeLocation Routing.Register)) ]
+                        [ text "Zarejestruj"
+                        ]
                     ]
 
                 FacebookLoggedIn ->
