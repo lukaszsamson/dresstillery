@@ -17,6 +17,7 @@ defmodule DresstilleryWeb.Router do
     plug :accepts, ["json"]
     plug :fetch_session
     plug DresstilleryWeb.Authenticate, require_session: false
+    plug DresstilleryWeb.Locale, "pl"
   end
 
   scope "/admin", DresstilleryWeb do

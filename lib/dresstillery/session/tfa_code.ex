@@ -2,9 +2,10 @@ defmodule Dresstillery.Session.TfaCode do
   use Ecto.Schema
   import Ecto.Changeset
   alias Dresstillery.Session.TfaCode
+  import DresstilleryWeb.Gettext
 
   embedded_schema do
-    field :code, :string
+    field(:code, :string)
   end
 
   def changeset(%TfaCode{} = struct, attrs) do
@@ -16,6 +17,6 @@ defmodule Dresstillery.Session.TfaCode do
 
   def add_code_error(struct) do
     struct
-    |> add_error(:code, "invalid code")
+    |> add_error(:code, dgettext("errors", "invalid code"))
   end
 end

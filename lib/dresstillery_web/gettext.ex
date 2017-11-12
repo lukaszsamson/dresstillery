@@ -21,4 +21,16 @@ defmodule DresstilleryWeb.Gettext do
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
   use Gettext, otp_app: :dresstillery
+
+  def supported_locales do
+    known = Gettext.known_locales(__MODULE__)
+    allowed = config() |> Keyword.fetch!(:locales)
+
+    IO.puts "Known: #{inspect known} allowed #{inspect allowed}"
+
+    MapSet.intersection(Enum.into(known, MapSet.new()), Enum.into(allowed, MapSet.new()))
+    |> MapSet.to_list()
+  end
+
+  defp config, do: Application.fetch_env!(:dresstillery, __MODULE__)
 end

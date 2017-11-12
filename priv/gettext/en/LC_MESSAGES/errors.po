@@ -95,3 +95,20 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
+
+#: lib/dresstillery/session/user_login.ex:25
+msgid "account deactivated"
+msgstr ""
+
+#: lib/dresstillery/session/change_password.ex:37
+#: lib/dresstillery/session/tfa_code.ex:20
+msgid "invalid code"
+msgstr ""
+
+#: lib/dresstillery/session/user_login.ex:20
+msgid "invalid login or password"
+msgstr ""
+
+#: lib/dresstillery/session/change_password.ex:32
+msgid "invalid password"
+msgstr ""

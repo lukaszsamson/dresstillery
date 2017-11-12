@@ -4,24 +4,24 @@ defmodule DresstilleryWeb.Api.UserController do
   alias Dresstillery.Administration
   alias Dresstillery.Administration.User
 
-  action_fallback DresstilleryWeb.FallbackController
+  action_fallback(DresstilleryWeb.FallbackController)
 
-  def register(conn, %{"user" => user_params}) do
+  def register(conn, user_params) do
     with {:ok, %User{} = user} <- Administration.register(user_params) do
       conn
       |> render("show.json", user: user)
     end
   end
 
-  def login(conn, %{"user" => user_params}) do
+  def login(conn, user_params) do
     with {:ok, %User{} = user} <- Administration.login(user_params) do
       conn
       |> render("show.json", user: user)
     end
   end
 
-  def login_facebook(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Administration.login_facebook(user_params) do
+  def login_facebook(conn, %{"token" => token}) do
+    with {:ok, %User{} = user} <- Administration.login_facebook(token) do
       conn
       |> render("show.json", user: user)
     end
@@ -35,5 +35,4 @@ defmodule DresstilleryWeb.Api.UserController do
   #     |> render("show.json", user: user)
   #   end
   # end
-
 end

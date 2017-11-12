@@ -4,13 +4,12 @@ import CommonElements exposing (icon)
 import FontAwesome
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
 import Markdown
 import Routing
 
 
-header : (Routing.Route -> msg) -> msg -> Html msg
-header changeRoute login =
+header : (Routing.Route -> msg) -> Html msg
+header changeRoute =
     Html.header [ class "header" ]
         [ img [ src "/img/logo/Falda_logo_horizontal_black.svg", class "headerLogo", alt "Logo formy Falda" ]
             []
@@ -22,7 +21,10 @@ header changeRoute login =
                 [ icon FontAwesome.shopping_bag
                 , span [] [ text "Koszyk" ]
                 ]
-            , a [ href "#", onClick login ] [ icon FontAwesome.sign_in, span [] [ text "Zaloguj" ] ]
+            , a [ Routing.linkHref Routing.User, Routing.onLinkClick (changeRoute Routing.User) ]
+                [ icon FontAwesome.sign_in
+                , span [] [ text "Zaloguj" ]
+                ]
             ]
         ]
 

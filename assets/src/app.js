@@ -23,10 +23,13 @@ const app = Elm.Main.fullscreen({
 //   localStorage.setItem('elm-facebook-api', JSON.stringify(state));
 // });
 
-function getUserData() {
-  FB.api('/me?fields=name,picture', function(response) {
-    const userData = JSON.stringify(response);
-    app.ports.userLoggedIn.send(userData);
+function getUserData(loginStatus) {
+  FB.api('/me?fields=name,picture', function(me) {
+    const userData = JSON.stringify({
+      loginStatus,
+      me
+    });
+    app.ports.facebookLoggedIn.send(userData);
   });
 }
 
@@ -36,18 +39,10 @@ window.fbAsyncInit = function() {
 
       if (response.status === 'connected') {
         console.log('FB.getLoginStatus Logged in.');
-        getUserData()
-      } else if (response.status === 'not_authorized') {
-        console.log(response.status);
-        app.ports.userLoggedOut.send(response.status);
-      } else if (alreadyAuthed) {
-        console.log('auto login');
-        let res = {
-          authResponse: alreadyAuthed
-        }
-        FB.login(function(res) {});
+        getUserData(response)
       } else {
-        app.ports.userLoggedOut.send(response.status);
+        console.log(response.status);
+        app.ports.facebookNotLoggedIn.send(response.status);
       }
   })
 
@@ -94,36 +89,21 @@ window.fbAsyncInit = function() {
 
 
 
-app.ports.logout.subscribe(function() {
-
-  // logout of pseudo login state
-  if (alreadyAuthed) {
-
-    const userStatus = {
-      uid: "",
-      name: "",
-      loginStatus: "unknown",
-      userType: "Unknown"
-    }
-
-    app.ports.userLoggedOut.send(JSON.stringify(userStatus));
-
-  } else {
+app.ports.facebookLogout.subscribe(function() {
+  console.log('Logging out');
     FB.logout(function(response) {
-      console.log('Logging out ' + response);
-      app.ports.userLoggedOut.send(response.status);
+      console.log('Loged out ' + response);
+      app.ports.facebookNotLoggedIn.send(response.status);
     });
-  }
 });
 
-app.ports.login.subscribe(function() {
-
+app.ports.facebookLogin.subscribe(function() {
   FB.login(function(response) {
     if (response.authResponse) {
 
       // localStorage.setItem('elm-facebook-api-authResponse', JSON.stringify(response.authResponse));
 
-      getUserData()
+      getUserData(response)
     } else {
       console.log('User cancelled login or did not fully authorize.');
     }

@@ -19,6 +19,7 @@ type Route
     | Basket
     | TermsAndConditions
     | Contact
+    | User
     | NotFound
 
 
@@ -27,6 +28,7 @@ matchers =
     oneOf
         [ map Home top
         , map Creator (s (pathImpl Creator))
+        , map User (s (pathImpl User))
         , map About (s (pathImpl About))
         , map Products (s (pathImpl Products))
         , map Fabrics (s (pathImpl Fabrics))
@@ -68,6 +70,9 @@ pathImpl r =
 
         Basket ->
             "basket"
+
+        User ->
+            "user"
 
         TermsAndConditions ->
             "terms_and_conditions"

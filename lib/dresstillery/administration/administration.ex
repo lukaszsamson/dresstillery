@@ -39,7 +39,7 @@ defmodule Dresstillery.Administration do
   """
   def get_backoffice_user!(id), do: Repo.get!(BackofficeUser, id)
 
-  def get_active_backoffice_user(id), do: Repo.get_by(BackofficeUser, id: (id || -1), active: true)
+  def get_active_backoffice_user(id), do: Repo.get_by(BackofficeUser, id: id || -1, active: true)
 
   @doc """
   Creates a backoffice_user.
@@ -139,36 +139,50 @@ defmodule Dresstillery.Administration do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  def login_facebook(attrs \\ %{}) do
-    case @facebook_api.is_valid(attrs[:token] || attrs["token"]) do
-      false -> {:error, :token_not_valid}
-      :error -> {:error, :facebook_api_error}
+  def login_facebook(token) do
+    case @facebook_api.is_valid(token) do
+      false ->
+        {:error, :token_not_valid}
+
+      :error ->
+        {:error, :facebook_api_error}
+
       {true, fb_id} ->
         get_or_create_facebook_user(fb_id)
     end
   end
 
   defp get_or_create_facebook_user(fb_id) do
-    user = (from u in User,
-    join: fb in assoc(u, :facebook_authentication),
-    where: fb.external_id == ^fb_id,
-    preload: [:facebook_authentication])
-    |> Repo.one
+    user =
+      from(
+        u in User,
+        join: fb in assoc(u, :facebook_authentication),
+        where: fb.external_id == ^fb_id,
+        preload: [:facebook_authentication]
+      )
+      |> Repo.one()
+
     case user do
       nil ->
-      fb = %FacebookAuthentication{}
-      |> FacebookAuthentication.changeset(%{external_id: fb_id})
-      %User{}
-      |> User.changeset(%{})
-      |> Ecto.Changeset.put_assoc(:facebook_authentication, fb)
-      |> Repo.insert()
-      user -> {:ok, user}
+        fb =
+          %FacebookAuthentication{}
+          |> FacebookAuthentication.changeset(%{external_id: fb_id})
+
+        %User{}
+        |> User.changeset(%{})
+        |> Ecto.Changeset.put_assoc(:facebook_authentication, fb)
+        |> Repo.insert()
+
+      user ->
+        {:ok, user}
     end
   end
 
   def register(attrs \\ %{}) do
-    pass = %PasswordAuthentication{}
-    |> PasswordAuthentication.changeset(attrs)
+    pass =
+      %PasswordAuthentication{}
+      |> PasswordAuthentication.changeset(attrs)
+
     %User{}
     |> User.changeset(%{})
     |> Ecto.Changeset.put_assoc(:password_authentication, pass)
@@ -176,17 +190,29 @@ defmodule Dresstillery.Administration do
   end
 
   def login(attrs \\ %{}) do
-    user = (from u in User,
-    join: fb in assoc(u, :password_authentication),
-    where: fb.login == ^(attrs[:login] || attrs["login"] || ""),
-    preload: [:password_authentication])
-    |> Repo.one
-    if PasswordAuthentication.check_password(user, attrs[:password] || attrs["password"] || "") do
+    %Dresstillery.Session.UserLogin{}
+    |> Dresstillery.Session.UserLogin.changeset(attrs)
+    |> do_login()
+  end
+
+  defp do_login(cs = %{valid?: true}) do
+    user =
+      from(
+        u in User,
+        join: fb in assoc(u, :password_authentication),
+        where: fb.login == ^(cs.changes[:login] || ""),
+        preload: [:password_authentication]
+      )
+      |> Repo.one()
+
+    if PasswordAuthentication.check_password(user, cs.changes[:password] || "") do
       {:ok, user}
     else
-      {:error, :invalid_login_or_password}
+      {:error, cs |> Dresstillery.Session.UserLogin.add_password_error()}
     end
   end
+
+  defp do_login(cs), do: {:error, cs}
 
   @doc """
   Creates a user.

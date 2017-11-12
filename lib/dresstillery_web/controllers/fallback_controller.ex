@@ -27,10 +27,10 @@ defmodule DresstilleryWeb.FallbackController do
     |> render(:"503")
   end
 
-  def call(conn, {:error, code}) when code in [:invalid_login_or_password, :token_not_valid] do
+  def call(conn, {:error, :token_not_valid}) do
     conn
-    |> put_status(:unauthorized)
+    |> put_status(:unprocessable_entity)
     |> put_view(DresstilleryWeb.ErrorView)
-    |> render(:"401")
+    |> render(:token_not_valid)
   end
 end

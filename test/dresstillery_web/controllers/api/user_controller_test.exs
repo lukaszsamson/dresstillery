@@ -10,7 +10,7 @@ defmodule DresstilleryWeb.Api.UserControllerTest do
 
   describe "register" do
     test "renders user when data is valid", %{conn: conn} do
-      conn = post conn, api_user_path(conn, :register), user: %{login: "test", password: "zxcv"}
+      conn = post conn, api_user_path(conn, :register), %{login: "test", password: "zxcv"}
       assert json_response(conn, 200)
 
       # TODO
@@ -18,7 +18,7 @@ defmodule DresstilleryWeb.Api.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post conn, api_user_path(conn, :register), user: %{login: "test", password: ""}
+      conn = post conn, api_user_path(conn, :register), %{login: "test", password: ""}
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -27,7 +27,7 @@ defmodule DresstilleryWeb.Api.UserControllerTest do
     test "renders user when data is valid", %{conn: conn} do
       {:ok, _user} = Administration.register(%{login: "test", password: "zxcv"})
 
-      conn = post conn, api_user_path(conn, :login), user: %{login: "test", password: "zxcv"}
+      conn = post conn, api_user_path(conn, :login), %{login: "test", password: "zxcv"}
       assert json_response(conn, 200)
 
       # TODO
@@ -35,14 +35,14 @@ defmodule DresstilleryWeb.Api.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post conn, api_user_path(conn, :login), user: %{login: "test", password: ""}
-      assert json_response(conn, 401)["errors"] != %{}
+      conn = post conn, api_user_path(conn, :login), %{login: "test", password: ""}
+      assert json_response(conn, 422)["errors"] != %{}
     end
   end
 
   describe "login_facebook" do
     test "renders user when data is valid", %{conn: conn} do
-      conn = post conn, api_user_path(conn, :login_facebook), user: %{token: "valid_token"}
+      conn = post conn, api_user_path(conn, :login_facebook), %{token: "valid_token"}
       assert json_response(conn, 200)
 
       # TODO
@@ -50,12 +50,12 @@ defmodule DresstilleryWeb.Api.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post conn, api_user_path(conn, :login_facebook), user: %{token: "test"}
-      assert json_response(conn, 401)["errors"] != %{}
+      conn = post conn, api_user_path(conn, :login_facebook), %{token: "test"}
+      assert json_response(conn, 422)["errors"] != %{}
     end
 
     test "renders errors when data api down", %{conn: conn} do
-      conn = post conn, api_user_path(conn, :login_facebook), user: %{token: "api_down"}
+      conn = post conn, api_user_path(conn, :login_facebook), %{token: "api_down"}
       assert json_response(conn, 503)["errors"] != %{}
     end
   end

@@ -2,12 +2,13 @@ defmodule Dresstillery.Session.ChangePassword do
   use Ecto.Schema
   import Ecto.Changeset
   alias Dresstillery.Session.ChangePassword
+  import DresstilleryWeb.Gettext
 
   embedded_schema do
-    field :tfa_code, :string
-    field :password, :string
-    field :new_password, :string
-    field :code, :string
+    field(:tfa_code, :string)
+    field(:password, :string)
+    field(:new_password, :string)
+    field(:code, :string)
   end
 
   def changeset_no_secret(%ChangePassword{} = struct, attrs) do
@@ -28,11 +29,11 @@ defmodule Dresstillery.Session.ChangePassword do
 
   def add_password_error(struct) do
     struct
-    |> add_error(:password, "invalid password")
+    |> add_error(:password, dgettext("errors", "invalid password"))
   end
 
   def add_code_error(struct) do
     struct
-    |> add_error(:code, "invalid code")
+    |> add_error(:code, dgettext("errors", "invalid code"))
   end
 end

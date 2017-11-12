@@ -8,6 +8,15 @@ import User.Model as User exposing (..)
 -- DECODERS
 
 
+getToken : String -> String
+getToken json =
+    Decode.decodeString
+        (field "loginStatus" <| (field "authResponse" <| field "accessToken" Decode.string))
+        json
+        |> Result.toMaybe
+        |> Maybe.withDefault ""
+
+
 nameDecoder : String -> Result String String
 nameDecoder json =
     decodeString (field "name" Decode.string) json

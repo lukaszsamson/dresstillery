@@ -5,7 +5,6 @@ import CommonMessages
 import Creator
 import Dict
 import Fabrics
-import Facebook
 import Home
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -16,8 +15,7 @@ import Navigation
 import Product
 import Products
 import Routing
-import User
-import User.Model
+import User.User
 import Utils exposing (..)
 
 
@@ -30,11 +28,7 @@ type Msg
     | CreatorMessage Creator.Msg (Maybe CommonMessages.Msg)
     | BasketMessage Basket.Msg (Maybe CommonMessages.Msg)
     | CommonMessage CommonMessages.Msg
-    | Login
-    | Logout
-    | LoggedIn String
-    | LoggedOut String
-    | UserMessage User.Msg
+    | UserMessage User.User.Msg (Maybe CommonMessages.Msg)
 
 
 type alias Model =
@@ -46,7 +40,7 @@ type alias Model =
     , creator : Creator.Model
     , basket : Basket.Model
     , productDict : Dict.Dict Int Product.Model
-    , user : User.Model.Model
+    , user : User.User.Model
     }
 
 
@@ -60,7 +54,7 @@ initialModel flags =
     , products = Products.init flags
     , fabrics = Fabrics.init flags
     , productDict = Dict.empty
-    , user = User.Model.init
+    , user = User.User.init flags
     }
 
 
@@ -69,26 +63,10 @@ init flags location =
     update (OnLocationChange location) (initialModel flags)
 
 
-
--- PORTS
-
-
-port userLoggedIn : (String -> msg) -> Sub msg
-
-
-port userLoggedOut : (String -> msg) -> Sub msg
-
-
-
--- SUBSCRIPTIONS
-
-
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ userLoggedIn LoggedIn
-        , userLoggedOut LoggedOut
-        ]
+        [ User.User.subscriptions model.user |> Sub.map (\x -> UserMessage x Nothing) ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -122,42 +100,8 @@ update msg model =
         BasketMessage cMsg pMsg ->
             updateComponent_ basket cMsg pMsg model
 
-        LoggedIn json ->
-            let
-                ( updatedUserModel, userCmd ) =
-                    User.update (User.LoggedIn json) model.user
-
-                _ =
-                    Debug.log "update LoggedIn " json
-            in
-            ( { model | user = updatedUserModel }, Cmd.map UserMessage userCmd )
-
-        LoggedOut loggedOutMsg ->
-            let
-                ( updatedUserModel, userCmd ) =
-                    User.update (User.LoggedOut loggedOutMsg) model.user
-
-                _ =
-                    Debug.log "update LoggedOut " loggedOutMsg
-            in
-            ( { model | user = updatedUserModel }, Cmd.none )
-
-        Login ->
-            let
-                _ =
-                    Debug.log "update Login " Login
-            in
-            ( model, Facebook.login {} )
-
-        Logout ->
-            let
-                _ =
-                    Debug.log "update Login " Login
-            in
-            ( model, Facebook.logout {} )
-
-        UserMessage m ->
-            ( model, Cmd.none )
+        UserMessage cMsg pMsg ->
+            updateComponent_ user cMsg pMsg model
 
 
 updateCommon : CommonMessages.Msg -> Model -> ( Model, Cmd Msg )
@@ -216,6 +160,9 @@ mainContent model =
         Routing.About ->
             aboutView model.flags.o_mnie
 
+        Routing.User ->
+            subView user model
+
         Routing.Products ->
             subView products model
 
@@ -247,7 +194,7 @@ mainContent model =
 view : Model -> Html Msg
 view model =
     div [ class "wrap" ]
-        [ header changeLocation Login
+        [ header changeLocation
         , Menu.menuContainer model.menuShown ToggleMenu changeLocation
         , mainContent model
         , footer
@@ -271,6 +218,16 @@ creator =
     , update = Creator.update
     , view = Creator.view
     , wrap = wrap CreatorMessage Creator.toParent
+    }
+
+
+user : Component Model Msg User.User.Model User.User.Msg
+user =
+    { getter = \m -> m.user
+    , setter = \m b -> { m | user = b }
+    , update = User.User.update
+    , view = User.User.view
+    , wrap = wrap UserMessage User.User.toParent
     }
 
 

@@ -1,4 +1,4 @@
-module User exposing (..)
+module User.Fb exposing (..)
 
 import Json.Decode as Decode exposing (decodeString)
 import User.Decoder exposing (..)
