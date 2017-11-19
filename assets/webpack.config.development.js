@@ -34,7 +34,10 @@ module.exports = {
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([{ from: './static/', to: '..' }]),
+    new CopyWebpackPlugin([{
+      from: './static/',
+      to: '..'
+    }]),
     new ExtractTextPlugin({
       // filename: '[name]-[hash].css',
       filename: '../css/[name].css',
@@ -49,11 +52,9 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        use: [
-          {
-            loader: "raw-loader"
-          }
-        ]
+        use: [{
+          loader: "raw-loader"
+        }]
       },
       {
         test: /\.elm$/,

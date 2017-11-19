@@ -76,8 +76,6 @@ window.fbAsyncInit = function() {
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 
-
-
 app.ports.facebookLogout.subscribe(function() {
   console.log('FB.logout');
   FB.logout(function(response) {
@@ -89,7 +87,7 @@ app.ports.facebookLogin.subscribe(function() {
   console.log('FB.login');
   FB.login(function(response) {
     if (response.authResponse) {
-      getUserData(response)
+      getUserData(response);
     } else {
       console.log('User cancelled login or did not fully authorize.');
     }
@@ -97,11 +95,11 @@ app.ports.facebookLogin.subscribe(function() {
 });
 
 app.ports.storeToken.subscribe(function(token) {
-  storage.set(LOGIN_TOKEN, token[0])
-  storage.set(LOGIN_TYPE, token[1])
+  storage.set(LOGIN_TOKEN, token[0]);
+  storage.set(LOGIN_TYPE, token[1]);
 });
 
 app.ports.deleteToken.subscribe(function() {
-  storage.remove(LOGIN_TOKEN)
-  storage.remove(LOGIN_TYPE)
+  storage.remove(LOGIN_TOKEN);
+  storage.remove(LOGIN_TYPE);
 });

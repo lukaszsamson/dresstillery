@@ -6,30 +6,32 @@ function handleError(e) {
 
 function get(key) {
   try {
-    return window.localStorage.getItem(key)
-  } catch(e) {
-    handleError(e)
+    return window.localStorage.getItem(key);
+  } catch (e) {
+    handleError(e);
   }
 }
 
 function set(key, value) {
   try {
-    return window.localStorage.setItem(key, value)
-  } catch(e) {
-    handleError(e)
+    return window.localStorage.setItem(key, value);
+  } catch (e) {
+    handleError(e);
   }
 }
 
 function remove(key) {
   try {
-    return window.localStorage.removeItem(key)
-  } catch(e) {
-    handleError(e)
+    return window.localStorage.removeItem(key);
+  } catch (e) {
+    handleError(e);
   }
 }
 
-export default {
-  get,
-  set,
-  remove
-}
+const mod = {
+  get: get,
+  set: set,
+  remove: remove,
+};
+
+export default mod;

@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 
 const elmSource = __dirname + '/src';
@@ -33,7 +34,10 @@ module.exports = {
       'process.env.FB_APP_ID': JSON.stringify('191715151387019'),
       'process.env.BACKEND_URL': JSON.stringify('/api')
     }),
-    new CopyWebpackPlugin([{ from: './static/', to: '..' }]),
+    new CopyWebpackPlugin([{
+      from: './static/',
+      to: '..'
+    }]),
     new ExtractTextPlugin({
       // filename: '[name]-[hash].css',
       filename: '../css/[name].css',
@@ -42,22 +46,18 @@ module.exports = {
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
       cssProcessor: require('cssnano'),
-      cssProcessorOptions: { discardComments: { removeAll: true } },
+      cssProcessorOptions: {
+        discardComments: {
+          removeAll: true
+        }
+      },
       canPrint: true
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      mangle: {
-        screw_ie8: true,
-        keep_fnames: true
-      },
-      compress: {
-        warnings: false,
-        screw_ie8: true
-      },
-      comments: false,
-      ie8: false
+    new UglifyJSPlugin({
+      uglifyOptions: {
+        ecma: 6,
+      }
     }),
   ],
   module: {
@@ -68,24 +68,20 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        use: [
-          {
-            loader: "raw-loader"
-          }
-        ]
+        use: [{
+          loader: "raw-loader"
+        }]
       },
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
-        use: [
-          {
-            loader: "elm-webpack-loader",
-            options: {
-              debug: false,
-              warn: true
-            }
+        use: [{
+          loader: "elm-webpack-loader",
+          options: {
+            debug: false,
+            warn: true
           }
-        ]
+        }]
       },
       {
         test: /\.scss$/,
