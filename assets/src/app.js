@@ -60,7 +60,7 @@ window.fbAsyncInit = function() {
     console.log('getLoginStatus', response)
     if (response.status === 'connected') {
       console.log('FB.getLoginStatus Logged in.');
-      getUserData()
+      getUserData(response);
     }
 
   }, true);

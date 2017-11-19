@@ -5,6 +5,7 @@ defmodule Dresstillery.FacebookApi do
   @url @conf |> Keyword.fetch!(:facebook_verify_token_url)
 
   def is_valid(nil), do: false
+  def is_valid(""), do: false
   def is_valid(token) do
     do_request(token, 0)
   end
