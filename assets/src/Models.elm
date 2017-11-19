@@ -1,6 +1,12 @@
 module Models exposing (..)
 
 
+type alias InitialState =
+    { token : Maybe String
+    , loginType : Maybe String
+    }
+
+
 type alias Flags =
     { backendUrl : String
     , o_mnie : String
@@ -8,4 +14,5 @@ type alias Flags =
     , aktualna_kolekcja : String
     , galeria_tkanin : String
     , otworz_konfigurator : String
+    , initialState : InitialState
     }

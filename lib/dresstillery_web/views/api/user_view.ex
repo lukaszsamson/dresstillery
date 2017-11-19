@@ -11,6 +11,7 @@ defmodule DresstilleryWeb.Api.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{id: user.id}
+    token = Phoenix.Token.sign(DresstilleryWeb.Endpoint, "uhbcqdcwdncn76g2d7bd2wdbshab", user.id)
+    %{id: user.id, token: token}
   end
 end

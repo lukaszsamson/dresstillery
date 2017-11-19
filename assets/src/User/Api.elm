@@ -10,6 +10,7 @@ import RemoteData exposing (WebData)
 
 type alias LoginResponse =
     { id : Int
+    , token : String
     }
 
 
@@ -17,6 +18,7 @@ loginResponseDecoder : Decode.Decoder LoginResponse
 loginResponseDecoder =
     decode LoginResponse
         |> required "id" Decode.int
+        |> required "token" Decode.string
 
 
 loginFacebookEncode : String -> Value

@@ -22,7 +22,6 @@ type Msg
     | LoginFieldChanged String
     | PasswordFieldChanged String
     | FacebookLoggedInResult String
-    | FacebookNotLoggedInResult String
     | Parent CommonMessages.Msg
 
 
@@ -40,7 +39,6 @@ type LoginStatus
     = NotLoggedIn
     | FacebookLoggedIn
     | PasswordLoggedIn
-    | LoggingOut
 
 
 type alias Model =
@@ -55,11 +53,28 @@ type alias Model =
 
 init : Flags -> Model
 init flags =
+    let
+        ( initialLoginStatus, token ) =
+            case flags.initialState.token of
+                Just t ->
+                    case flags.initialState.loginType of
+                        Just "password" ->
+                            ( PasswordLoggedIn, t )
+
+                        Just "facebook" ->
+                            ( FacebookLoggedIn, t )
+
+                        _ ->
+                            ( NotLoggedIn, "" )
+
+                Nothing ->
+                    ( NotLoggedIn, "" )
+    in
     { login = ""
     , password = ""
     , loginPasswordResponse = RemoteData.NotAsked
     , loginFacebookResponse = RemoteData.NotAsked
-    , loginStatus = NotLoggedIn
+    , loginStatus = initialLoginStatus
     , flags = flags
     }
 
@@ -80,6 +95,12 @@ port facebookLogin : {} -> Cmd msg
 port facebookLogout : {} -> Cmd msg
 
 
+port storeToken : ( String, String ) -> Cmd msg
+
+
+port deleteToken : {} -> Cmd msg
+
+
 
 -- SUBSCRIPTIONS
 
@@ -88,7 +109,6 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ facebookLoggedIn FacebookLoggedInResult
-        , facebookNotLoggedIn FacebookNotLoggedInResult
         ]
 
 
@@ -100,6 +120,16 @@ updateLoginStatus result current wanted =
 
         _ ->
             current
+
+
+maybeStoreToken : RemoteData.RemoteData e LoginResponse -> String -> Cmd msg
+maybeStoreToken result loginType =
+    case result of
+        RemoteData.Success u ->
+            storeToken ( u.token, loginType )
+
+        _ ->
+            Cmd.none
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -121,7 +151,7 @@ update msg model =
 
                 -- TODO reset form
             in
-            ( { model | loginStatus = loginStatus, loginPasswordResponse = response }, Cmd.none )
+            ( { model | loginStatus = loginStatus, loginPasswordResponse = response }, maybeStoreToken response "password" )
 
         LoginFacebookResponse response ->
             let
@@ -131,7 +161,7 @@ update msg model =
                 loginStatus =
                     updateLoginStatus response model.loginStatus FacebookLoggedIn
             in
-            ( { model | loginStatus = loginStatus, loginFacebookResponse = response }, Cmd.none )
+            ( { model | loginStatus = loginStatus, loginFacebookResponse = response }, maybeStoreToken response "facebook" )
 
         LoginFieldChanged value ->
             ( { model | login = value }, Cmd.none )
@@ -149,14 +179,6 @@ update msg model =
             in
             ( model, loginFacebook model.flags token LoginFacebookResponse )
 
-        FacebookNotLoggedInResult loggedOutMsg ->
-            case model.loginStatus of
-                LoggingOut ->
-                    ( { model | loginStatus = NotLoggedIn }, Cmd.none )
-
-                _ ->
-                    ( model, Cmd.none )
-
         Logout ->
             let
                 _ =
@@ -166,14 +188,11 @@ update msg model =
                 NotLoggedIn ->
                     ( model, Cmd.none )
 
-                LoggingOut ->
-                    ( model, Cmd.none )
-
                 FacebookLoggedIn ->
-                    ( { model | loginStatus = LoggingOut }, facebookLogout {} )
+                    ( { model | loginStatus = NotLoggedIn }, Cmd.batch [ facebookLogout {}, deleteToken {} ] )
 
                 PasswordLoggedIn ->
-                    ( { model | loginStatus = NotLoggedIn }, Cmd.none )
+                    ( { model | loginStatus = NotLoggedIn }, deleteToken {} )
 
         Parent msg_ ->
             ( model, Cmd.none )
@@ -237,8 +256,5 @@ view model =
 
                 PasswordLoggedIn ->
                     [ logoutForm model ]
-
-                LoggingOut ->
-                    []
     in
     section [ class "content" ] content
