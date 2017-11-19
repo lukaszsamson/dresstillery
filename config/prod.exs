@@ -60,6 +60,10 @@ config :dresstillery, DresstilleryWeb.Gettext,
 #     config :dresstillery, DresstilleryWeb.Endpoint, server: true
 #
 config :dresstillery, :upload_directory_system, true
+
+config :dresstillery, :oauth,
+  facebook_app_id: "191715151387019",
+  facebook_verify_token_url: "https://graph.facebook.com/debug_token"
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 import_config "prod.secret.exs"
