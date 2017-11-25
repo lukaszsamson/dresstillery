@@ -132,6 +132,16 @@ maybeStoreToken result loginType =
             Cmd.none
 
 
+maybeResetForm : RemoteData.RemoteData e a -> Model -> Model
+maybeResetForm result model =
+    case result of
+        RemoteData.Success u ->
+            { model | login = "", password = "" }
+
+        _ ->
+            model
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -149,9 +159,10 @@ update msg model =
                 loginStatus =
                     updateLoginStatus response model.loginStatus PasswordLoggedIn
 
-                -- TODO reset form
+                model_ =
+                    maybeResetForm response model
             in
-            ( { model | loginStatus = loginStatus, loginPasswordResponse = response }, maybeStoreToken response "password" )
+            ( { model_ | loginStatus = loginStatus, loginPasswordResponse = response }, maybeStoreToken response "password" )
 
         LoginFacebookResponse response ->
             let
@@ -160,8 +171,11 @@ update msg model =
 
                 loginStatus =
                     updateLoginStatus response model.loginStatus FacebookLoggedIn
+
+                model_ =
+                    maybeResetForm response model
             in
-            ( { model | loginStatus = loginStatus, loginFacebookResponse = response }, maybeStoreToken response "facebook" )
+            ( { model_ | loginStatus = loginStatus, loginFacebookResponse = response }, maybeStoreToken response "facebook" )
 
         LoginFieldChanged value ->
             ( { model | login = value }, Cmd.none )

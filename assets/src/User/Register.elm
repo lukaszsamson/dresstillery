@@ -57,7 +57,13 @@ update msg model =
             ( model, register model.flags model.login model.password model.passwordRepeat RegisterResponse )
 
         RegisterResponse response ->
-            ( { model | registerResponse = response }, Cmd.none )
+            let
+                model_ =
+                    maybeResetForm response model
+
+                -- TODO login after register
+            in
+            ( { model_ | registerResponse = response }, Cmd.none )
 
         LoginFieldChanged value ->
             ( { model | login = value }, Cmd.none )
@@ -80,6 +86,16 @@ loginButton =
         ]
         [ text "Zaloguj"
         ]
+
+
+maybeResetForm : RemoteData.RemoteData e a -> Model -> Model
+maybeResetForm result model =
+    case result of
+        RemoteData.Success u ->
+            { model | login = "", password = "", passwordRepeat = "" }
+
+        _ ->
+            model
 
 
 registerForm : Model -> Html Msg
