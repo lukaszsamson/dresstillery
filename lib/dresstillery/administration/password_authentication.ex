@@ -18,6 +18,7 @@ defmodule Dresstillery.Administration.PasswordAuthentication do
     |> validate_required([:login, :password])
     |> validate_length(:login, max: 60)
     |> validate_length(:password, max: 60)
+    |> validate_confirmation(:password)
     |> hash_password
     |> unique_constraint(:login)
   end

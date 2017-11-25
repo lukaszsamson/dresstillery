@@ -36,6 +36,15 @@ loginPasswordEncode login password =
         ]
 
 
+registerEncode : String -> String -> String -> Value
+registerEncode login password passwordRepeat =
+    Encode.object
+        [ ( "login", Encode.string login )
+        , ( "password", Encode.string password )
+        , ( "password_confirmation", Encode.string passwordRepeat )
+        ]
+
+
 loginFacebook : Flags -> String -> (WebData LoginResponse -> msg) -> Cmd msg
 loginFacebook flags token msg =
     post (flags.backendUrl ++ "/account/login_facebook") (loginFacebookEncode token) (field "data" loginResponseDecoder) msg
@@ -46,6 +55,6 @@ loginPassword flags login password msg =
     post (flags.backendUrl ++ "/account/login") (loginPasswordEncode login password) (field "data" loginResponseDecoder) msg
 
 
-register : Flags -> String -> String -> (WebData LoginResponse -> msg) -> Cmd msg
-register flags login password msg =
-    post (flags.backendUrl ++ "/account/register") (loginPasswordEncode login password) (field "data" loginResponseDecoder) msg
+register : Flags -> String -> String -> String -> (WebData LoginResponse -> msg) -> Cmd msg
+register flags login password passwordRepeat msg =
+    post (flags.backendUrl ++ "/account/register") (registerEncode login password passwordRepeat) (field "data" loginResponseDecoder) msg

@@ -32,7 +32,7 @@ msgid "is reserved"
 msgstr ""
 
 msgid "does not match confirmation"
-msgstr ""
+msgstr "Nie jest takie samo"
 
 msgid "is still associated with this entry"
 msgstr ""

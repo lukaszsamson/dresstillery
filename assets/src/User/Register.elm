@@ -53,7 +53,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Register login password ->
-            ( model, register model.flags model.login model.password RegisterResponse )
+            ( model, register model.flags model.login model.password model.passwordRepeat RegisterResponse )
 
         RegisterResponse response ->
             ( { model | registerResponse = response }, Cmd.none )
@@ -94,7 +94,7 @@ registerForm model =
         , Html.label []
             [ text "Powtórz hasło"
             , input [ type_ "password", value model.passwordRepeat, onInput PasswordRepeatFieldChanged ] []
-            , formError error "password_authentication.passwordRepeat"
+            , formError error "password_authentication.password_confirmation"
             ]
         , formError error "_"
         , Html.button [ type_ "submit" ] [ text "Zarejestruj" ]
