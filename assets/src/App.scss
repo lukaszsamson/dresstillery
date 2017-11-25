@@ -13,6 +13,9 @@ $buttonColor: $gray;
 a, a:link, a:visited, a:hover, a:active {
   text-decoration: none;
 }
+button {
+  border-radius: 0;
+}
 
 *, button, input, optgroup, select, textarea {
   font-family: 'Lato', sans-serif;
@@ -24,6 +27,7 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
   }
 }
 .seo {
@@ -98,6 +102,7 @@ body {
     text-align: center;
     margin-top: 2.5rem;
   }
+  flex-grow: 1;
 }
 
 .grid3 {
@@ -220,6 +225,42 @@ body {
   padding-left: 6rem;
   padding-right: 6rem;
 }
+
+
+
+form.centered {
+  margin-top: 2rem;
+  display: block;
+  margin: auto;
+  width: 200px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  label {
+    margin-bottom: 1rem;
+    display: block;
+  }
+  input {
+    height: 2rem;
+    width: 100%;
+  }
+}
+.formRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.loginFacebookForm {
+  // margin: auto;
+  // width: 200px;
+  // padding-top: 0;
+  // padding-bottom: 0;
+  button {
+    width: 100%;
+  }
+}
+
+
 
 @import "Accordion.scss";
 @import "CommonElements.scss";

@@ -204,7 +204,7 @@ loginPasswordForm model =
         error =
             model.loginPasswordResponse |> handleFailure
     in
-    Html.form [ onSubmit (LoginPassword model.login model.password) ]
+    Html.form [ onSubmit (LoginPassword model.login model.password), class "centered" ]
         [ Html.label []
             [ text "Login"
             , input [ value model.login, onInput LoginFieldChanged ] []
@@ -216,7 +216,11 @@ loginPasswordForm model =
             , formError error "password"
             ]
         , formError error "_"
-        , Html.button [ type_ "submit" ] [ text "Zaloguj" ]
+        , div [ class "formRow" ]
+            [ Html.button [ type_ "submit" ] [ text "Zaloguj" ]
+            , registerButton
+            ]
+        , loginFacebookForm model
         ]
 
 
@@ -226,7 +230,7 @@ loginFacebookForm model =
         error =
             model.loginFacebookResponse |> handleFailure
     in
-    Html.form [ onSubmit LoginFacebook ]
+    Html.form [ onSubmit LoginFacebook, class "loginFacebookForm" ]
         [ Html.button [ type_ "submit" ] [ text "Zaloguj przez Facebook" ]
         , formError error "_"
         ]
@@ -238,6 +242,16 @@ logoutForm model =
         [ Html.button [ type_ "submit" ] [ text "Wyloguj" ] ]
 
 
+registerButton =
+    a
+        [ Routing.linkHref Routing.Register
+        , Routing.onLinkClick (Parent (CommonMessages.ChangeLocation Routing.Register))
+        , class "button"
+        ]
+        [ text "Zarejestruj"
+        ]
+
+
 view : Model -> Html Msg
 view model =
     let
@@ -245,10 +259,8 @@ view model =
             case model.loginStatus of
                 NotLoggedIn ->
                     [ loginPasswordForm model
-                    , loginFacebookForm model
-                    , a [ Routing.linkHref Routing.Register, Routing.onLinkClick (Parent (CommonMessages.ChangeLocation Routing.Register)) ]
-                        [ text "Zarejestruj"
-                        ]
+
+                    -- , loginFacebookForm model
                     ]
 
                 FacebookLoggedIn ->
@@ -257,4 +269,4 @@ view model =
                 PasswordLoggedIn ->
                     [ logoutForm model ]
     in
-    section [ class "content" ] content
+    section [ class "content" ] ([ h1 [] [ text "Zaloguj" ] ] ++ content)
