@@ -11,93 +11,99 @@ msgstr ""
 "Language: pl\n"
 
 msgid "can't be blank"
-msgstr "Nie może być puste"
+msgstr "nie może być puste"
 
 msgid "has already been taken"
-msgstr ""
+msgstr "został już użyty"
 
 msgid "is invalid"
-msgstr ""
+msgstr "jest niepoprawny"
 
 msgid "must be accepted"
-msgstr ""
+msgstr "musi być zaakceptowane"
 
 msgid "has invalid format"
-msgstr ""
+msgstr "ma niepoprawny format"
 
 msgid "has an invalid entry"
-msgstr ""
+msgstr "ma niepoprawny wpis"
 
 msgid "is reserved"
-msgstr ""
+msgstr "jest zarezerwowane"
 
 msgid "does not match confirmation"
-msgstr "Nie jest takie samo"
+msgstr "nie jest takie samo"
 
 msgid "is still associated with this entry"
-msgstr ""
+msgstr "jest ciągle powiązane z tym wpisem"
 
 msgid "are still associated with this entry"
-msgstr ""
+msgstr "są ciągle powiązne z tym wpisem"
 
 msgid "should be %{count} character(s)"
 msgid_plural "should be %{count} character(s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "powinno mieć %{count} znak"
+msgstr[1] "powinno mieć %{count} znaki"
+msgstr[2] "powinno mieć %{count} znaków"
 
 msgid "should have %{count} item(s)"
 msgid_plural "should have %{count} item(s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "powinno mieć %{count} pozycję"
+msgstr[1] "powinno mieć %{count} pozycje"
+msgstr[2] "powinno mieć %{count} pozycji"
 
 msgid "should be at least %{count} character(s)"
 msgid_plural "should be at least %{count} character(s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "powinno mieć minimum %{count} znak"
+msgstr[1] "powinno mieć minimum %{count} znaki"
+msgstr[2] "powinno mieć minimum %{count} znaków"
 
 msgid "should have at least %{count} item(s)"
 msgid_plural "should have at least %{count} item(s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "powinno mieć minimum %{count} pozycję"
+msgstr[1] "powinno mieć minimum %{count} pozycje"
+msgstr[2] "powinno mieć minimum %{count} pozycji"
 
 msgid "should be at most %{count} character(s)"
 msgid_plural "should be at most %{count} character(s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "powinno mieć maksimum %{count} znak"
+msgstr[1] "powinno mieć maksimum %{count} znaki"
+msgstr[2] "powinno mieć maksimum %{count} znaków"
 
 msgid "should have at most %{count} item(s)"
 msgid_plural "should have at most %{count} item(s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "powinno mieć maksimum %{count} pozycję"
+msgstr[1] "powinno mieć maksimum %{count} pozycje"
+msgstr[2] "powinno mieć maksimum %{count} pozycji"
 
 msgid "must be less than %{number}"
-msgstr ""
+msgstr "musi być mniejsze niż %{number}"
 
 msgid "must be greater than %{number}"
-msgstr ""
+msgstr "musi być większe niż %{number}"
 
 msgid "must be less than or equal to %{number}"
-msgstr ""
+msgstr "musi być mniejsze lub równe %{number}"
 
 msgid "must be greater than or equal to %{number}"
-msgstr ""
+msgstr "musi być większe lub równe %{number}"
 
 msgid "must be equal to %{number}"
-msgstr ""
+msgstr "musi być równe %{number}"
 
 #: lib/dresstillery/session/user_login.ex:25
 msgid "account deactivated"
-msgstr "Konto nieaktywne"
+msgstr "konto nieaktywne"
 
 #: lib/dresstillery/session/change_password.ex:37
 #: lib/dresstillery/session/tfa_code.ex:20
 msgid "invalid code"
-msgstr "Nieprawisłowy kod"
+msgstr "nieprawidłowy kod"
 
 #: lib/dresstillery/session/user_login.ex:20
 msgid "invalid login or password"
-msgstr "Nieprawidłowy login lub hasło"
+msgstr "nieprawidłowy login lub hasło"
 
 #: lib/dresstillery/session/change_password.ex:32
 msgid "invalid password"
-msgstr "Nieprawidłowe hasło"
+msgstr "nieprawidłowe hasło"
