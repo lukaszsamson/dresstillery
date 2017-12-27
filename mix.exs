@@ -34,7 +34,8 @@ defmodule Dresstillery.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.0"},
+      # {:phoenix, "~> 1.3.0"},
+      {:phoenix, github: "phoenixframework/phoenix", branch: "v1.3", override: true},
       # {:phoenix, github: "phoenixframework/phoenix", override: true},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},

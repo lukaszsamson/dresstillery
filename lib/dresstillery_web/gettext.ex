@@ -26,7 +26,7 @@ defmodule DresstilleryWeb.Gettext do
     known = Gettext.known_locales(__MODULE__)
     allowed = config() |> Keyword.fetch!(:locales)
 
-    IO.puts "Known: #{inspect known} allowed #{inspect allowed}"
+    # IO.puts "Known: #{inspect known} allowed #{inspect allowed}"
 
     MapSet.intersection(Enum.into(known, MapSet.new()), Enum.into(allowed, MapSet.new()))
     |> MapSet.to_list()
