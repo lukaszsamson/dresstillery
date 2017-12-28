@@ -48,6 +48,7 @@ defmodule DresstilleryWeb.Router do
     resources "/fabrics/:fabric_id/images", FabricImageController
 
     resources "/users", UserController, only: [:show, :index]
+    resources "/orders", OrderController
 
     get   "/change_password",   SessionController, :change_password_page
     post  "/change_password",   SessionController, :change_password
