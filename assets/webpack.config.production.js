@@ -1,8 +1,8 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
 const elmSource = __dirname + '/src';
@@ -11,14 +11,12 @@ module.exports = {
   bail: true,
   entry: {
     app: './src/app.js',
-    backend: './backend/js/backend.js',
+    backend: './backend/js/backend.js'
   },
-
   output: {
     path: path.join(__dirname, "../priv/static/js"),
     filename: '[name].js',
   },
-
   resolve: {
     modules: [
       path.join(__dirname, "src"),
@@ -38,10 +36,8 @@ module.exports = {
       from: './static/',
       to: '..'
     }]),
-    new ExtractTextPlugin({
-      // filename: '[name]-[hash].css',
-      filename: '../css/[name].css',
-      allChunks: true
+    new MiniCssExtractPlugin({
+      filename: `../css/[name].css`
     }),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
@@ -53,9 +49,8 @@ module.exports = {
       },
       canPrint: true
     }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new UglifyJSPlugin({
-      uglifyOptions: {
+    new TerserPlugin({
+      terserOptions: {
         ecma: 6,
       }
     }),
@@ -86,22 +81,12 @@ module.exports = {
       {
         test: /\.scss$/,
         exclude: [/elm-stuff/, /node_modules/],
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          //resolve-url-loader may be chained before sass-loader if necessary
-          use: ['css-loader', 'sass-loader']
-        })
-        // loaders: ["style-loader", "css-loader", "sass-loader"]
+        loaders: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
       },
       {
         test: /\.css$/,
-        exclude: [/elm-stuff/],
-        // loaders: ["style-loader", "css-loader"]
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          //resolve-url-loader may be chained before sass-loader if necessary
-          use: ['css-loader']
-        })
+        exclude: [/elm-stuff/, /node_modules/],
+        loaders: [MiniCssExtractPlugin.loader, "css-loader"]
       },
       {
         test: /\.(jpg|png|gif|svg|ico)$/,

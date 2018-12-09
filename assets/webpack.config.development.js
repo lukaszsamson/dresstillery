@@ -1,22 +1,19 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 const elmSource = __dirname + '/src';
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
   entry: {
     app: './src/app.js',
-    backend: './backend/js/backend.js',
+    backend: './backend/js/backend.js'
   },
-
   output: {
     path: path.join(__dirname, "../priv/static/js"),
     filename: '[name].js',
   },
-
   resolve: {
     modules: [
       path.join(__dirname, "src"),
@@ -32,17 +29,13 @@ module.exports = {
       'process.env.FB_APP_ID': JSON.stringify('129842534345154'),
       'process.env.BACKEND_URL': JSON.stringify('/api')
     }),
-    new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
     new CopyWebpackPlugin([{
       from: './static/',
       to: '..'
     }]),
-    new ExtractTextPlugin({
-      // filename: '[name]-[hash].css',
-      filename: '../css/[name].css',
-      allChunks: true
-    }),
+    new MiniCssExtractPlugin({
+      filename: `../css/[name].css`
+    })
   ],
   module: {
     rules: [{
@@ -74,22 +67,12 @@ module.exports = {
       {
         test: /\.scss$/,
         exclude: [/elm-stuff/, /node_modules/],
-        // loaders: ["style-loader", "css-loader", "sass-loader"]
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          //resolve-url-loader may be chained before sass-loader if necessary
-          use: ['css-loader', "sass-loader"]
-        })
+        loaders: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
       },
       {
         test: /\.css$/,
-        exclude: [/elm-stuff/],
-        // loaders: ["style-loader", "css-loader"]
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          //resolve-url-loader may be chained before sass-loader if necessary
-          use: ['css-loader']
-        })
+        exclude: [/elm-stuff/, /node_modules/],
+        loaders: [MiniCssExtractPlugin.loader, "css-loader"]
       },
       {
         test: /\.(jpg|png|gif|svg|ico)$/,

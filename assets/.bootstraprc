@@ -7,7 +7,7 @@ bootstrapVersion: 4
 
 # Webpack loaders, order matters
 styleLoaders:
-  - style
+#  - style
   - css
 #  - postcss
   - sass
