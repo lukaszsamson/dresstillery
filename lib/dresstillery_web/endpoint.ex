@@ -44,7 +44,7 @@ defmodule DresstilleryWeb.Endpoint do
     store: :cookie,
     key: "_dresstillery_key",
     signing_salt: "8mjattpP",
-    max_age: 60 * 60 # 1h
+    max_age: 24 * 60 * 60 # 24h
 
   plug DresstilleryWeb.Router
 
