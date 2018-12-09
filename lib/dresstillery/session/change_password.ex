@@ -25,6 +25,7 @@ defmodule Dresstillery.Session.ChangePassword do
     |> validate_required([:password, :new_password, :tfa_code, :code])
     |> validate_length(:new_password, min: 6)
     |> validate_confirmation(:new_password, required: true)
+    |> validate_format(:code, ~r/\d{6}/)
   end
 
   def add_password_error(struct) do
