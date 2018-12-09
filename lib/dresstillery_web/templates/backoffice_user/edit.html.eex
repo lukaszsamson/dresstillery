@@ -1,5 +1,5 @@
 <h2>Edit Backoffice user</h2>
 
-<%= render "form.html", Map.put(assigns, :action, backoffice_user_path(@conn, :update, @backoffice_user)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.backoffice_user_path(@conn, :update, @backoffice_user)) %>
 
-<span><%= link "Back", to: backoffice_user_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.backoffice_user_path(@conn, :index) %></span>

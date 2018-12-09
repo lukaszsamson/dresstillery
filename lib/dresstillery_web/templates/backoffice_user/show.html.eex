@@ -28,7 +28,7 @@
 
 </ul>
 
-<span><%= link "Reset password", to: backoffice_user_path(@conn, :reset_password, @backoffice_user), method: :post, data: [confirm: "Are you sure?"], class: "btn btn-warning btn-xs" %></span>
-<span><%= link "Deactivate", to: backoffice_user_path(@conn, :delete, @backoffice_user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-<span><%= link "Edit", to: backoffice_user_path(@conn, :edit, @backoffice_user), class: "btn btn-default btn-xs" %></span>
-<span><%= link "Back", to: backoffice_user_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
+<span><%= link "Reset password", to: Routes.backoffice_user_path(@conn, :reset_password, @backoffice_user), method: :post, data: [confirm: "Are you sure?"], class: "btn btn-warning btn-xs" %></span>
+<span><%= link "Deactivate", to: Routes.backoffice_user_path(@conn, :delete, @backoffice_user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+<span><%= link "Edit", to: Routes.backoffice_user_path(@conn, :edit, @backoffice_user), class: "btn btn-default btn-xs" %></span>
+<span><%= link "Back", to: Routes.backoffice_user_path(@conn, :index), class: "btn btn-default btn-xs" %></span>

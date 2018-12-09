@@ -29,7 +29,7 @@ defmodule DresstilleryWeb.FabricImageController do
       {:ok, fabric_image} ->
         conn
         |> put_flash(:info, "Fabric image created successfully.")
-        |> redirect(to: fabric_image_path(conn, :show, fabric_id, fabric_image))
+        |> redirect(to: Routes.fabric_image_path(conn, :show, fabric_id, fabric_image))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", fabric_id: fabric_id, available_images: get_images(fabric_id), changeset: changeset)
     end
@@ -53,7 +53,7 @@ defmodule DresstilleryWeb.FabricImageController do
       {:ok, fabric_image} ->
         conn
         |> put_flash(:info, "Fabric image updated successfully.")
-        |> redirect(to: fabric_image_path(conn, :show, fabric_image.fabric_id, fabric_image))
+        |> redirect(to: Routes.fabric_image_path(conn, :show, fabric_image.fabric_id, fabric_image))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", fabric_image: fabric_image, available_images: get_images(fabric_image.fabric_id), changeset: changeset)
     end
@@ -65,6 +65,6 @@ defmodule DresstilleryWeb.FabricImageController do
 
     conn
     |> put_flash(:info, "Fabric image deleted successfully.")
-    |> redirect(to: fabric_image_path(conn, :index, fabric_image.fabric_id))
+    |> redirect(to: Routes.fabric_image_path(conn, :index, fabric_image.fabric_id))
   end
 end

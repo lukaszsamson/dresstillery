@@ -29,7 +29,7 @@ defmodule DresstilleryWeb.ProductImageController do
       {:ok, product_image} ->
         conn
         |> put_flash(:info, "Product image created successfully.")
-        |> redirect(to: product_image_path(conn, :show, product_id, product_image))
+        |> redirect(to: Routes.product_image_path(conn, :show, product_id, product_image))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", product_id: product_id, available_images: get_images(product_id), changeset: changeset)
     end
@@ -53,7 +53,7 @@ defmodule DresstilleryWeb.ProductImageController do
       {:ok, product_image} ->
         conn
         |> put_flash(:info, "Product image updated successfully.")
-        |> redirect(to: product_image_path(conn, :show, product_image.product_id, product_image))
+        |> redirect(to: Routes.product_image_path(conn, :show, product_image.product_id, product_image))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", product_image: product_image, available_images: get_images(product_image.product_id), changeset: changeset)
     end
@@ -65,6 +65,6 @@ defmodule DresstilleryWeb.ProductImageController do
 
     conn
     |> put_flash(:info, "Product image deleted successfully.")
-    |> redirect(to: product_image_path(conn, :index, product_image.product_id))
+    |> redirect(to: Routes.product_image_path(conn, :index, product_image.product_id))
   end
 end

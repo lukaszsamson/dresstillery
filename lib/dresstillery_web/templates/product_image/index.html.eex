@@ -18,14 +18,14 @@
       <td><%= product_image.order %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: product_image_path(@conn, :show, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: product_image_path(@conn, :edit, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: product_image_path(@conn, :delete, @product_id, product_image), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: Routes.product_image_path(@conn, :show, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: Routes.product_image_path(@conn, :edit, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: Routes.product_image_path(@conn, :delete, @product_id, product_image), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Product image", to: product_image_path(@conn, :new, @product_id) %></span>
-<span><%= link "Back", to: product_path(@conn, :show, @product_id) %></span>
+<span><%= link "New Product image", to: Routes.product_image_path(@conn, :new, @product_id) %></span>
+<span><%= link "Back", to: Routes.product_path(@conn, :show, @product_id) %></span>

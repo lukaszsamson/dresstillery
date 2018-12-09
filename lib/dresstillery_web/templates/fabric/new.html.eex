@@ -1,5 +1,5 @@
 <h2>New Fabric</h2>
 
-<%= render "form.html", Map.put(assigns, :action, fabric_path(@conn, :create)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.fabric_path(@conn, :create)) %>
 
-<span><%= link "Back", to: fabric_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.fabric_path(@conn, :index) %></span>

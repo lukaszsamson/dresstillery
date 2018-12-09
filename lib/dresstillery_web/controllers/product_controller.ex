@@ -63,7 +63,7 @@ defmodule DresstilleryWeb.ProductController do
       {:ok, product} ->
         conn
         |> put_flash(:info, "Product created successfully.")
-        |> redirect(to: product_path(conn, :show, product))
+        |> redirect(to: Routes.product_path(conn, :show, product))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset, available_product_types: get_product_types())
     end
@@ -91,7 +91,7 @@ defmodule DresstilleryWeb.ProductController do
       {:ok, product} ->
         conn
         |> put_flash(:info, "Product updated successfully.")
-        |> redirect(to: product_path(conn, :show, product))
+        |> redirect(to: Routes.product_path(conn, :show, product))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", product: product, changeset: changeset, available_product_types: get_product_types())
     end
@@ -103,6 +103,6 @@ defmodule DresstilleryWeb.ProductController do
 
     conn
     |> put_flash(:info, "Product deleted successfully.")
-    |> redirect(to: product_path(conn, :index))
+    |> redirect(to: Routes.product_path(conn, :index))
   end
 end

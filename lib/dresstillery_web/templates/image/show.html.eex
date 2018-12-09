@@ -19,4 +19,4 @@
 
 </ul>
 
-<span><%= link "Back", to: image_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.image_path(@conn, :index) %></span>

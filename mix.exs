@@ -1,4 +1,4 @@
-defmodule Dresstillery.Mixfile do
+defmodule Dresstillery.MixProject do
   use Mix.Project
 
   def project do
@@ -34,23 +34,23 @@ defmodule Dresstillery.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      # {:phoenix, "~> 1.3.0"},
-      {:phoenix, github: "phoenixframework/phoenix", branch: "v1.3", override: true},
-      # {:phoenix, github: "phoenixframework/phoenix", override: true},
+      {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.2"},
-      {:ecto, "~> 2.2", override: true},
-      {:decimal, "~> 1.4.1", override: true},
+      {:phoenix_ecto, "~> 4.0"},
+      {:ecto_sql, "~> 3.0"},
+      {:decimal, "~> 1.6"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:phoenix_histo, "~> 1.0.0"},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"},
+      {:plug, "~> 1.7"},
+      {:plug_cowboy, "~> 2.0"},
       {:pot, "~> 0.9.5"},
       {:comeonin, "~> 3.0"},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
-      {:httpoison, "~> 0.13"},
+      {:httpoison, "~> 1.1"},
+      {:jason, "~> 1.0"},
    ]
   end
 

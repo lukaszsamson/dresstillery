@@ -35,7 +35,7 @@ defmodule Dresstillery.FacebookApi do
       raise HTTPoison.Error, reason: "Dresstillery.FacebookApi.is_valid failed with code #{response.status_code}, #{response.body}"
     end
     Logger.info "Dresstillery.FacebookApi.is_valid response: #{response.status_code}, #{response.body}"
-    parsed = Poison.Parser.parse!(response.body)
+    parsed = Jason.decode!(response.body)
     case parsed["data"]["is_valid"] do
       true -> {true, parsed["data"]["user_id"]}
       false -> false

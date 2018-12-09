@@ -20,13 +20,13 @@
       <td><%= fabric.hidden %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: fabric_path(@conn, :show, fabric), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: fabric_path(@conn, :edit, fabric), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: fabric_path(@conn, :delete, fabric), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: Routes.fabric_path(@conn, :show, fabric), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: Routes.fabric_path(@conn, :edit, fabric), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: Routes.fabric_path(@conn, :delete, fabric), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Fabric", to: fabric_path(@conn, :new) %></span>
+<span><%= link "New Fabric", to: Routes.fabric_path(@conn, :new) %></span>

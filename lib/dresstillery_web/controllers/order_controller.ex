@@ -19,7 +19,7 @@ defmodule DresstilleryWeb.OrderController do
       {:ok, order} ->
         conn
         |> put_flash(:info, "Order created successfully.")
-        |> redirect(to: order_path(conn, :show, order))
+        |> redirect(to: Routes.order_path(conn, :show, order))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -43,7 +43,7 @@ defmodule DresstilleryWeb.OrderController do
       {:ok, order} ->
         conn
         |> put_flash(:info, "Order updated successfully.")
-        |> redirect(to: order_path(conn, :show, order))
+        |> redirect(to: Routes.order_path(conn, :show, order))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", order: order, changeset: changeset)
     end
@@ -55,6 +55,6 @@ defmodule DresstilleryWeb.OrderController do
 
     conn
     |> put_flash(:info, "Order deleted successfully.")
-    |> redirect(to: order_path(conn, :index))
+    |> redirect(to: Routes.order_path(conn, :index))
   end
 end

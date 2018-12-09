@@ -11,7 +11,6 @@ config :logger, level: :warn
 
 # Configure your database
 config :dresstillery, Dresstillery.Repo,
-  adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
   database: "dresstillery_test",

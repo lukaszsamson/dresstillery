@@ -8,19 +8,19 @@
     <h4>Resources</h4>
     <ul>
       <li>
-        <%= link "Backoffice users", to: backoffice_user_path(@conn, :index) %>
+        <%= link "Backoffice users", to: Routes.backoffice_user_path(@conn, :index) %>
       </li>
       <li>
-        <%= link "Images", to: image_path(@conn, :index) %>
+        <%= link "Images", to: Routes.image_path(@conn, :index) %>
       </li>
       <li>
-        <%= link "Product types", to: product_type_path(@conn, :index) %>
+        <%= link "Product types", to: Routes.product_type_path(@conn, :index) %>
       </li>
       <li>
-        <%= link "Products", to: product_path(@conn, :index) %>
+        <%= link "Products", to: Routes.product_path(@conn, :index) %>
       </li>
       <li>
-        <%= link "Fabrics", to: fabric_path(@conn, :index) %>
+        <%= link "Fabrics", to: Routes.fabric_path(@conn, :index) %>
       </li>
     </ul>
   </div>

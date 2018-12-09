@@ -1,3 +1,3 @@
 <h2>Two factor auth</h2>
 
-<%= render "tfa_form.html", Map.put(assigns, :action, session_path(@conn, :tfa)) %>
+<%= render "tfa_form.html", Map.put(assigns, :action, Routes.session_path(@conn, :tfa)) %>

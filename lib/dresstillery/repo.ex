@@ -1,5 +1,5 @@
 defmodule Dresstillery.Repo do
-  use Ecto.Repo, otp_app: :dresstillery
+  use Ecto.Repo, otp_app: :dresstillery, adapter: Ecto.Adapters.Postgres
 
   @doc """
   Dynamically loads the repository url from the

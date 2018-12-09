@@ -41,7 +41,7 @@ defmodule DresstilleryWeb.FabricController do
       {:ok, fabric} ->
         conn
         |> put_flash(:info, "Fabric created successfully.")
-        |> redirect(to: fabric_path(conn, :show, fabric))
+        |> redirect(to: Routes.fabric_path(conn, :show, fabric))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -69,7 +69,7 @@ defmodule DresstilleryWeb.FabricController do
       {:ok, fabric} ->
         conn
         |> put_flash(:info, "Fabric updated successfully.")
-        |> redirect(to: fabric_path(conn, :show, fabric))
+        |> redirect(to: Routes.fabric_path(conn, :show, fabric))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", fabric: fabric, changeset: changeset)
     end
@@ -81,6 +81,6 @@ defmodule DresstilleryWeb.FabricController do
 
     conn
     |> put_flash(:info, "Fabric deleted successfully.")
-    |> redirect(to: fabric_path(conn, :index))
+    |> redirect(to: Routes.fabric_path(conn, :index))
   end
 end

@@ -1,5 +1,5 @@
 <h2>Edit Fabric image</h2>
 
-<%= render "form.html", Map.put(assigns, :action, fabric_image_path(@conn, :update, @fabric_image.fabric_id, @fabric_image)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.fabric_image_path(@conn, :update, @fabric_image.fabric_id, @fabric_image)) %>
 
-<span><%= link "Back", to: fabric_image_path(@conn, :index, @fabric_image.fabric_id) %></span>
+<span><%= link "Back", to: Routes.fabric_image_path(@conn, :index, @fabric_image.fabric_id) %></span>

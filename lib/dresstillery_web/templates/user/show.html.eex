@@ -9,4 +9,4 @@
 
 </ul>
 
-<span><%= link "Back", to: user_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.user_path(@conn, :index) %></span>

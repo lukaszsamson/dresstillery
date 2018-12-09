@@ -21,7 +21,7 @@ defmodule DresstilleryWeb do
     quote do
       use Phoenix.Controller, namespace: DresstilleryWeb
       import Plug.Conn
-      import DresstilleryWeb.Router.Helpers
+      alias DresstilleryWeb.Router.Helpers, as: Routes
       import DresstilleryWeb.Gettext
     end
   end
@@ -37,7 +37,7 @@ defmodule DresstilleryWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import DresstilleryWeb.Router.Helpers
+      alias DresstilleryWeb.Router.Helpers, as: Routes
       import DresstilleryWeb.ErrorHelpers
       import DresstilleryWeb.Gettext
     end

@@ -24,7 +24,7 @@ defmodule DresstilleryWeb.BackofficeUserController do
       {:ok, backoffice_user} ->
         conn
         |> put_flash(:info, "Backoffice user created successfully.")
-        |> redirect(to: backoffice_user_path(conn, :show, backoffice_user))
+        |> redirect(to: Routes.backoffice_user_path(conn, :show, backoffice_user))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset, permissions_values: permissions_values(conn))
     end
@@ -50,7 +50,7 @@ defmodule DresstilleryWeb.BackofficeUserController do
       {:ok, backoffice_user} ->
         conn
         |> put_flash(:info, "Backoffice user updated successfully.")
-        |> redirect(to: backoffice_user_path(conn, :show, backoffice_user))
+        |> redirect(to: Routes.backoffice_user_path(conn, :show, backoffice_user))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", backoffice_user: backoffice_user, changeset: changeset, permissions_values: permissions_values(conn))
     end
@@ -63,11 +63,11 @@ defmodule DresstilleryWeb.BackofficeUserController do
       {:ok, _backoffice_user} ->
         conn
         |> put_flash(:info, "Password resetted successfully.")
-        |> redirect(to: backoffice_user_path(conn, :index))
+        |> redirect(to: Routes.backoffice_user_path(conn, :index))
       {:error, _changeset} ->
         conn
         |> put_flash(:error, "Password reset failed.")
-        |> redirect(to: backoffice_user_path(conn, :index))
+        |> redirect(to: Routes.backoffice_user_path(conn, :index))
     end
   end
 
@@ -77,7 +77,7 @@ defmodule DresstilleryWeb.BackofficeUserController do
 
     conn
     |> put_flash(:info, "Backoffice user deleted successfully.")
-    |> redirect(to: backoffice_user_path(conn, :show, backoffice_user))
+    |> redirect(to: Routes.backoffice_user_path(conn, :show, backoffice_user))
   end
 
   defp map_params_to_permissions(conn) do

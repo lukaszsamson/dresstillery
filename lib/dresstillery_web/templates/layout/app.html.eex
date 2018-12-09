@@ -8,12 +8,12 @@
     <meta name="author" content="">
 
     <title>Dresstillery Admin Panel</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/backend.css") %>">
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/backend.css") %>">
   </head>
 
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <%= link "Dresstillery", to: page_path(@conn, :index), class: "navbar-brand" %>
+      <%= link "Dresstillery", to: Routes.page_path(@conn, :index), class: "navbar-brand" %>
 
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="navbar-nav mr-auto">
@@ -27,7 +27,7 @@
           <%= render "logout_form.html", conn: @conn %>
           <%= if can_change_password(@conn) do %>
             <div class="form-inline my-2 my-lg-0">
-            <%= link "Change password", to: session_path(@conn, :change_password), class: "btn btn-outline-success my-2 my-sm-0" %>
+            <%= link "Change password", to: Routes.session_path(@conn, :change_password), class: "btn btn-outline-success my-2 my-sm-0" %>
             </div>
           <% end %>
         <% end %>
@@ -58,6 +58,6 @@
         <p>&copy; 2017 Łukasz Samson</p>
       </footer>
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/backend.js") %>"></script>
+    <script src="<%= Routes.static_path(@conn, "/js/backend.js") %>"></script>
   </body>
 </html>

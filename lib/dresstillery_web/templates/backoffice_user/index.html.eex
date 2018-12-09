@@ -18,13 +18,13 @@
       <td><%= backoffice_user.active %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: backoffice_user_path(@conn, :show, backoffice_user), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: backoffice_user_path(@conn, :edit, backoffice_user), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: backoffice_user_path(@conn, :delete, backoffice_user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: Routes.backoffice_user_path(@conn, :show, backoffice_user), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: Routes.backoffice_user_path(@conn, :edit, backoffice_user), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: Routes.backoffice_user_path(@conn, :delete, backoffice_user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Backoffice user", to: backoffice_user_path(@conn, :new) %></span>
+<span><%= link "New Backoffice user", to: Routes.backoffice_user_path(@conn, :new) %></span>

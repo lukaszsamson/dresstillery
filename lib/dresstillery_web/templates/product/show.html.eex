@@ -53,7 +53,7 @@
   <%= render "part.html", part: part %>
 <% end %>
 
-<span><%= link "Edit", to: product_path(@conn, :edit, @product) %></span>
-<span><%= link "Product type", to: product_type_path(@conn, :show, @product.product_type_id) %></span>
-<span><%= link "Images", to: product_image_path(@conn, :index, @product) %></span>
-<span><%= link "Back", to: product_path(@conn, :index) %></span>
+<span><%= link "Edit", to: Routes.product_path(@conn, :edit, @product) %></span>
+<span><%= link "Product type", to: Routes.product_type_path(@conn, :show, @product.product_type_id) %></span>
+<span><%= link "Images", to: Routes.product_image_path(@conn, :index, @product) %></span>
+<span><%= link "Back", to: Routes.product_path(@conn, :index) %></span>

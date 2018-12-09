@@ -5,8 +5,8 @@ defmodule DresstilleryWeb.SessionController do
 
   def login_page(conn, _params) do
     cond do
-      get_session(conn, :tfa_user) -> redirect(conn, to: session_path(conn, :tfa_page))
-      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
+      get_session(conn, :tfa_user) -> redirect(conn, to: Routes.session_path(conn, :tfa_page))
+      get_session(conn, :current_user) -> redirect(conn, to: Routes.page_path(conn, :index))
       true ->
         changeset = Session.login_changeset
         render(conn, "login_page.html", changeset: changeset)
@@ -15,8 +15,8 @@ defmodule DresstilleryWeb.SessionController do
 
   def login(conn, %{"user_login" => user_login_params}) do
     cond do
-      get_session(conn, :tfa_user) -> redirect(conn, to: session_path(conn, :tfa_page))
-      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
+      get_session(conn, :tfa_user) -> redirect(conn, to: Routes.session_path(conn, :tfa_page))
+      get_session(conn, :current_user) -> redirect(conn, to: Routes.page_path(conn, :index))
       true ->
         case Session.login(user_login_params) do
           {:ok, %BackofficeUser{tfa_code: nil} = user} ->
@@ -24,12 +24,12 @@ defmodule DresstilleryWeb.SessionController do
             |> configure_session(renew: true)
             |> put_session(:current_user, user.id)
             |> put_flash(:info, "Password change required")
-            |> redirect(to: session_path(conn, :change_password_page))
+            |> redirect(to: Routes.session_path(conn, :change_password_page))
           {:ok, user} ->
             conn
             |> configure_session(renew: true)
             |> put_session(:tfa_user, user.id)
-            |> redirect(to: session_path(conn, :tfa_page))
+            |> redirect(to: Routes.session_path(conn, :tfa_page))
           {:error, changeset} ->
             conn
             |> render("login_page.html", changeset: changeset)
@@ -42,8 +42,8 @@ defmodule DresstilleryWeb.SessionController do
       get_session(conn, :tfa_user) ->
         changeset = Session.tfa_changeset
         render(conn, "tfa_page.html", changeset: changeset)
-      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
-      true -> redirect(conn, to: session_path(conn, :login_page))
+      get_session(conn, :current_user) -> redirect(conn, to: Routes.page_path(conn, :index))
+      true -> redirect(conn, to: Routes.session_path(conn, :login_page))
     end
   end
 
@@ -58,13 +58,13 @@ defmodule DresstilleryWeb.SessionController do
             |> put_session(:current_user, user.id)
             |> delete_session(:tfa_user)
             |> put_flash(:info, "Logged in")
-            |> redirect(to: page_path(conn, :index))
+            |> redirect(to: Routes.page_path(conn, :index))
           {:error, changeset} ->
             conn
             |> render("tfa_page.html", changeset: changeset)
         end
-      get_session(conn, :current_user) -> redirect(conn, to: page_path(conn, :index))
-      true -> redirect(conn, to: session_path(conn, :login_page))
+      get_session(conn, :current_user) -> redirect(conn, to: Routes.page_path(conn, :index))
+      true -> redirect(conn, to: Routes.session_path(conn, :login_page))
     end
   end
 
@@ -78,7 +78,7 @@ defmodule DresstilleryWeb.SessionController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "Password changed")
-        |> redirect(to: page_path(conn, :index))
+        |> redirect(to: Routes.page_path(conn, :index))
       {:error, changeset} ->
         conn
         |> render("change_password_page.html", changeset: changeset, login: conn.assigns[:current_user].login, tfa_required: tfa_required?(conn))
@@ -94,6 +94,6 @@ defmodule DresstilleryWeb.SessionController do
     |> clear_session
     |> configure_session(drop: true)
     |> halt
-    |> redirect(to: session_path(conn, :login_page))
+    |> redirect(to: Routes.session_path(conn, :login_page))
   end
 end
