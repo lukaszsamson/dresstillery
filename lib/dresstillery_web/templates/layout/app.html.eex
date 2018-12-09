@@ -7,17 +7,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dresstillery Admin Panel</title>
+    <title>Falda admin panel</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/backend.css") %>">
   </head>
 
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <%= link "Dresstillery", to: Routes.page_path(@conn, :index), class: "navbar-brand" %>
+      <%= link "Falda admin panel", to: Routes.page_path(@conn, :index), class: "navbar-brand" %>
 
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="navbar-nav mr-auto">
-          <a class="nav-link" href="/">Site</a>
+          <a class="nav-link" href="/">Falda webpage</a>
         </ul>
 
         <%= if can_logout(@conn) do %>
@@ -38,7 +38,7 @@
     <%= if view_module(@conn) == Dresstillery.PageView do %>
     <div class="jumbotron">
       <div class="container">
-        <h1>Dresstillery Admin Panel</h1>
+        <h1>Falda admin panel</h1>
       </div>
     </div>
     <% end %>
@@ -55,7 +55,7 @@
       <hr>
 
       <footer>
-        <p>&copy; 2017 Łukasz Samson</p>
+        <p>&copy; 2018 Łukasz Samson</p>
       </footer>
     </div> <!-- /container -->
     <script src="<%= Routes.static_path(@conn, "/js/backend.js") %>"></script>
