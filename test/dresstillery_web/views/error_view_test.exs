@@ -50,7 +50,7 @@ defmodule DresstilleryWeb.ErrorViewTest do
   end
 
   test "render any other" do
-    assert render_to_string(DresstilleryWeb.ErrorView, "505.html", []) ==
+    assert render_to_string(DresstilleryWeb.ErrorView, "500.html", []) ==
            "Internal server error"
   end
 end
