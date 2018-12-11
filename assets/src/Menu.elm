@@ -39,7 +39,7 @@ menu changeRoute =
         [ Html.h5 [ class "seo" ] [ text "Menu główne" ]
         , div [ class "logo" ]
             [ a [ Routing.linkHref Routing.Home, Routing.onLinkClick <| changeRoute Routing.Home, title "Strona główna" ]
-                [ img [ src "/img/logo/Falda_logo_vertical_black.svg", alt "Logo falda" ] [] ]
+                [ img [ src "/img/logo/Falda_logo_vertical_black.svg", alt "Logo Falda" ] [] ]
             ]
         , ul []
             [ l Routing.About "Kim jesteśmy"
