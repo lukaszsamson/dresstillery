@@ -18,6 +18,7 @@ import Routing
 import User.Register
 import User.User
 import Utils exposing (..)
+import Keyboard exposing (..)
 
 
 type Msg
@@ -31,6 +32,7 @@ type Msg
     | CommonMessage CommonMessages.Msg
     | UserMessage User.User.Msg (Maybe CommonMessages.Msg)
     | RegisterMessage User.Register.Msg (Maybe CommonMessages.Msg)
+    | KeyDown Int
 
 
 type alias Model =
@@ -66,16 +68,19 @@ init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     update (OnLocationChange location) (initialModel flags)
 
+            
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ User.User.subscriptions model.user |> Sub.map (\x -> UserMessage x Nothing) ]
+        [ User.User.subscriptions model.user |> Sub.map (\x -> UserMessage x Nothing), Keyboard.downs KeyDown ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        KeyDown kc ->
+            if kc == 27 && model.menuShown then ( { model | menuShown = False }, Cmd.none ) else ( model, Cmd.none )
         CommonMessage cmsg ->
             updateCommon cmsg model
 
