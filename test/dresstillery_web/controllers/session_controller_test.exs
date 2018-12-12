@@ -166,7 +166,7 @@ defmodule DresstilleryWeb.SessionControllerTest do
     |> Plug.Test.recycle_cookies(oldconn1)
     |> get(page_path(conn, :index))
 
-    assert html_response(conn, 200) =~ "Dresstillery"
+    assert html_response(conn, 200) =~ "Falda admin panel"
   end
 
   test "getting restricted page not possible if not authorized", %{conn: conn} do
