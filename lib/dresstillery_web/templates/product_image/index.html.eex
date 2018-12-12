@@ -20,7 +20,12 @@
       <td class="text-right">
         <span><%= link "Show", to: Routes.product_image_path(@conn, :show, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Edit", to: Routes.product_image_path(@conn, :edit, @product_id, product_image), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: Routes.product_image_path(@conn, :delete, @product_id, product_image), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <%= if product_image.order > 0 do %>
+        <span><%= link "Move up", to: Routes.product_image_path(@conn, :decrease_order, @product_id, product_image.id), method: :post, class: "btn btn-default btn-xs" %></span>
+        <% end %>
+        <%= if product_image.order < length(@product_images) - 1 do %>
+        <span><%= link "Move down", to: Routes.product_image_path(@conn, :increase_order, @product_id, product_image.id), method: :post, class: "btn btn-default btn-xs" %></span>
+        <% end %>
       </td>
     </tr>
 <% end %>

@@ -184,6 +184,14 @@ defmodule Dresstillery.ProductsTest do
       product_image = %ProductImage{}
       assert %Ecto.Changeset{} = Products.change_product_image(product.id, product_image)
     end
+
+    test "swap product images", %{product: product, image: image1, image1: image2} do
+      assert {:ok, %ProductImage{order: 42} = product_image_1} = Products.create_product_image(product.id, @valid_attrs |> Map.put(:image_id, image1.id))
+      assert {:ok, %ProductImage{order: 43} = product_image_2} = Products.create_product_image(product.id, @valid_attrs |> Map.put(:image_id, image2.id) |> Map.put(:order, 43))
+      assert {:ok, _} = Products.swap_product_images(product_image_1, product_image_2)
+      assert %ProductImage{order: 43} = Products.get_product_image!(product_image_1.id)
+      assert %ProductImage{order: 42} = Products.get_product_image!(product_image_2.id)
+    end
   end
 
   describe "product_types" do

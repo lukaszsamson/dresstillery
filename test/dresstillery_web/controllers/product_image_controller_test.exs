@@ -15,11 +15,12 @@ defmodule DresstilleryWeb.ProductImageControllerTest do
     lenght: 25,
     available: true, hidden: false,})
     {:ok, image} = Media.create_image(%{path: "some path", file_name: "some name"})
-    {:ok, product: product, image: image}
+    {:ok, image1} = Media.create_image(%{path: "some path", file_name: "some name"})
+    {:ok, product: product, image: image, image1: image1}
   end
 
-  def fixture(:product_image, product, image) do
-    {:ok, product_image} = Products.create_product_image(product.id, @create_attrs |> Map.put(:image_id, image.id))
+  def fixture(:product_image, product, image, order \\ 0) do
+    {:ok, product_image} = Products.create_product_image(product.id, @create_attrs |> Map.put(:image_id, image.id) |> Map.put(:order, order))
     product_image
   end
 
@@ -90,6 +91,18 @@ defmodule DresstilleryWeb.ProductImageControllerTest do
         get conn_orig, product_image_path(conn_orig, :show, product_image.product_id, product_image)
       end
     end
+  end
+
+  test "move up", %{conn: conn_orig, product: product, image: image_1, image1: image_2} do
+    pi_1 = fixture(:product_image, product, image_1, 0)
+    _pi_2 = fixture(:product_image, product, image_2, 1)
+    conn = post conn_orig, product_image_path(conn_orig, :increase_order, product.id, pi_1)
+
+    assert redirected_to(conn) == product_image_path(conn, :index, product.id)
+
+    conn = post conn_orig, product_image_path(conn_orig, :decrease_order, product.id, pi_1)
+
+    assert redirected_to(conn) == product_image_path(conn, :index, product.id)
   end
 
   defp create_product_image(%{product: product, image: image}) do

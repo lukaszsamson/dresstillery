@@ -160,6 +160,10 @@ defmodule Dresstillery.Products do
   """
   def get_product_image!(id), do: Repo.get!(ProductImage, id) |> Repo.preload(:image)
 
+  def get_product_image_by_order!(product_id, order) do
+    Repo.get_by!(ProductImage, product_id: product_id, order: order)
+  end
+
   @doc """
   Creates a product_image.
 
@@ -197,6 +201,21 @@ defmodule Dresstillery.Products do
     product_image
     |> ProductImage.changeset(attrs)
     |> Repo.update()
+  end
+
+  def swap_product_images(%ProductImage{} = product_image_1, %ProductImage{} = product_image_2) do
+    cs_1 = product_image_1
+    |> ProductImage.changeset(%{order: -1})
+    cs_2 = product_image_2
+    |> ProductImage.changeset(%{order: product_image_1.order})
+    cs_11 = product_image_1
+    |> ProductImage.changeset(%{order: product_image_2.order})
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update("cs_1", cs_1)
+    |> Ecto.Multi.update("cs_2", cs_2)
+    |> Ecto.Multi.update("cs_11", cs_11)
+    |> Repo.transaction()
   end
 
   @doc """

@@ -41,6 +41,8 @@ defmodule DresstilleryWeb.Router do
     resources "/product_types", ProductTypeController
 
     resources "/products", ProductController
+    post "/products/:product_id/images/:id/move_down", ProductImageController, :increase_order
+    post "/products/:product_id/images/:id/move_up", ProductImageController, :decrease_order
     resources "/products/:product_id/images", ProductImageController
     resources "/images", ImageController, except: [:edit, :update]
 

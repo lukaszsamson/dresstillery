@@ -59,6 +59,26 @@ defmodule DresstilleryWeb.ProductImageController do
     end
   end
 
+  def increase_order(conn, %{"id" => id}) do
+    product_image_1 = Products.get_product_image!(id)
+    product_image_2 = Products.get_product_image_by_order!(product_image_1.product_id, product_image_1.order + 1)
+
+    {:ok, _} = Products.swap_product_images(product_image_1, product_image_2)
+    conn
+    |> put_flash(:info, "Product image updated successfully.")
+    |> redirect(to: Routes.product_image_path(conn, :index, product_image_1.product_id))
+  end
+
+  def decrease_order(conn, %{"id" => id}) do
+    product_image_1 = Products.get_product_image!(id)
+    product_image_2 = Products.get_product_image_by_order!(product_image_1.product_id, product_image_1.order - 1)
+
+    {:ok, _} = Products.swap_product_images(product_image_1, product_image_2)
+    conn
+    |> put_flash(:info, "Product image updated successfully.")
+    |> redirect(to: Routes.product_image_path(conn, :index, product_image_1.product_id))
+  end
+
   def delete(conn, %{"id" => id}) do
     product_image = Products.get_product_image!(id)
     {:ok, _product_image} = Products.delete_product_image(product_image)
