@@ -80,7 +80,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         KeyDown kc ->
-            if kc == 27 && model.menuShown then ( { model | menuShown = False }, Cmd.none ) else ( model, Cmd.none )
+            if kc == 27 && model.menuShown then ( { model | menuShown = False }, Cmd.none ) else (handleKeyDown kc model)
         CommonMessage cmsg ->
             updateCommon cmsg model
 
@@ -147,6 +147,19 @@ load route =
         _ ->
             \m -> m ! []
 
+handleKeyDown key model = 
+    case model.route of
+
+        Routing.ProductZoom i j ->
+            let j_ = case key of
+                37 -> if j > 0 then j - 1 else j
+                39 -> if j < (model.productDict |> Dict.get i |> Maybe.withDefault (Product.init model.flags i)).totalImages - 1 then j + 1 else j
+                _ -> j
+            in
+                update (changeLocation (Routing.ProductZoom i j_)) model
+
+        _ ->
+            model ! []
 
 updateComponent_ :
     Component Model Msg modelC msgC

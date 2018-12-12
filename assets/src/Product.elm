@@ -43,6 +43,7 @@ type alias Model =
     , flags : Flags
     , justAddedToBasket : Bool
     , selectedImage : Maybe Int
+    , totalImages : Int
     , zoom : Bool
     }
 
@@ -54,6 +55,7 @@ init flags i =
     , flags = flags
     , justAddedToBasket = False
     , selectedImage = Nothing
+    , totalImages = 0
     , zoom = False
     }
 
@@ -99,20 +101,25 @@ update msg model =
 
         Loaded response ->
             let
-                selectedImage =
+                (selectedImage, totalImages) =
                     case model.selectedImage of
                         Just x ->
-                            Just x
+                            case response of
+                                RemoteData.Success product ->
+                                    (Just x, product.images |> List.length)
+
+                                _ ->
+                                    (Nothing, 0)
 
                         Nothing ->
                             case response of
                                 RemoteData.Success product ->
-                                    Just 0
+                                    (Just 0, product.images |> List.length)
 
                                 _ ->
-                                    Nothing
+                                    (Nothing, 0)
             in
-            ( { model | product = response, selectedImage = selectedImage }, Cmd.none )
+            ( { model | product = response, selectedImage = selectedImage, totalImages = totalImages }, Cmd.none )
 
 
 smallImage : Int -> String -> Html Msg
