@@ -3,11 +3,10 @@ defmodule DresstilleryWeb.ImageController do
 
   alias Dresstillery.Media
   alias Dresstillery.Media.Image
-  @upload_dir Application.fetch_env!(:dresstillery, :upload_directory)
 
   defp get_path do
     if Application.get_env(:dresstillery, :upload_directory_system) do
-      @upload_dir
+      Application.fetch_env!(:dresstillery, :upload_directory)
     else
       Application.app_dir(:dresstillery, @upload_dir)
     end
