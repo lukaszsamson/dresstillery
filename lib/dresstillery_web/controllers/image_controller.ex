@@ -5,10 +5,11 @@ defmodule DresstilleryWeb.ImageController do
   alias Dresstillery.Media.Image
 
   defp get_path do
+    upload_dir = Application.fetch_env!(:dresstillery, :upload_directory)
     if Application.get_env(:dresstillery, :upload_directory_system) do
-      Application.fetch_env!(:dresstillery, :upload_directory)
+      upload_dir
     else
-      Application.app_dir(:dresstillery, @upload_dir)
+      Application.app_dir(:dresstillery, upload_dir)
     end
   end
 
