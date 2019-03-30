@@ -70,7 +70,8 @@ config :dresstillery, DresstilleryWeb.Gettext,
 #
 #     config :dresstillery, DresstilleryWeb.Endpoint, server: true
 #
-config :dresstillery, :upload_directory_system, true
+# TODO fixme
+config :dresstillery, :upload_directory_system, false
 
 config :dresstillery, :oauth,
   facebook_app_id: "191715151387019",
