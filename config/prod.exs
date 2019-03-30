@@ -75,6 +75,7 @@ config :dresstillery, :upload_directory_system, false
 
 config :dresstillery, :oauth,
   facebook_app_id: "191715151387019",
+  facebook_app_secret: "${FACEBOOK_APP_SECRET}",
   facebook_verify_token_url: "https://graph.facebook.com/debug_token"
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
