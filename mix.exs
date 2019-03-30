@@ -51,6 +51,7 @@ defmodule Dresstillery.MixProject do
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
       {:httpoison, "~> 1.1"},
       {:jason, "~> 1.0"},
+      {:distillery, "~> 2.0"},
    ]
   end
 
