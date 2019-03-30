@@ -15,8 +15,19 @@ use Mix.Config
 # which you typically run after static files are built.
 config :dresstillery, DresstilleryWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "falda.pl", port: 443, scheme: "https"],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [port: {:system, "PORT"}],
+  # url: [host: "falda.pl", port: 443, scheme: "https"],
+  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: "${SECRET_KEY_BASE}",
+  server: true
+
+config :dresstillery, DresstilleryWeb.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: "${DATABASE_URL}",
+  database: "",
+  ssl: true,
+  pool_size: 2
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -66,4 +77,4 @@ config :dresstillery, :oauth,
   facebook_verify_token_url: "https://graph.facebook.com/debug_token"
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
