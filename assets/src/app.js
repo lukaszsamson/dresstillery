@@ -51,7 +51,7 @@ window.fbAsyncInit = function() {
     status: false, // Indicates whether the current login status of the user is refreshed on every page load. If this is disabled, that status will have to be manually retrieved using .getLoginStatus(). Defaults to false.
     autoLogAppEvents: false, // Indicates whether app events are logged automatically. Defaults to false.
     xfbml: false,
-    version: 'v2.11'
+    version: 'v2.12'
   });
 
   FB.AppEvents.logPageView()
